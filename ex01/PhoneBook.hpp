@@ -10,16 +10,13 @@
 #include "color.hpp"
 
 #define MAX_CONTACT 8
-//↑defineよりもconst int maxContactの方が良さそう←調べればすぐに出てくる
 
-/* PhoneBookにすべき(ファイル自体もPhoneBook.cppみたいにした方がいい←pdfに書いてある)*/
-/* privateを基本にした方がいい理由を調べる(関数も含め)　*/
 class PhoneBook {
 public:
 	PhoneBook();
 	~PhoneBook();
 
-
+/* [メソッド] */
 	void addContact();
 	void searchContact();
 private:

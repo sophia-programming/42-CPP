@@ -16,7 +16,7 @@ bool	is_str_digit(const std::string &str)
 void printContact(const std::string &str)
 {
 	std::cout << UNDERLINE << "|";
-	if (str.size() > 10) {
+	if (10 < str.size()) {
 		std::cout << str.substr(0, 9) + ".";
 	} else {
 		std::cout << std::right << std::setw(10) << str;
@@ -69,8 +69,6 @@ void PhoneBook::printOnlyInput(size_t index)
 	std::cout << "DARKESTSECRET : " << contact[index].getDarkestSecret() << std::endl;
 }
 
-/* まだないindexの時に変更をしないといけない */
-//->何もないことを伝えると意味で実装者次第だと思った。(修正住み)
 void PhoneBook::searchContact()
 {
 	PhoneBook::printTable();
@@ -98,9 +96,6 @@ void PhoneBook::searchContact()
 }
 
 /* [ADD] */
-/* validateをまとめたい */
-/* headindexはinsertindexは割ることで揃えられるのでまとめられる */
-
 void PhoneBook::retryAddContact()
 {
 	std::cout << GREEN << "Retry[ADD]!" << STOP << std::endl;
@@ -153,11 +148,6 @@ void PhoneBook::addContact() {
 		contact[insertIndex_++] = Contact(firstName, lastName, nickname, phoneNumber, darkestSecret);
 	}
 }
-/*
- * if (headIndex_ % MAX_CONTACT[8])
- * contact[headIndex_++] = Contact(firstName, lastName, nickname, phoneNumber, darkestSecret);
- * ↑としてindex自体を一つにした方がミスも減るのでよかった。←今回はerror handlingも二つのindexを前提にいるので使わない。
- */
 
 PhoneBook::PhoneBook() : headIndex_(0), insertIndex_(0) {}
 
