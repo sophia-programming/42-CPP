@@ -1,7 +1,5 @@
 #include "Contact.hpp"
-//#include <utility>
 
-/* std::moveだめ->C++14 */
 Contact::Contact(const std::string &firstName,
 				 const std::string &lastName,
 				 const std::string &nickname,

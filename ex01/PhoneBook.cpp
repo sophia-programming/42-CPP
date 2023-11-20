@@ -83,7 +83,7 @@ void PhoneBook::searchContact()
 	}
 	size_t index;
 	std::istringstream(input) >> index;
-	if (index >= headIndex_ || headIndex_ == 0) {
+	if (headIndex_ <= index || headIndex_ == 0) {
 		std::cout << RED << "You can't know the [ID]!!" << STOP << std::endl;
 		return ;
 	}
