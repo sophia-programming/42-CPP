@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-
 #ifndef CPP_ZOMBIE_HPP
 #define CPP_ZOMBIE_HPP
 #include <iostream>
@@ -26,4 +22,4 @@ private:
 
 Zombie *zombieHorde(int N, std::string name);
 
-#endif //CPP_ZOMBIE_HPP
+#endif
