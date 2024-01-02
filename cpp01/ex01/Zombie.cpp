@@ -10,9 +10,11 @@ void Zombie::announce() {
 	<< std::endl;
 }
 
-Zombie::Zombie() : name_("zombie") {}
+Zombie::Zombie(const std::string &name)
+: name_(name) {}
 
-Zombie::Zombie(const std::string &name) : name_(name) {}
+Zombie::Zombie()
+: name_("zombie") {}
 
 Zombie::~Zombie()
 {
@@ -24,6 +26,11 @@ Zombie::~Zombie()
 	<< std::endl;
 }
 /* accessor */
+const std::string &Zombie::getName() const
+{
+	return name_;
+}
+
 void Zombie::setName(const std::string &name)
 {
 	name_ = name;

@@ -20,12 +20,13 @@ Zombie::~Zombie()
 	std::cout << Underline << "Zombie() destructor is called" << Stop << std::endl;
 }
 
-/* accessor */
+/* getter */
 const std::string &Zombie::getName() const
 {
 	return name_;
 }
 
+/* setter */
 void Zombie::setName(const std::string &name)
 {
 	name_ = name;
