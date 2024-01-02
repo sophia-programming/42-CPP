@@ -43,9 +43,9 @@ bool is_str_unprintable(const std::string &str)
 /* [SEARCH] */
 void PhoneBook::printTable() {
 	std::cout << UNDERLINE
-	<< "                                                        "
+	<< "                                             "
 	<< std::endl
-	<< "|    ID    |FIRSTNAME | LASTNAME | NICKNAME |PHONEBOOK |"
+	<< "|    ID    |FIRSTNAME | LASTNAME | NICKNAME |"
 	<< std::endl
 	<< STOP;
 	for (size_t i = 0; i < 8; i++) {
@@ -55,7 +55,6 @@ void PhoneBook::printTable() {
 		printContact(contact[i].getFirstName());
 		printContact(contact[i].getLastName());
 		printContact(contact[i].getNickname());
-		printContact(contact[i].getPhoneNumber());
 		std::cout << "|" << std::endl;
 	}
 }
