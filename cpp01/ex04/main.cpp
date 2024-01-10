@@ -21,17 +21,18 @@ std::string readFile(const std::string &fileName)
 
 void replaceString(std::string &fileContent, const std::string &s1, const std::string &s2)
 {
-	size_t pos = 0;
+	size_t position = 0;
 	const size_t s1len = s1.length();
+	const size_t s2len = s2.length();
 
 	while (true) {
-		pos = fileContent.find(s1, pos);
-		if (pos == std::string::npos) {
+		position = fileContent.find(s1, position);
+		if (position == std::string::npos) {
 			break ;
 		} else {
-			fileContent.erase(pos, s1len);
-			fileContent.insert(pos, s2);
-			pos += s1len;
+			fileContent.erase(position, s1len);
+			fileContent.insert(position, s2);
+			position += s2len;
 		}
 	}
 }

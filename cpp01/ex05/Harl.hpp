@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/07.
-//
-
 #ifndef CPP_HARL_HPP
 #define CPP_HARL_HPP
 

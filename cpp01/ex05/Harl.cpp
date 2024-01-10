@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/07.
-//
-
 #include "Harl.hpp"
 
 void Harl::complain(std::string level)
