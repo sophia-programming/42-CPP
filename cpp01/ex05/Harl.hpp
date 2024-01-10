@@ -27,4 +27,4 @@ private:
 	void invalidArg();
 };
 
-#endif //CPP_HARL_HPP
+#endif

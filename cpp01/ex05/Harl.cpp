@@ -48,8 +48,7 @@ void Harl::warning()
 	<< YellowColor
 	<< "[WARNING]"
 	<< std::endl
-	<< "I think I deserve to have some extra bacon for free. I’ve been coming for\n"
-	   "years whereas you started working here since last month."
+	<< "I think I deserve to have some extra bacon for free. I’ve been coming for years whereas you started working here since last month."
 	<< StopColor
 	<< std::endl;
 }
