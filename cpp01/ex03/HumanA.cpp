@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-
 #include "HumanA.hpp"
 
 void HumanA::attack()
@@ -15,18 +11,22 @@ name_(name), weapon_(weapon) {}
 HumanA::~HumanA() {}
 
 /* accessor */
-const std::string &HumanA::getName() const {
+const std::string &HumanA::getName() const
+{
 	return name_;
 }
 
-void HumanA::setName(const std::string &name) {
+void HumanA::setName(const std::string &name)
+{
 	name_ = name;
 }
 
-Weapon &HumanA::getWeapon() const {
+Weapon &HumanA::getWeapon() const
+{
 	return weapon_;
 }
 
-void HumanA::setWeapon(Weapon &weapon) {
+void HumanA::setWeapon(Weapon &weapon)
+{
 	weapon_ = weapon;
 }

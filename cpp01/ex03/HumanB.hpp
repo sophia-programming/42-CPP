@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-
 #ifndef CPP_HUMANB_HPP
 #define CPP_HUMANB_HPP
 
@@ -19,4 +15,4 @@ private:
 	Weapon *weapon_;
 };
 
-#endif //CPP_HUMANB_HPP
+#endif

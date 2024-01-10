@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-
 #ifndef CPP_WEAPON_HPP
 #define CPP_WEAPON_HPP
 #include <string>
@@ -19,4 +15,4 @@ private:
 	std::string type_;
 };
 
-#endif //CPP_WEAPON_HPP
+#endif
