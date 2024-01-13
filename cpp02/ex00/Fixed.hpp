@@ -1,0 +1,20 @@
+#ifndef CPP_FIXED_HPP
+#define CPP_FIXED_HPP
+#include <iostream>
+
+class Fixed {
+public:
+	Fixed();
+	Fixed(const Fixed &rhs);
+	Fixed &operator=(Fixed const &rhs);
+	~Fixed();
+
+	int getRawBits() const;
+	void setRawBits(int raw);
+
+private:
+	int rawBits_;
+	static const int kFractionalBits_ = 8;
+};
+
+#endif
