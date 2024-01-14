@@ -10,11 +10,11 @@ public:
 	~Fixed();
 
 	int getRawBits() const;
-	void setRawBits(int raw);
+	void setRawBits(int const raw);
 
 private:
 	int rawBits_;
-	static const int kFractionalBits_ = 8;
+	static const int FractionalBits_ = 8;
 };
 
 #endif
