@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-
 #include "Fixed.hpp"
 
 Fixed::Fixed() :rawBits_(0) {}
@@ -10,13 +6,13 @@ Fixed::Fixed() :rawBits_(0) {}
 Fixed::Fixed(const int &value)
 {
 //	std::cout << "(Int constructor called)" << std::endl;
-	rawBits_ = (value << kFractionalBits_);
+	rawBits_ = (value << FractionalBits_);
 }
 
 Fixed::Fixed(const float &value)
 {
 //	std::cout << "(Float constructor called)" << std::endl;
-	rawBits_ = static_cast<int>(roundf(value * (1 << kFractionalBits_)));
+	rawBits_ = static_cast<int>(roundf(value * (1 << FractionalBits_)));
 }
 
 Fixed::~Fixed()
@@ -58,7 +54,7 @@ Fixed &Fixed::operator++()
 
 Fixed &Fixed::operator--()
 {
-	++rawBits_;
+	--rawBits_;
 	return *this;
 }
 
@@ -88,12 +84,12 @@ void Fixed::setRawBits(const int value)
 
 float Fixed::toFloat() const
 {
-	return (static_cast<float>(rawBits_) / (1 << kFractionalBits_));
+	return (static_cast<float>(rawBits_) / (1 << FractionalBits_));
 }
 
 int Fixed::toInt() const
 {
-	return (rawBits_ >> kFractionalBits_);
+	return (rawBits_ >> FractionalBits_);
 }
 
 Fixed& Fixed::min(Fixed& a, Fixed& b)

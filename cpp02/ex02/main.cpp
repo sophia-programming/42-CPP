@@ -1,8 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-/* PDF */
-
 #include "Fixed.hpp"
 
 int main( void ) {
@@ -17,4 +12,3 @@ int main( void ) {
 	std::cout << Fixed::max( a, b ) << std::endl;
 	return 0;
 }
-/* テスター追加すべき */
