@@ -9,7 +9,7 @@ public:
 	~Weapon();
 
 	/* accessor (PDF指定あり)*/
-	void setType(std::string type);
+	void setType(const std::string &type);
 	const std::string &getType();
 private:
 	std::string type_;
