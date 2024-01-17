@@ -16,6 +16,10 @@ std::string readFile(const std::string &fileName)
 		fileContent += nextLine;
 		fileContent += '\n';
 	}
+	if (fileContent.empty()) {
+		std::cout << RedColor << "The file is empty." << StopColor << std::endl;
+		exit(EXIT_FAILURE);
+	}
 	return fileContent;
 }
 
