@@ -11,7 +11,7 @@ std::string readFile(const std::string &fileName)
 	std::string fileContent;
 	std::string nextLine;
 	while (true) {
-		if (!getline(ifs, nextLine))
+		if (!std::getline(ifs, nextLine))
 			break ;
 		fileContent += nextLine;
 		fileContent += '\n';
