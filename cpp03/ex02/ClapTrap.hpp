@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-
 #ifndef CPP_CLAPTRAP_HPP
 #define CPP_CLAPTRAP_HPP
 #include <iostream>
@@ -50,4 +46,4 @@ const char *const CYAN = "\033[36m";
 const char *const WHITE = "\033[37m";
 const char *const UNDERLINE =" \033[4m";
 
-#endif //CPP_CLAPTRAP_HPP
+#endif

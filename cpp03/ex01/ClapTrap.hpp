@@ -20,7 +20,6 @@ public:
 	unsigned int getEnergyPoint() const;
 	unsigned int getAttackDamage() const;
 
-
 protected:
 	std::string name_;
 	unsigned int hitPoint_;

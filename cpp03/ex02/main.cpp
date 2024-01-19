@@ -13,18 +13,18 @@ void printInfo(const FragTrap &x)
 int main()
 {
 	std::cout << "===[NORMAL CASE]===" << std::endl;
-	FragTrap naganoyu("naganoyu");
-	printInfo(naganoyu);
-	naganoyu.attack("ako");
-	naganoyu.takeDamage(2);
-	naganoyu.beRepaired(3);
-	naganoyu.takeDamage(5);
+	FragTrap wolf("wolf");
+	printInfo(wolf);
+	wolf.attack("fox");
+	wolf.takeDamage(2);
+	wolf.beRepaired(3);
+	wolf.takeDamage(5);
 	std::cout << "===[ADDED FUNCTION]===" << std::endl;
-	naganoyu.highFivesGuys();
+	wolf.highFivesGuys();
 
 	std::cout << "===[GAMEOVER CASE]===" << std::endl;
-	FragTrap nop("nop");
-	printInfo(nop);
-	nop.attack("sataharu");
-	nop.takeDamage(100);
+	FragTrap neko("neko");
+	printInfo(neko);
+	neko.attack("mouse");
+	neko.takeDamage(100);
 }

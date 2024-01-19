@@ -22,7 +22,6 @@ public:
 
 private:
 	std::string name_;
-
 	unsigned int hitPoint_;
 	unsigned int energyPoint_;
 	unsigned int attackDamage_;

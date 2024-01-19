@@ -15,7 +15,7 @@ int main()
 	std::cout << "===[NORMAL CASE]===" << std::endl;
 	ScavTrap wolf("wolf");
 	printInfo(wolf);
-	wolf.attack("ako");
+	wolf.attack("fox");
 	wolf.takeDamage(2);
 	wolf.beRepaired(3);
 	wolf.takeDamage(5);

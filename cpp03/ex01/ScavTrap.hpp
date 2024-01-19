@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-
 #ifndef CPP_SCAVTRAP_HPP
 #define CPP_SCAVTRAP_HPP
 
@@ -24,5 +20,4 @@ private:
 	static const unsigned int kInitAttackDamage_ = 20;
 };
 
-
-#endif //CPP_SCAVTRAP_HPP
+#endif

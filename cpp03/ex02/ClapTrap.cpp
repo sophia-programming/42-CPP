@@ -1,7 +1,3 @@
-//
-// Created by 小平波琉 on 2022/08/04.
-//
-
 #include "ClapTrap.hpp"
 
 ClapTrap::ClapTrap() :
@@ -10,7 +6,7 @@ hitPoint_(kInitHitPoint_),
 energyPoint_(kInitEnergyPoint_),
 attackDamage_(kInitAttackDamage_)
 {
-	std::cerr << "(ClapTrap constructor called)" << std::endl;
+	std::cerr << "(ClapTrap default constructor called)" << std::endl;
 }
 
 ClapTrap::ClapTrap(const std::string &name) :
@@ -104,7 +100,18 @@ void ClapTrap::beRepaired(unsigned int amount)
 	<< std::endl;
 }
 
-const std::string &ClapTrap::getName() const { return name_; }
-unsigned int ClapTrap::getHitPoints() const { return hitPoint_; }
-unsigned int ClapTrap::getEnergyPoint() const { return energyPoint_; }
-unsigned int ClapTrap::getAttackDamage() const { return attackDamage_; }
+const std::string &ClapTrap::getName() const {
+	return name_;
+}
+
+unsigned int ClapTrap::getHitPoints() const {
+	return hitPoint_;
+}
+
+unsigned int ClapTrap::getEnergyPoint() const {
+	return energyPoint_;
+}
+
+unsigned int ClapTrap::getAttackDamage() const {
+	return attackDamage_;
+}
