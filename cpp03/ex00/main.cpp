@@ -5,7 +5,7 @@ void printInfo(const ClapTrap &x)
 	std::cout << UNDERLINE;
 	std::cout << "Name: " << x.getName() << std::endl;
 	std::cout << " [HP]: " << x.getHitPoints() << std::endl;
-	std::cout << " [EP]: " << x.getEnergyPoint() << std::endl;
+	std::cout << " [EP]: " << x.getEnergyPoints() << std::endl;
 	std::cout << " [AD]: " << x.getAttackDamage() << std::endl;
 	std::cout << STOP;
 }
