@@ -46,14 +46,14 @@ void Fixed::setRawBits(const int rawBits)
 	rawBits_ = rawBits;
 }
 
-float Fixed::toFloat() const
-{
-	return (static_cast<float>(rawBits_) / (1 << FractionalBits_));
-}
-
 int Fixed::toInt() const
 {
 	return (rawBits_ >> FractionalBits_);
+}
+
+float Fixed::toFloat() const
+{
+	return (static_cast<float>(rawBits_) / (1 << FractionalBits_));
 }
 
 std::ostream &operator<<(std::ostream &os, const Fixed &rhs)

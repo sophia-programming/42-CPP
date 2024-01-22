@@ -1,7 +1,6 @@
 #include "Fixed.hpp"
 
 /* PDF */
-
 #include <iostream>
 int main( void ) {
 	Fixed a;
