@@ -11,15 +11,14 @@ int main()
 		std::cout << meta->getType() << std::endl;
 		meta->makeSound();
 		delete meta;
-		std::cerr << "________________________________________" << std::endl;
 
-
+		std::cerr << "___________[CorrectDog]______________" << std::endl;
 		const Animal *j = new Dog();
 		std::cout << j->getType() << std::endl;
 		j->makeSound();
 		delete j;
-		std::cerr << "________________________________________" << std::endl;
 
+		std::cerr << "___________[CorrectCat]______________" << std::endl;
 		const Animal *i = new Cat();
 		std::cout << i->getType() << std::endl;
 		i->makeSound();
