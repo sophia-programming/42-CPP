@@ -19,6 +19,7 @@ int main()
 	wolf.takeDamage(2);
 	wolf.beRepaired(3);
 	wolf.takeDamage(5);
+	printInfo(wolf);
 	std::cout << "===[ADDED FUNCTION]===" << std::endl;
 	wolf.highFivesGuys();
 

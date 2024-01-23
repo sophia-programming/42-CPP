@@ -22,13 +22,13 @@ public:
 
 protected:
 	std::string name_;
-	unsigned int hitPoint_;
-	unsigned int energyPoint_;
+	unsigned int hitPoints_;
+	unsigned int energyPoints_;
 	unsigned int attackDamage_;
 
 private:
-	static const unsigned int kInitHitPoint_ = 10;
-	static const unsigned int kInitEnergyPoint_ = 10;
+	static const unsigned int kInitHitPoints_ = 10;
+	static const unsigned int kInitEnergyPoints_ = 10;
 	static const unsigned int kInitAttackDamage_ = 0;
 };
 

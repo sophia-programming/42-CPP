@@ -15,8 +15,8 @@ public:
 	void attack(const std::string &target);
 
 private:
-	static const unsigned int kInitHitPoint_ = 100;
-	static const unsigned int kInitEnergyPoint_ = 100;
+	static const unsigned int kInitHitPoints_ = 100;
+	static const unsigned int kInitEnergyPoints_ = 100;
 	static const unsigned int kInitAttackDamage_ = 30;
 };
 

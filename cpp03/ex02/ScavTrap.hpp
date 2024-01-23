@@ -15,8 +15,8 @@ public:
 	void guardGate();
 
 private:
-	static const unsigned int kInitHitPoint_ = 100;
-	static const unsigned int kInitEnergyPoint_ = 50;
+	static const unsigned int kInitHitPoints_ = 100;
+	static const unsigned int kInitEnergyPoints_ = 50;
 	static const unsigned int kInitAttackDamage_ = 20;
 };
 

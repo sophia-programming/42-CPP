@@ -4,8 +4,8 @@ FragTrap::FragTrap()
 {
 	std::cerr << "(FragTrap default constructor called)" << std::endl;
 	name_ = "frag";
-	hitPoint_ = kInitHitPoint_;
-	energyPoint_ = kInitEnergyPoint_;
+	hitPoints_ = kInitHitPoints_;
+	energyPoints_ = kInitEnergyPoints_;
 	attackDamage_ = kInitAttackDamage_;
 }
 
@@ -13,8 +13,8 @@ FragTrap::FragTrap(const std::string &name)
 {
 	std::cerr << "(FragTrap " << name << " constructor called)" << std::endl;
 	name_ = name;
-	hitPoint_ = kInitHitPoint_;
-	energyPoint_ = kInitEnergyPoint_;
+	hitPoints_ = kInitHitPoints_;
+	energyPoints_ = kInitEnergyPoints_;
 	attackDamage_ = kInitAttackDamage_;
 }
 
@@ -32,8 +32,8 @@ FragTrap::~FragTrap()
 FragTrap &FragTrap::operator=(const FragTrap &rhs) {
 	if (this != &rhs) {
 		name_ = rhs.getName();
-		hitPoint_ = rhs.getHitPoints();
-		energyPoint_ = rhs.getEnergyPoint();
+		hitPoints_ = rhs.getHitPoints();
+		energyPoints_ = rhs.getEnergyPoint();
 		attackDamage_ = rhs.getAttackDamage();
 	}
 	return *this;
@@ -58,15 +58,11 @@ void FragTrap::highFivesGuys()
 
 void FragTrap::attack(std::string const &target)
 {
-	std::cout
-	<< RED
-	<< "FragTrap "
-	<< name_
-	<< " attack "
-	<< target
-	<< ", causing "
-	<< attackDamage_
-	<< " points of damage!"
-	<< STOP
-	<< std::endl;
+	if (energyPoints_ > 0) {
+		std::cout << "FragTrap " << name_ << " attacks " << target
+				  << ", causing " << attackDamage_ << " points of damage!" << std::endl;
+		energyPoints_--;
+	} else {
+		std::cout << "FragTrap " << name_ << " has no energy left to attack!" << std::endl;
+	}
 }

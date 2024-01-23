@@ -4,8 +4,8 @@ ScavTrap::ScavTrap()
 {
 	std::cerr << "(ScavTrap default constructor called)" << std::endl;
 	name_ = "scav";
-	hitPoint_ = kInitHitPoint_;
-	energyPoint_ = kInitEnergyPoint_;
+	hitPoints_ = kInitHitPoints_;
+	energyPoints_ = kInitEnergyPoints_;
 	attackDamage_ = kInitAttackDamage_;
 }
 
@@ -13,8 +13,8 @@ ScavTrap::ScavTrap(const std::string &name)
 {
 	std::cerr << "(ScavTrap " << name << " constructor called)" << std::endl;
 	name_ = name;
-	hitPoint_ = kInitHitPoint_;
-	energyPoint_ = kInitEnergyPoint_;
+	hitPoints_ = kInitHitPoints_;
+	energyPoints_ = kInitEnergyPoints_;
 	attackDamage_ = kInitAttackDamage_;
 }
 
@@ -32,8 +32,8 @@ ScavTrap::~ScavTrap()
 ScavTrap &ScavTrap::operator=(const ScavTrap &rhs) {
 	if (this != &rhs) {
 		name_ = rhs.getName();
-		hitPoint_ = rhs.getHitPoints();
-		energyPoint_ = rhs.getEnergyPoint();
+		hitPoints_ = rhs.getHitPoints();
+		energyPoints_ = rhs.getEnergyPoint();
 		attackDamage_ = rhs.getAttackDamage();
 	}
 	return *this;
@@ -41,17 +41,13 @@ ScavTrap &ScavTrap::operator=(const ScavTrap &rhs) {
 
 void ScavTrap::attack(std::string const &target)
 {
-	std::cout
-	<< RED
-	<< "ScavTrap "
-	<< name_
-	<< " attacks "
-	<< target
-	<< ", causing "
-	<< attackDamage_
-	<< " points of damage!"
-	<< STOP
-	<< std::endl;
+	if (energyPoints_ > 0) {
+		std::cout << "ScavTrap " << name_ << " attacks " << target
+				  << ", causing " << attackDamage_ << " points of damage!" << std::endl;
+		energyPoints_--;
+	} else {
+		std::cout << "ScavTrap " << name_ << " has no energy left to attack!" << std::endl;
+	}
 }
 
 void ScavTrap::guardGate()
