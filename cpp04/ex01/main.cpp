@@ -1,12 +1,14 @@
+#include "Animal.hpp"
 #include "Dog.hpp"
 #include "Cat.hpp"
+#include "Brain.hpp"
 #include <iostream>
 
 int main() {
-	const int numAnimals = 10;
-	Animal *animals[numAnimals];
+	const int numAnimals = 4;
+	Animal* animals[numAnimals];
 
-	// 動物のオブジェクトを交互に作成（偶数はDog、奇数はCat）
+	// Animal配列にDogとCatを交互に割り当て
 	for (int i = 0; i < numAnimals; i++) {
 		if (i % 2 == 0) {
 			animals[i] = new Dog();
@@ -15,31 +17,35 @@ int main() {
 		}
 	}
 
-	// 各動物の音を出力
+	// 各AnimalのmakeSoundメソッドをテスト
 	for (int i = 0; i < numAnimals; i++) {
-		std::cout << "animals[" << i << "]->makeSound\t";
+		std::cout << GREEN << "animals[" << i << "]->makeSound->";
 		animals[i]->makeSound();
+		std::cout << STOP;
 	}
 
-	// 動物のオブジェクトを削除
-	for (int i = 0; i < numAnimals; i++) {
+	for (int i = 0; i < numAnimals; i++)
 		delete animals[i];
-	}
 
-	std::cout << "+----------------------------------------------------------------+" << std::endl;
+	// Brainクラス テスト
+	std::cout << RED << "============= Brain Test ===================" << STOP << std::endl;
+	Dog *dog = new Dog;
+	Dog *dogCopy = new Dog(*dog);
+	std::cout << "Dog *dog Brain: " << dog->getBrain() << std::endl;
+	std::cout << "Dog *dogCopy Brain: " << dogCopy->getBrain() << std::endl;
+	delete dog;
+	delete dogCopy;
 
-	// Catオブジェクトのコピーをテスト（コピーの確認方法はクラスの実装に依存）
-	Cat *originalCat = new Cat;
-	Cat *copiedCat = new Cat(*originalCat);
+	// CatとDogのコピーコンストラクタをテスト
+	std::cout << RED << "============== dog  copy test  ===================" << STOP << std::endl;
+	Dog originalDog;
+	Dog copyDog(originalDog);
 
-	// （ここでコピーがディープコピーであることを確認する方法を実装する）
+	std::cout << RED << "============== cat  copy test  ===================" << STOP << std::endl;
+	Cat originalCat;
+	Cat copyCat(originalCat);
 
-	delete originalCat;
-	delete copiedCat;
-
-	std::cout << "+----------------------------------------------------------------+" << std::endl;
-
-	// メモリリークチェックは適切なツールを使用して実行
+	std::cout << GREEN << "All animals were deleted successfully." << STOP << std::endl;
 
 	return 0;
 }

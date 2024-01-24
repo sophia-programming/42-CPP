@@ -12,7 +12,6 @@ public:
 	Brain &operator=(const Brain &rhs);
 
 	const std::string *getIdeas() const;
-	void printIdeas() const;
 
 private:
 	std::string ideas[100];
