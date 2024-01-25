@@ -6,7 +6,7 @@ hitPoints_(kInitHitPoints_),
 energyPoints_(kInitEnergyPoints_),
 attackDamage_(kInitAttackDamage_)
 {
-	std::cerr << "(ClapTrap default constructor called)" << std::endl;
+	std::cout << "(ClapTrap default constructor called)" << std::endl;
 }
 
 ClapTrap::ClapTrap(const std::string &name) :
@@ -15,17 +15,17 @@ hitPoints_(kInitHitPoints_),
 energyPoints_(kInitEnergyPoints_),
 attackDamage_(kInitAttackDamage_)
 {
-	std::cerr << "(ClapTrap " << name << " constructor called)" << std::endl;
+	std::cout << "(ClapTrap " << name << " constructor called)" << std::endl;
 }
 
 ClapTrap::~ClapTrap()
 {
-	std::cerr << "(ClapTrap destructor called)" << std::endl;
+	std::cout << "(ClapTrap destructor called)" << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap &rhs)
 {
-	std::cerr << "(ClapTrap copy constructor called)" << std::endl;
+	std::cout << "(ClapTrap copy constructor called)" << std::endl;
 	*this = rhs;
 }
 

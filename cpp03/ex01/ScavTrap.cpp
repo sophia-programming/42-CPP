@@ -2,7 +2,7 @@
 
 ScavTrap::ScavTrap()
 {
-	std::cerr << "(ScavTrap default constructor called)" << std::endl;
+	std::cout << "(ScavTrap default constructor called)" << std::endl;
 	name_ = "scav";
 	hitPoints_ = kInitHitPoints_;
 	energyPoints_ = kInitEnergyPoints_;
@@ -11,7 +11,7 @@ ScavTrap::ScavTrap()
 
 ScavTrap::ScavTrap(const std::string &name)
 {
-	std::cerr << "(ScavTrap " << name << " constructor called)" << std::endl;
+	std::cout << "(ScavTrap " << name << " constructor called)" << std::endl;
 	name_ = name;
 	hitPoints_ = kInitHitPoints_;
 	energyPoints_ = kInitEnergyPoints_;
@@ -20,13 +20,13 @@ ScavTrap::ScavTrap(const std::string &name)
 
 ScavTrap::ScavTrap(const ScavTrap &rhs)
 {
-	std::cerr << "(ScavTrap copy constructor called)" << std::endl;
+	std::cout << "(ScavTrap copy constructor called)" << std::endl;
 	*this = rhs;
 }
 
 ScavTrap::~ScavTrap()
 {
-	std::cerr << "(ScavTrap " << name_ << " destructor called)" << std::endl;
+	std::cout << "(ScavTrap " << name_ << " destructor called)" << std::endl;
 }
 
 ScavTrap &ScavTrap::operator=(const ScavTrap &rhs) {
