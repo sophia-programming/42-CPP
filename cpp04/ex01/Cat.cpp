@@ -12,7 +12,7 @@ Cat::Cat(const Cat &rhs) : Animal(rhs)
 	if (rhs.brain) {
 		brain = new Brain(*rhs.brain);
 	} else {
-		brain = nullptr;
+		brain = NULL;
 	}
 }
 
@@ -29,7 +29,7 @@ Cat &Cat::operator=(const Cat &rhs) {
 		if (rhs.brain) {
 			brain = new Brain(*rhs.brain);
 		} else {
-			brain = nullptr;
+			brain = NULL;
 		}
 	}
 	return *this;

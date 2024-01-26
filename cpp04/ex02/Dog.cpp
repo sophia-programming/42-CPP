@@ -12,7 +12,7 @@ Dog::Dog(const Dog &rhs) : AAnimal(rhs)
 	if (rhs.brain) {
 		brain = new Brain(*rhs.brain);
 	} else {
-		brain = nullptr;
+		brain = NULL;
 	}
 }
 
@@ -29,7 +29,7 @@ Dog &Dog::operator=(const Dog &rhs) {
 		if (rhs.brain) {
 			brain = new Brain(*rhs.brain);
 		} else {
-			brain = nullptr;
+			brain = NULL;
 		}
 	}
 	return *this;
