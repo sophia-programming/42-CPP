@@ -1,10 +1,11 @@
-#ifndef CPP_ANIMAL_HPP
-#define CPP_ANIMAL_HPP
+#ifndef ANIMAL_HPP
+#define ANIMAL_HPP
 
 #include <string>
 #include <iostream>
 
-class Animal {
+class Animal
+{
 public:
 	Animal();
 	Animal(std::string type);
@@ -14,7 +15,8 @@ public:
 
 	const std::string &getType() const;
 	void setType(const std::string &type);
-	virtual void makeSound() const;
+
+	virtual void makeSound() const = 0;
 
 protected:
 	std::string type;

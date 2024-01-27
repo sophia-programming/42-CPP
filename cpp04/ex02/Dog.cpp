@@ -1,12 +1,12 @@
 #include "Dog.hpp"
 
-Dog::Dog() : AAnimal("Dog")
+Dog::Dog() : Animal("Dog")
 {
 	std::cerr << "(Dog default constructor called)" << std::endl;
 	brain = new Brain();
 }
 
-Dog::Dog(const Dog &rhs) : AAnimal(rhs)
+Dog::Dog(const Dog &rhs) : Animal(rhs)
 {
 	std::cerr << "(Dog copy constructor called)" << std::endl;
 	if (rhs.brain) {
@@ -24,7 +24,7 @@ Dog::~Dog()
 
 Dog &Dog::operator=(const Dog &rhs) {
 	if (this != &rhs) {
-		AAnimal::operator=(rhs);
+		Animal::operator=(rhs);
 		delete brain;
 		if (rhs.brain) {
 			brain = new Brain(*rhs.brain);

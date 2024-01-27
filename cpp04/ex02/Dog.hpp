@@ -1,10 +1,9 @@
-#ifndef CPP_DOG_HPP
-#define CPP_DOG_HPP
+#ifndef DOG_HPP
+#define DOG_HPP
 #include "Animal.hpp"
 #include "Brain.hpp"
-#include "AAnimal.hpp"
 
-class Dog : public AAnimal {
+class Dog : public Animal {
 public:
 	Dog();
 	virtual ~Dog();

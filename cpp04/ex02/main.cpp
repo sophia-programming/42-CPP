@@ -5,9 +5,9 @@
 #include <iostream>
 
 int main() {
-//	AAnimal test;
+//	Animal test;
 	const int numAnimals = 4;
-	AAnimal* animals[numAnimals];
+	Animal* animals[numAnimals];
 
 	// Animal配列にDogとCatを交互に割り当て
 	for (int i = 0; i < numAnimals; i++) {

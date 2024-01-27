@@ -1,5 +1,5 @@
-#ifndef CPP_WRONGANIMAL_HPP
-#define CPP_WRONGANIMAL_HPP
+#ifndef WRONGANIMAL_HPP
+#define WRONGANIMAL_HPP
 
 #include "Animal.hpp"
 #include <iostream>

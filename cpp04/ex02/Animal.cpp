@@ -1,42 +1,42 @@
-#include "AAnimal.hpp"
+#include "Animal.hpp"
 
-AAnimal::AAnimal() : type("AAnimal")
+Animal::Animal() : type("Animal")
 {
-	std::cerr << "(AAnimal Default constructor called)" << std::endl;
+	std::cerr << "(Animal Default constructor called)" << std::endl;
 }
 
-AAnimal::AAnimal(std::string type) : type(type)
+Animal::Animal(std::string type) : type(type)
 {
-	std::cerr << "(AAnimal " << type << " constructor called)" << std::endl;
+	std::cerr << "(Animal " << type << " constructor called)" << std::endl;
 }
 
-AAnimal::AAnimal(const AAnimal &rhs)
+Animal::Animal(const Animal &rhs)
 {
-	std::cerr << "(AAnimal copy constructor called)" << std::endl;
+	std::cerr << "(Animal copy constructor called)" << std::endl;
 	*this = rhs;
 }
 
-AAnimal::~AAnimal()
+Animal::~Animal()
 {
-	std::cerr << "(AAnimal destructor called)" << std::endl;
+	std::cerr << "(Animal destructor called)" << std::endl;
 }
 
-AAnimal &AAnimal::operator=(const AAnimal &rhs) {
+Animal &Animal::operator=(const Animal &rhs) {
 	if (this != &rhs) {
 		type = rhs.getType();
 	}
 	return *this;
 }
 
-void AAnimal::makeSound() const
+void Animal::makeSound() const
 {
 	std::cout << BOLD << "..." << STOP << std::endl;
 }
 
-const std::string &AAnimal::getType() const {
+const std::string &Animal::getType() const {
 	return type;
 }
 
-void AAnimal::setType(const std::string &type) {
+void Animal::setType(const std::string &type) {
 	this->type = type;
 }

@@ -1,13 +1,9 @@
-//derived class should be virtual destructor
-
-#ifndef CPP_CAT_HPP
-#define CPP_CAT_HPP
+#ifndef CAT_HPP
+#define CAT_HPP
 #include "Animal.hpp"
 #include "Brain.hpp"
-#include "AAnimal.hpp"
 
-
-class Cat : public AAnimal {
+class Cat : public Animal {
 public:
 	Cat();
 	virtual ~Cat();
