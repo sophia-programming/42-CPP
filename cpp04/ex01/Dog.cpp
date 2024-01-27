@@ -16,6 +16,11 @@ Dog::Dog(const Dog &rhs) : Animal(rhs)
 	}
 }
 
+/* Brain test ( shallow copy )*/
+//Dog::Dog(const Dog &rhs) : Animal(rhs), brain(rhs.brain) {
+//	std::cerr << "(Dog shallow copy constructor called)" << std::endl;
+//}
+
 Dog::~Dog()
 {
 	std::cerr << "(Dog destructor called)" << std::endl;

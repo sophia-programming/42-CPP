@@ -18,7 +18,7 @@ WrongAnimal::WrongAnimal(const WrongAnimal &rhs)
 
 WrongAnimal::~WrongAnimal()
 {
-	std::cerr << "(WrongAnimale destructor called)" << std::endl;
+	std::cerr << "(WrongAnimal destructor called)" << std::endl;
 }
 
 WrongAnimal &WrongAnimal::operator=(const WrongAnimal &rhs) {

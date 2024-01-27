@@ -11,7 +11,7 @@ public:
 	AAnimal();
 	AAnimal(std::string type);
 	AAnimal(const AAnimal &rhs);
-	virtual ~AAnimal() = 0;
+	virtual ~AAnimal();
 	AAnimal &operator=(const AAnimal &rhs);
 
 	const std::string &getType() const;

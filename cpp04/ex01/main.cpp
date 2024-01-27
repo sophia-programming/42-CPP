@@ -2,11 +2,13 @@
 #include "Dog.hpp"
 #include "Cat.hpp"
 #include "Brain.hpp"
+#include "WrongAnimal.hpp"
+#include "WrongCat.hpp"
 #include <iostream>
 
 int main() {
 	const int numAnimals = 4;
-	Animal* animals[numAnimals];
+	Animal *animals[numAnimals];
 
 	// Animal配列にDogとCatを交互に割り当て
 	for (int i = 0; i < numAnimals; i++) {
@@ -47,5 +49,20 @@ int main() {
 
 	std::cout << GREEN << "All animals were deleted successfully." << STOP << std::endl;
 
-	return 0;
+	std::cerr <<  RED << "============== WrongAnimal ===================" << STOP << std::endl;
+	{
+		const WrongAnimal *meta = new WrongAnimal();
+		std::cout << meta->getType() << std::endl;
+		meta->makeSound();
+		delete meta;
+		std::cerr << "____________________________________" << std::endl;
+
+		const WrongAnimal *i = new WrongCat();
+		std::cout << i->getType() << std::endl;
+		i->makeSound();
+		delete i;
+		std::cerr << "____________________________________" << std::endl;
+
+		return 0;
+	}
 }
