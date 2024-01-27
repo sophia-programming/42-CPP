@@ -5,6 +5,7 @@
 #include <iostream>
 
 int main() {
+//	AAnimal test;
 	const int numAnimals = 4;
 	AAnimal* animals[numAnimals];
 
