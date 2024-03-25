@@ -17,7 +17,7 @@ int main(void)
 	}
 	catch (std::exception & e)
 	{
-		std::cout << "Grade out of range " << e.what() << std::endl;
+		std::cout << RED << "Grade out of range " << e.what() << STOP << std::endl;
 		return (0);
 	}
 //	 try
