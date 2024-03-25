@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <exception>
 
 class Bureaucrat {
 private:
@@ -16,11 +17,23 @@ public:
 	virtual ~Bureaucrat();
 	Bureaucrat &operator=(const Bureaucrat &rhs);
 
-	const std::string &getName() const;
+	std::string getName() const;
 	void setName(const std::string &name);
-	int getGrade() const;
+	int  getGrade() const;
 	void setGrade(int grade);
+
+	void incrementGrade();
+	void decrementGrade();
+
+	class GradeTooHighException : public std::exception {
+		virtual const char *what() const throw();
+	};
+	class GradeTooLowException : public std::exception {
+		virtual const char *what() const throw();
+	};
 };
+
+std::ostream &operator<<(std::ostream &os, const Bureaucrat &bureaucrat);
 
 /* colors */
 const char *const STOP = "\033[0m";
