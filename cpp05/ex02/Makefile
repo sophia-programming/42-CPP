@@ -12,7 +12,7 @@ clean:
 	$(RM) $(objs)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) target_shrubbery
 
 re: fclean all
 
