@@ -6,6 +6,7 @@
 #include <exception>
 
 class Form;
+
 class Bureaucrat {
 private:
 	std::string name_;
