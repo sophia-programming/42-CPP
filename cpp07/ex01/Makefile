@@ -1,6 +1,5 @@
 NAME = iter
-#srcs = $(wildcard *.cpp)
-srcs = main2.cpp
+srcs = $(wildcard *.cpp)
 objs = $(srcs:.cpp=.o)
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -pedantic
 
