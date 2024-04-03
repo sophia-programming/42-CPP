@@ -5,7 +5,7 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -pedantic
 
 all: $(NAME)
 
-$(MAME): $(objs)
+$(NAME): $(objs)
 	c++ $(CXXFLAGS) $(objs) -o $(NAME)
 
 clean:
