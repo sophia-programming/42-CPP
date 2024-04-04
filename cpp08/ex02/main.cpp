@@ -2,26 +2,31 @@
 
 int main()
 {
-	MutantStack<int> mstack;
-	mstack.push(5);
-	mstack.push(17);
-	std::cout << mstack.top() << std::endl;
-	mstack.pop();
-	std::cout << mstack.size() << std::endl;
-	mstack.push(3);
-	mstack.push(5);
-	mstack.push(737);
+	MutantStack<int> ms;
+	std::cout << GREEN << "=== [top] ===" << STOP << std::endl;
+	ms.push(5);
+	ms.push(17);
+	std::cout << ms.top() << std::endl;
+
+	std::cout << GREEN << "=== [pop] ===" << STOP << std::endl;
+	ms.pop();
+	std::cout << ms.size() << std::endl;
+
+	std::cout << GREEN << "=== [push] ===" << STOP << std::endl;
+	ms.push(3);
+	ms.push(5);
+	ms.push(737);
 //[...]
-	mstack.push(0);
-	MutantStack<int>::iterator it = mstack.begin();
-	MutantStack<int>::iterator ite = mstack.end();
+	ms.push(0);
+	MutantStack<int>::iterator it = ms.begin();
+	MutantStack<int>::iterator ite = ms.end();
 	++it;
 	--it;
 	while (it != ite)
 	{
 		std::cout << *it << std::endl;
-		++it;
+		it++;
 	}
-	std::stack<int> s(mstack);
+	std::stack<int> s(ms);
 	return 0;
 }
