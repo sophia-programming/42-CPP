@@ -56,11 +56,11 @@ bool BitcoinExchange::validateDateFormat(const std::string &date)
 	return true;
 }
 
-bool BitcoinExchange::isValidDate(const std::string& date)
+bool BitcoinExchange::isValidDate(const std::string &date)
 {
 	std::string s;
-	int year, month, day;
 	std::istringstream ss(date);
+	int year, month, day;
 	int i = 0;
 
 	while (std::getline(ss, s, '-'))
@@ -68,7 +68,7 @@ bool BitcoinExchange::isValidDate(const std::string& date)
 		if (i == 0)
 		{
 			year = ft_stou(s);
-			if (year < 2009 || year > 2022)
+			if (year < 2009 || 2022 < year)
 			{
 				std::cerr << RED << "Error: year is not at the database => " << "\"" << date << "\"" << STOP << std::endl;
 				return false;
@@ -77,7 +77,7 @@ bool BitcoinExchange::isValidDate(const std::string& date)
 		if (i == 1)
 		{
 			month = ft_stou(s);
-			if (month < 1 || month > 12)
+			if (month < 1 || 12 < month)
 			{
 				std::cerr << RED << "Error: incorrect month => " << "\"" << date << "\"" << STOP << std::endl;
 				return false;
@@ -86,15 +86,15 @@ bool BitcoinExchange::isValidDate(const std::string& date)
 		if (i == 2)
 		{
 			day = ft_stou(s);
-			if ((day < 1 || day > 31)
+			if ((day < 1 || 31 < day)
 				||  (day == 31 && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11))
-				||  (day > 28 && month == 2))
+				||  (28 < day && month == 2))
 			{
 				std::cerr << RED << "Error: incorrect day => " << "\"" << date << "\"" << STOP << std::endl;
 				return false;
 			}
 		}
-		i += 1;
+		i++;
 	}
 	if (i != 3)
 	{
@@ -111,18 +111,17 @@ bool BitcoinExchange::validatePriceFormat(const std::string& priceStr)
 		std::cerr << RED << "Error: invalid priceStr => " << "\"" << priceStr << "\"" << STOP << std::endl;
 	else if (priceStr.at(0) == '-')
 		std::cerr << RED << "Error: not a positive number." << STOP << std::endl;
-	else if (priceStr.length() > 10 || (priceStr.length() == 10 && priceStr > "2147483647"))
+	else if (10 < priceStr.length() || (priceStr.length() == 10 && "2147483647" < priceStr))
 		std::cerr << RED << "Error: too large a number." << STOP << std::endl;
 	else
 		return true;
 	return false;
 }
 
-void BitcoinExchange::loadPricesFromCSV(std::ifstream& csvFile)
+void BitcoinExchange::loadPricesFromCSV(std::ifstream &csvFile)
 {
 	std::string line;
 	size_t delim;
-
 	// skip first line
 	std::getline(csvFile, line);
 	while (std::getline(csvFile, line))
