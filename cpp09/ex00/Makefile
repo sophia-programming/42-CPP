@@ -1,4 +1,4 @@
-NAME = MutantStack
+NAME = btc
 srcs = $(wildcard *.cpp)
 objs = $(srcs:.cpp=.o)
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -pedantic
