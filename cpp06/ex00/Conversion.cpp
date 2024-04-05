@@ -2,7 +2,7 @@
 
 void convert(std::string &literal)
 {
-	long long iVal_ = 0;
+	uint64_t iVal_ = 0;
 	float fVal_ = 0.0f;
 	double dVal_ = 0.0;
 	char cVal_ = 0;
