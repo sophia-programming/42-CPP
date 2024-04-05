@@ -1,8 +1,8 @@
 #include "BitcoinExchange.hpp"
 
-float ft_stof(const std::string& str);
+float ft_stof(const std::string &str);
 
-static int panic(std::string error_msg)
+static int error_message(std::string error_msg)
 {
 	std::cerr << RED << error_msg << STOP << std::endl;
 	return EXIT_FAILURE;
@@ -11,28 +11,26 @@ static int panic(std::string error_msg)
 int main(int argc, char **argv)
 {
 	if (argc != 2)
-		return panic("Error: could not open file");
+		return error_message("Error: could not open file");
 
 	std::ifstream input_db(argv[1], std::ifstream::in);
 	if (!input_db.is_open())
-		return panic("Error: could not open file");
+		return error_message("Error: could not open file");
 
 	std::ifstream csvFile("./data.csv", std::ifstream::in);
 	if (!csvFile.is_open())
-		return panic("Error: fatal: could not open internal database file");
+		return error_message("Error: fatal: could not open csv file");
 
 	BitcoinExchange btc;
 	btc.loadPricesFromCSV(csvFile);
 
 	std::string line;
-
 	// skip first line
 	std::getline(input_db, line);
 	while (std::getline(input_db, line))
 	{
 		size_t delim = line.find('|');
-		if (delim == std::string::npos
-			||	line.length() < delim + 2)
+		if (delim == std::string::npos || line.length() < delim + 2)
 		{
 			std::cerr << RED << "Error: bad input => " << "\"" << line << "\"" << STOP << std::endl;
 			continue ;
