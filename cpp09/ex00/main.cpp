@@ -1,7 +1,5 @@
 #include "BitcoinExchange.hpp"
 
-#define INTERNAL_DB_FILE "./data.csv"
-
 float ft_stof(const std::string& str);
 
 static int panic(std::string error_msg)
@@ -19,12 +17,12 @@ int main(int argc, char **argv)
 	if (!input_db.is_open())
 		return panic("Error: could not open file");
 
-	std::ifstream internal_db(INTERNAL_DB_FILE, std::ifstream::in);
-	if (!internal_db.is_open())
+	std::ifstream csvFile("./data.csv", std::ifstream::in);
+	if (!csvFile.is_open())
 		return panic("Error: fatal: could not open internal database file");
 
 	BitcoinExchange btc;
-	btc.readInternalDataBase(internal_db);
+	btc.loadPricesFromCSV(csvFile);
 
 	std::string line;
 
@@ -41,17 +39,17 @@ int main(int argc, char **argv)
 		}
 
 		std::string date = line.substr(0, delim - 1);
-		if (!btc.isDateInCorrectFormat(date) || !btc.isValidDate(date))
+		if (!btc.validateDateFormat(date) || !btc.isValidDate(date))
 			continue;
 
-		std::string rate_as_str = line.substr(delim + 2);
-		if (!btc.isRateInCorrectFormat(rate_as_str))
+		std::string priceStr_as_str = line.substr(delim + 2);
+		if (!btc.validatePriceFormat(priceStr_as_str))
 			continue;
-		float rate = ft_stof(rate_as_str);
+		float priceStr = ft_stof(priceStr_as_str);
 
-		std::cout << RED << date << " => " << rate << " = " << std::setprecision(2) << rate * btc.getRateFromDataBase(date) << STOP << std::endl;
+		std::cout << date << " => " << priceStr << " = " << std::setprecision(2) << priceStr * btc.findClosestPrice(date) << std::endl;
 	}
 	input_db.close();
-	internal_db.close();
+	csvFile.close();
 	return EXIT_SUCCESS;
 }

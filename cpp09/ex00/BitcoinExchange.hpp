@@ -16,13 +16,12 @@ public:
 	BitcoinExchange& operator=(const BitcoinExchange &to_copy);
 	~BitcoinExchange(void);
 
-	void readInternalDataBase(std::ifstream &internal_db);
+	void  loadPricesFromCSV(std::ifstream &csvFile);
+	float findClosestPrice(const std::string &date);
 
-	float getRateFromDataBase(const std::string &date);
-
-	bool isDateInCorrectFormat(const std::string &date);
-	bool isValidDate(const std::string &date);
-	bool isRateInCorrectFormat(const std::string &rate);
+	bool  validateDateFormat(const std::string &date);
+	bool  isValidDate(const std::string &date);
+	bool  validatePriceFormat(const std::string &priceStr);
 
 private:
 	std::map<std::string, float> dataBase;

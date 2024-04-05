@@ -1,6 +1,6 @@
 #include "BitcoinExchange.hpp"
 
-static unsigned int ft_stou(const std::string& str)
+static unsigned int ft_stou(const std::string &str)
 {
 	unsigned int num;
 	std::stringstream ss(str);
@@ -9,7 +9,7 @@ static unsigned int ft_stou(const std::string& str)
 	return num;
 }
 
-float ft_stof(const std::string& str)
+float ft_stof(const std::string &str)
 {
 	float num;
 	std::stringstream ss(str);
@@ -25,20 +25,21 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange& to_copy) {
 }
 
 BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& to_copy) {
-	this->dataBase = to_copy.dataBase;
+	if (this != &to_copy)
+		this->dataBase = to_copy.dataBase;
 	return *this;
 }
 
 BitcoinExchange::~BitcoinExchange(void) {}
 
-float BitcoinExchange::getRateFromDataBase(const std::string& date)
+float BitcoinExchange::findClosestPrice(const std::string &date)
 {
-	if (this->dataBase.count(date) > 0)
+	if (0 < this->dataBase.count(date))
 		return this->dataBase.at(date);
 	return (--this->dataBase.lower_bound(date))->second;
 }
 
-bool BitcoinExchange::isDateInCorrectFormat(const std::string &date)
+bool BitcoinExchange::validateDateFormat(const std::string &date)
 {
 	if (date.empty())
 		return false;
@@ -47,7 +48,7 @@ bool BitcoinExchange::isDateInCorrectFormat(const std::string &date)
 	size_t second_hyphen = date.find('-', first_hyphen + 1);
 
 	if (first_hyphen == std::string::npos || second_hyphen == std::string::npos
-		||  date.find_first_not_of("0123456789.-") != std::string::npos)
+		||  date.find_first_not_of("0123456789-") != std::string::npos)
 	{
 		std::cerr << RED << "Error: bad input => " << "\"" << date << "\"" << STOP << std::endl;
 		return false;
@@ -103,33 +104,33 @@ bool BitcoinExchange::isValidDate(const std::string& date)
 	return true;
 }
 
-bool BitcoinExchange::isRateInCorrectFormat(const std::string& rate)
+bool BitcoinExchange::validatePriceFormat(const std::string& priceStr)
 {
-	if (rate.empty() || rate.find_first_not_of("0123456789.-") != std::string::npos
-		||  rate.at(0) == '.' || rate.find('.', rate.length() - 1) != std::string::npos)
-		std::cerr << RED << "Error: invalid rate => " << "\"" << rate << "\"" << STOP << std::endl;
-	else if (rate.at(0) == '-')
+	if (priceStr.empty() || priceStr.find_first_not_of("0123456789.-") != std::string::npos
+		||  priceStr.at(0) == '.' || priceStr.find('.', priceStr.length() - 1) != std::string::npos)
+		std::cerr << RED << "Error: invalid priceStr => " << "\"" << priceStr << "\"" << STOP << std::endl;
+	else if (priceStr.at(0) == '-')
 		std::cerr << RED << "Error: not a positive number." << STOP << std::endl;
-	else if (rate.length() > 10 || (rate.length() == 10 && rate > "2147483647"))
+	else if (priceStr.length() > 10 || (priceStr.length() == 10 && priceStr > "2147483647"))
 		std::cerr << RED << "Error: too large a number." << STOP << std::endl;
 	else
 		return true;
 	return false;
 }
 
-void BitcoinExchange::readInternalDataBase(std::ifstream& internal_db)
+void BitcoinExchange::loadPricesFromCSV(std::ifstream& csvFile)
 {
 	std::string line;
 	size_t delim;
 
 	// skip first line
-	std::getline(internal_db, line);
-	while (std::getline(internal_db, line))
+	std::getline(csvFile, line);
+	while (std::getline(csvFile, line))
 	{
 		delim = line.find(',');
-		std::string rate = line.substr(delim + 1);
-		// set a new pair on the map <date, rate>
-		this->dataBase[line.substr(0, delim)] = ft_stof(rate);
+		std::string priceStr = line.substr(delim + 1);
+		// set a new pair on the map <date, priceStr>
+		this->dataBase[line.substr(0, delim)] = ft_stof(priceStr);
 	}
-	internal_db.close();
+	csvFile.close();
 }
