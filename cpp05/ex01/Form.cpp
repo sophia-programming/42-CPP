@@ -60,6 +60,14 @@ void Form::beSigned(const Bureaucrat &bureaucrat)
 		throw Form::GradeTooLowException();
 }
 
+void Form::execute(const Bureaucrat &executor)
+{
+	if (executor.getGrade() <= this->gradeToExecute_)
+		this->isSigned_ = true;
+	else
+		throw Form::GradeTooLowException();
+}
+
 const char *Form::GradeTooHighException::what() const throw()
 {
 	return "Grade is too high";
