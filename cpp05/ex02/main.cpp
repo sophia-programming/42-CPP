@@ -11,7 +11,7 @@ int main() {
 
 	try {
 		lowRankBureaucrat.signForm(form);
-		form.execute(lowRankBureaucrat);
+		lowRankBureaucrat.executeForm(form);
 	} catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}
@@ -21,11 +21,11 @@ int main() {
 //int main() {
 //	RobotomyRequestForm form("neko");
 //	Bureaucrat highRankBureaucrat("HighRank", 1);
-//	Bureaucrat lowRankBureaucrat("LowRank", 4);
+//	Bureaucrat lowRankBureaucrat("LowRank", 70);
 //
 //	try {
 //		lowRankBureaucrat.signForm(form);
-//		form.execute(lowRankBureaucrat);
+//		lowRankBureaucrat.executeForm(form);
 //	} catch (std::exception& e) {
 //		std::cout << e.what() << std::endl;
 //	}
@@ -39,9 +39,10 @@ int main() {
 //
 //	try {
 //		highRankBureaucrat.signForm(form);
-//		form.execute(highRankBureaucrat);
+//		highRankBureaucrat.executeForm(form);
 //	} catch (std::exception& e) {
 //		std::cout << e.what() << std::endl;
 //	}
 //	return 0;
 //}
+//
