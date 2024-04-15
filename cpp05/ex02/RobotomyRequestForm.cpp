@@ -38,7 +38,6 @@ void RobotomyRequestForm::execute(Bureaucrat const &executor) const {
 			std::cout << rand() << std::endl;
 			std::cout << "*************" << std::endl;
 		}
-//
 		else
 			std::cout << RED << this->target_ <<  " robotomization failed" << STOP << std::endl;
 	}

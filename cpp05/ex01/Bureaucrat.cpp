@@ -2,7 +2,7 @@
 #include "Form.hpp"
 
 Bureaucrat::Bureaucrat() : name_("default"), grade_(150) {
-	std::cout << "this->grade_ : " << std::endl;
+	std::cout << "this->grade_ : " << this->grade_ << std::endl;
 	std::cout << GREEN << "[Bureaucrat] Default constructor called" << STOP << std::endl;
 	if (this->grade_ < 1)
 		throw Bureaucrat::GradeTooHighException();
@@ -20,7 +20,6 @@ Bureaucrat::Bureaucrat(std::string name, int grade) : name_(name), grade_(grade)
 
 Bureaucrat::Bureaucrat(const Bureaucrat &rhs) : name_(rhs.name_), grade_(rhs.grade_) {
 	std::cout << GREEN << "[Bureaucrat] Copy constructor called"<< STOP << std::endl;
-	*this = rhs;
 }
 
 Bureaucrat::~Bureaucrat() {
