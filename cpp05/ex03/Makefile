@@ -12,7 +12,7 @@ clean:
 	$(RM) $(objs)
 
 fclean: clean
-	$(RM) $(NAME) target_shrubbery
+	$(RM) $(NAME) Garden_shrubbery
 
 re: fclean all
 
