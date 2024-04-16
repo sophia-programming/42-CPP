@@ -8,12 +8,12 @@
 class Form;
 class Bureaucrat {
 private:
-	std::string name_;
+	const std::string name_;
 	int grade_;
 
 public:
 	Bureaucrat();
-	Bureaucrat(std::string name, int grade);
+	Bureaucrat(const std::string name, int grade);
 	Bureaucrat(const Bureaucrat &rhs);
 	virtual ~Bureaucrat();
 	Bureaucrat &operator=(const Bureaucrat &rhs);
