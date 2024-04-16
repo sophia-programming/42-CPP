@@ -8,10 +8,10 @@ int main(void)
 	data->n = 42;
 	data->s2 = "Neko";
 
-	uintptr_t row = Serialization::serialize(data);
+	uintptr_t row = Serializer::serialize(data);
 	std::cout << YELLOW << "serialize address: " << STOP << row << std::endl;
 
-	Data *deserialized = Serialization::deserialize(row);
+	Data *deserialized = Serializer::deserialize(row);
 	std::cout << YELLOW << "deserialized pointer address:  " << STOP << deserialized << std::endl;
 
 	std::cout << CYAN << "Original pointer address: " << STOP << data << std::endl;

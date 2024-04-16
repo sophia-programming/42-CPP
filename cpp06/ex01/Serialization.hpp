@@ -2,16 +2,16 @@
 #define SERIALIZATION_HPP
 
 #include <iostream>
+#include "Data.hpp"
 
-struct Data
+class Serializer
 {
-	std::string s1;
-	int n;
-	std::string s2;
-};
+public:
+	Serializer();
+	Serializer(const Serializer &rhs);
+	Serializer &operator=(const Serializer &rhs);
+	~Serializer();
 
-class Serialization
-{
 public:
 	static uintptr_t serialize(Data *ptr);
 	static Data *deserialize(uintptr_t raw);
