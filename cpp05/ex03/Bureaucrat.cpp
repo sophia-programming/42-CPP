@@ -10,7 +10,7 @@ Bureaucrat::Bureaucrat() : name_("default"), grade_(150) {
 		throw Bureaucrat::GradeTooLowException();
 }
 
-Bureaucrat::Bureaucrat(std::string name, int grade) : name_(name), grade_(grade) {
+Bureaucrat::Bureaucrat(const std::string name, int grade) : name_(name), grade_(grade) {
 	std::cout << GREEN << "[Bureaucrat] Constructor called" << STOP << std::endl;
 	if (this->grade_ < 1)
 		throw Bureaucrat::GradeTooHighException();
@@ -30,7 +30,6 @@ Bureaucrat::~Bureaucrat() {
 Bureaucrat &Bureaucrat::operator=(const Bureaucrat &rhs) {
 	std::cout << "[Bureaucrat] Assignation operator called" << std::endl;
 	if (this != &rhs) {
-		this->name_ = rhs.name_;
 		this->grade_ = rhs.grade_;
 	}
 	return *this;
