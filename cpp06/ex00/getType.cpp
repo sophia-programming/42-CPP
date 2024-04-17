@@ -56,7 +56,7 @@ static int	isFloat(const std::string& str, size_t& len, size_t& dot)
 	return 1;
 }
 
-e_type  whichType(const std::string& str, size_t& len)
+e_type  getType(const std::string& str, size_t& len)
 {
 	size_t  dot = str.find('.');
 	size_t  f = str.find('f');
