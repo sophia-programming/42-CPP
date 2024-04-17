@@ -6,10 +6,23 @@
 int	main(void)
 {
 	srand(time(NULL));
-	Base *ptr = generate();
-	Base &ref = *ptr;
-	identify(ptr);
-	identify(ref);
-	delete ptr;
+	for (int i = 0; i < 10; i++) {
+		std::cout << "Test " << i + 1 << ":" << std::endl;
+		Base *ptr = generate();
+		if (!ptr) {
+			std::cerr << "Failed to generate instance." << std::endl;
+			continue;
+		}
+
+		Base &ref = *ptr;
+
+		std::cout << GREEN << "Pointer:" << STOP << std::endl;
+		identify(ptr);
+		std::cout << YELLOW << "Reference:" << STOP << std::endl;
+		identify(ref);
+
+		delete ptr;
+		std::cout << std::endl;
+	}
 	return 0;
 }
