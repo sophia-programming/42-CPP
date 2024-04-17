@@ -36,7 +36,7 @@ public:
 	static void	convert(const std::string &str);
 };
 
-e_type	getType(const std::string &str, size_t &len);
+e_type	getType(const std::string &str);
 void	printSpecial(const std::string &str);
 void	convertChar(const std::string &str, size_t &len);
 void	convertInt(const std::string &str);

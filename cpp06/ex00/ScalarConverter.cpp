@@ -22,10 +22,9 @@ ScalarConverter::~ScalarConverter() {
 
 void ScalarConverter::convert(const std::string &str) {
 	size_t len = str.length();
-	e_type type = getType(str, len);
+	e_type type = getType(str);
 	switch (type) {
 		case INVALID:
-			std::cerr << RED << "Invalid input" << STOP << std::endl;
 			break;
 		case SPECIAL:
 			printSpecial(str);
