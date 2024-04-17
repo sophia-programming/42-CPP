@@ -11,7 +11,7 @@ int main() {
 	Bureaucrat highRankBureaucrat("HighRank", 1);
 	Bureaucrat lowRankBureaucrat("LowRank", 150);
 
-	Form *form1 = intern.makeForm("shrubbery creation", "Garden");
+	AForm *form1 = intern.makeForm("shrubbery creation", "Garden");
 	if (form1) {
 		try {
 			lowRankBureaucrat.signForm(*form1);
@@ -23,7 +23,7 @@ int main() {
 	}
 
 	std::cout << "----------------------------------------" << std::endl;
-	Form *form2 = intern.makeForm("robotomy request", "Bender");
+	AForm *form2 = intern.makeForm("robotomy request", "Bender");
 	if (form2) {
 		try {
 			highRankBureaucrat.signForm(*form2);
@@ -35,7 +35,7 @@ int main() {
 	}
 
 	std::cout << "----------------------------------------" << std::endl;
-	Form *form3 = intern.makeForm("presidential pardon", "Zaphod Beeblebrox");
+	AForm *form3 = intern.makeForm("presidential pardon", "Zaphod Beeblebrox");
 	if (form3) {
 		try {
 			highRankBureaucrat.signForm(*form3);
@@ -49,7 +49,7 @@ int main() {
 	std::cout << "----------------------------------------" << std::endl;
 
 //	 存在しないフォーム名を指定（"Intern cannot create" メッセージが出る）
-	Form *formUnknown = intern.makeForm("unknown form", "Nowhere");
+	AForm *formUnknown = intern.makeForm("unknown form", "Nowhere");
 	if (formUnknown != NULL) {
 		std::cout <<  *formUnknown << std::endl;
 		delete formUnknown;
