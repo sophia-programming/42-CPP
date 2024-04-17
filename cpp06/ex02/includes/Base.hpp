@@ -9,7 +9,7 @@ public:
 	virtual ~Base();
 };
 
-Base *genepriceStr(void);
+Base *generate(void);
 void identify(Base *p);
 void identify(Base &p);
 
