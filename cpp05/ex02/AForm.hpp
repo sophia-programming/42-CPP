@@ -6,7 +6,7 @@
 #include <exception>
 #include "Bureaucrat.hpp"
 
-class Form {
+class AForm {
 private:
 	const std::string name_;
 	bool isSigned_;
@@ -14,11 +14,11 @@ private:
 	const int gradeToExecute_;
 
 public:
-	Form();
-	Form(const std::string &name, const int gradeToSign, const int gradeToExecute);
-	Form(const Form &rhs);
-	Form &operator=(const Form &rhs);
-	virtual ~Form();
+	AForm();
+	AForm(const std::string &name, const int gradeToSign, const int gradeToExecute);
+	AForm(const AForm &rhs);
+	AForm &operator=(const AForm &rhs);
+	virtual ~AForm();
 
 	std::string getName() const;
 	bool getIsSigned() const;
@@ -44,6 +44,6 @@ public:
 	};
 };
 
-std::ostream &operator<<(std::ostream &os, const Form &form);
+std::ostream &operator<<(std::ostream &os, const AForm &form);
 
 #endif

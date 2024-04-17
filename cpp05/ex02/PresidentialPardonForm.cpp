@@ -1,14 +1,14 @@
 #include "PresidentialPardonForm.hpp"
 
-PresidentialPardonForm::PresidentialPardonForm() : Form("PresidentialPardonForm", 25, 5), target_("default") {
+PresidentialPardonForm::PresidentialPardonForm() : AForm("PresidentialPardonForm", 25, 5), target_("default") {
 	std::cout << MAGENTA << "[PresidentialPardonForm] default constructor" << STOP << std::endl;
 }
 
-PresidentialPardonForm::PresidentialPardonForm(const std::string &target) : Form("PresidentialPardonForm", 25, 5), target_(target) {
+PresidentialPardonForm::PresidentialPardonForm(const std::string &target) : AForm("PresidentialPardonForm", 25, 5), target_(target) {
 	std::cout << MAGENTA << "[PresidentialPardonForm] constructor called" << STOP << std::endl;
 }
 
-PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &rhs) : Form(rhs), target_(rhs.target_) {
+PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &rhs) : AForm(rhs), target_(rhs.target_) {
 	std::cout << MAGENTA << "[PresidentialPardonForm] copy constructor called" << STOP << std::endl;
 }
 
@@ -26,9 +26,9 @@ PresidentialPardonForm &PresidentialPardonForm::operator=(const PresidentialPard
 
 void PresidentialPardonForm::execute(Bureaucrat const &executor) const {
 	if (executor.getGrade() > this->getGradeToExecute())
-		throw Form::GradeTooLowException();
+		throw AForm::GradeTooLowException();
 	else if (!this->getIsSigned())
-		throw Form::FormNotSignedException();
+		throw AForm::FormNotSignedException();
 	else
 		std::cout << this->target_ << " has been pardoned by Zafod Beeblebrox" << std::endl;
 }

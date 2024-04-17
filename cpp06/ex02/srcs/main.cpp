@@ -14,21 +14,21 @@ int	main(int argc, char **argv)
 	std::cout << GREEN << "====================" << STOP << std::endl;
 	Base *a;
 	std::cout << "<TEST 1>" << std::endl;
-	a = genepriceStr();
+	a = generate();
 	identify(a);
 	identify(*a);
 
 	std::cout << GREEN << "====================" << STOP << std::endl;
 	Base *b;
 	std::cout << "<TEST 2>" << std::endl;
-	b = genepriceStr();
+	b = generate();
 	identify(b);
 	identify(*b);
 
 	std::cout << GREEN << "====================" << STOP << std::endl;
 	Base *c;
 	std::cout << "<TEST 3>" << std::endl;
-	c = genepriceStr();
+	c = generate();
 	identify(c);
 	identify(*c);
 

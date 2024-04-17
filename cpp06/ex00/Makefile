@@ -1,7 +1,7 @@
 NAME = Conversion
 src = $(wildcard *.cpp)
 objs = $(src:.cpp=.o)
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -pedantic
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all: $(NAME)
 

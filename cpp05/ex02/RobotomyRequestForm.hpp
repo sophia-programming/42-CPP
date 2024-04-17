@@ -4,7 +4,7 @@
 #include "AForm.hpp"
 #include "ShrubberyCreationForm.hpp"
 
-class RobotomyRequestForm : public Form {
+class RobotomyRequestForm : public AForm {
 private:
 	std::string target_;
 

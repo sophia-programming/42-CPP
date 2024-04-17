@@ -18,7 +18,7 @@ Base *make_c(void)
 	return new C;
 }
 
-Base *genepriceStr(void)
+Base *generate(void)
 {
 	Base *(*f[3])() = {make_a, make_b, make_c};
 	srand(time(0));

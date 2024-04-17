@@ -1,14 +1,14 @@
 #include "RobotomyRequestForm.hpp"
 
-RobotomyRequestForm::RobotomyRequestForm() : Form("RobotomyRequestForm", 72, 45), target_("default") {
+RobotomyRequestForm::RobotomyRequestForm() : AForm("RobotomyRequestForm", 72, 45), target_("default") {
 	std::cout << CYAN << "[RobotomyRequestForm] Default constructor called" << STOP << std::endl;
 }
 
-RobotomyRequestForm::RobotomyRequestForm(const std::string &target) : Form("RobotomyRequestForm", 72, 45), target_(target) {
+RobotomyRequestForm::RobotomyRequestForm(const std::string &target) : AForm("RobotomyRequestForm", 72, 45), target_(target) {
 	std::cout << CYAN << "[RobotomyRequestForm] Constructor called" << STOP << std::endl;
 }
 
-RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &rhs) : Form(rhs), target_(rhs.target_) {
+RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &rhs) : AForm(rhs), target_(rhs.target_) {
 	std::cout << CYAN << "[RobotomyRequestForm] Copy constructor called" << STOP << std::endl;
 }
 
@@ -26,9 +26,9 @@ RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &r
 
 void RobotomyRequestForm::execute(Bureaucrat const &executor) const {
 	if (executor.getGrade() > this->getGradeToExecute())
-		throw Form::GradeTooLowException();
+		throw AForm::GradeTooLowException();
 	else if (!this->getIsSigned())
-		throw Form::FormNotSignedException();
+		throw AForm::FormNotSignedException();
 	else {
 		std::cout << YELLOW << "Drilling noises" << STOP << std::endl;
 		srand(time(0));

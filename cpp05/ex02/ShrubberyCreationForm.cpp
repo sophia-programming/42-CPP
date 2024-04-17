@@ -1,16 +1,16 @@
 #include "ShrubberyCreationForm.hpp"
 
-ShrubberyCreationForm::ShrubberyCreationForm() : Form("ShrubberyCreationForm", 145, 137), target_("default")
+ShrubberyCreationForm::ShrubberyCreationForm() : AForm("ShrubberyCreationForm", 145, 137), target_("default")
 {
 	std::cout << BLUE << "[ShrubberyCreationForm] Default constructor called" << STOP << std::endl;
 }
 
-ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) : Form("ShrubberyCreationForm", 145, 137), target_(target)
+ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) : AForm("ShrubberyCreationForm", 145, 137), target_(target)
 {
 	std::cout << BLUE << "[ShrubberyCreationForm] Constructor called" << STOP << std::endl;
 }
 
-ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &rhs) : Form(rhs), target_(rhs.target_)
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &rhs) : AForm(rhs), target_(rhs.target_)
 {
 	std::cout << BLUE << "[ShrubberyCreationForm] Copy constructor called" << STOP << std::endl;
 }
@@ -33,9 +33,9 @@ ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationF
 void ShrubberyCreationForm::execute(Bureaucrat const &executor) const
 {
 	if (executor.getGrade() > this->getGradeToExecute())
-		throw Form::GradeTooLowException();
+		throw AForm::GradeTooLowException();
 	else if (!this->getIsSigned())
-		throw Form::FormNotSignedException();
+		throw AForm::FormNotSignedException();
 	std::ofstream file(this->target_ + "_shrubbery");
 	if (file.is_open())
 	{
