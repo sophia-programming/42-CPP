@@ -1,19 +1,23 @@
 #include "ScalarConverter.hpp"
 
 ScalarConverter::ScalarConverter() {
+	std::cout << "Default constructor" << std::endl;
 }
 
 ScalarConverter::ScalarConverter(const ScalarConverter &rhs) {
+	std::cout << "Copy constructor" << std::endl;
 	*this = rhs;
 }
 
 ScalarConverter &ScalarConverter::operator=(const ScalarConverter &rhs) {
+	std::cout << "Assignation operator" << std::endl;
 	if (this != &rhs)
 		*this = rhs;
 	return *this;
 }
 
 ScalarConverter::~ScalarConverter() {
+	std::cout << "Destructor" << std::endl;
 }
 
 void ScalarConverter::convert(const std::string &str) {
@@ -21,7 +25,7 @@ void ScalarConverter::convert(const std::string &str) {
 	e_type type = getType(str, len);
 	switch (type) {
 		case INVALID:
-			std::cerr << "Invalid input" << std::endl;
+			std::cerr << RED << "Invalid input" << STOP << std::endl;
 			break;
 		case SPECIAL:
 			printSpecial(str);

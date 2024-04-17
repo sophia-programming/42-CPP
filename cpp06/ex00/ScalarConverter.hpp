@@ -18,22 +18,22 @@
 enum    e_type
 {
 	SPECIAL = 0,
-	CHAR = 1,
-	INT = 2,
-	FLOAT = 3,
-	DOUBLE = 4,
-	INVALID = -1
+	CHAR,
+	INT,
+	FLOAT,
+	DOUBLE,
+	INVALID
 };
 
 class	ScalarConverter
 {
 private:
-	ScalarConverter(void);
+	ScalarConverter();
 	ScalarConverter(ScalarConverter const &src);
-	~ScalarConverter(void);
+	~ScalarConverter();
 	ScalarConverter	&operator=(ScalarConverter const &rhs);
 public:
-	static void	convert(const std::string& str);
+	static void	convert(const std::string &str);
 };
 
 e_type	getType(const std::string &str, size_t &len);
