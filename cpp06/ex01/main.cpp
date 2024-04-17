@@ -3,7 +3,6 @@
 int main(void)
 {
 	Data *data = new Data;
-	std::cout << data << std::endl;
 	data->s1 = "Hello";
 	data->n = 42;
 	data->s2 = "Neko";
