@@ -7,7 +7,7 @@ void printSpecial(const std::string &str) {
 		std::cout << "float: nanf" << std::endl;
 		std::cout << "double: nan" << std::endl;
 	}
-	else if (str == "+inf" || str == "+inff") {
+	else if (str == "+inf" || str == "inf" || str == "+inff" || str == "inff") {
 		std::cout << "char: impossible" << std::endl;
 		std::cout << "int: impossible" << std::endl;
 		std::cout << "float: inff" << std::endl;
@@ -38,51 +38,64 @@ void convertChar(const std::string &str, size_t &len){
 		std::cout << "Non displayable" << std::endl;
 }
 
-void convertInt(const std::string &str){
-	long  i = std::atoll(str.c_str());
+void convertInt(const std::string &str)
+{
+	char *endptr = NULL;
+	errno = 0;
+	long l = std::strtol(str.c_str(), &endptr, 10);
 
-	std::cout << "char: ";
-	if (i < 0 || 127 < i)
-		std::cout << "impossible" << std::endl;
-	else {
-		if (isprint(i))
-			std::cout << "'" << static_cast<char>(i) << "'" << std::endl;
+	if (str.empty() || *endptr != '\0') {
+		std::cout << "char: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
+		std::cout << "float: impossible" << std::endl;
+		std::cout << "double: impossible" << std::endl;
+		return;
+	}
+
+	if (errno == ERANGE || l < INT_MIN || l > INT_MAX) {
+		std::cout << "char: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
+	} else {
+		std::cout << "char: ";
+		if (l < 0 || l > 127)
+			std::cout << "impossible" << std::endl;
+		else if (isprint(static_cast<int>(l)))
+			std::cout << "'" << static_cast<char>(l) << "'" << std::endl;
 		else
 			std::cout << "Non displayable" << std::endl;
-		}
-	std::cout << "int: ";
-	if (i < MIN_INT && MAX_INT < i)
-		std::cout << "impossible" << std::endl;
-	else
-		std::cout << static_cast<int>(i) << std::endl;
-	std::cout << "float: " << static_cast<float>(i) << ".0f" << std::endl;
-	std::cout << "double: " << static_cast<double>(i) << ".0" << std::endl;
+		std::cout << "int: " << l << std::endl;
+	}
+	std::cout << "float: " << static_cast<float>(l) << "f" << std::endl;
+	std::cout << "double: " << static_cast<double>(l) << std::endl;
 }
 
-void convertFloat(const std::string &str){
-	float f = std::atof(str.c_str());
-	bool tolerance = std::fabs(f - static_cast<int>(f)) < 0.0000000000001;
-
-	std::cout << "char: ";
-	if (f < 0 || 127 < f)
-		std::cout << "impossible" << std::endl;
-	else {
-		if (isprint(f))
-			std::cout << "'" << static_cast<char>(f) << "'" << std::endl;
+void convertFloat(const std::string &str) {
+	try {
+		float f = std::stof(str);
+		bool tolerance = std::fabs(f - static_cast<int>(f)) < 0.0000000000001;
+		std::cout << "char: ";
+		if (f < 0 || 127 < f)
+			std::cout << "impossible" << std::endl;
+		else {
+			if (isprint(static_cast<int>(f)))
+				std::cout << "'" << static_cast<char>(f) << "'" << std::endl;
+			else
+				std::cout << "Non displayable" << std::endl;
+		}
+		std::cout << "int: ";
+		if (f < MIN_INT || MAX_INT < f)
+			std::cout << "impossible" << std::endl;
 		else
-			std::cout << "Non displayable" << std::endl;
+			std::cout << static_cast<int>(f) << std::endl;
+		std::cout << "float: ";
+		if (f < MIN_FLOAT || MAX_FLOAT < f)
+			std::cout << "impossible" << std::endl;
+		else
+			std::cout << f << (tolerance ? ".0f" : "f") << std::endl;
+		std::cout << "double: " << static_cast<double>(f) << (tolerance ? ".0" : "") << std::endl;
+	} catch (const std::exception& e) {
+		std::cout << "Error: " << e.what() << std::endl;
 	}
-	std::cout << "int: ";
-	if (static_cast<long>(f) < MIN_INT && MAX_INT < static_cast<long>(f))
-		std::cout << "impossible" << std::endl;
-	else
-		std::cout << static_cast<int>(f) << std::endl;
-	std::cout << "float: ";
-	if (f < MIN_FLOAT || MAX_FLOAT < f)
-		std::cout << "impossible" << std::endl;
-	else
-		std::cout << f << (tolerance ? ".0f" : "f") << std::endl;
-	std::cout << "double: " << static_cast<double>(f) << (tolerance ? ".0" : "") << std::endl;
 }
 
 void convertDouble(const std::string &str){

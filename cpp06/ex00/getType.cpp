@@ -3,6 +3,8 @@
 static bool isSpecial(const std::string &str) {
 	if (str == "nan" || str == "nanf")
 		return true;
+	if (str == "inf" || str == "inff")
+		return true;
 	if (str == "+inf" || str == "+inff")
 		return true;
 	if (str == "-inf" || str == "-inff")
@@ -13,9 +15,9 @@ static bool isSpecial(const std::string &str) {
 static bool isChar(const std::string &str) {
 	size_t len = str.size();
 
-	if (len == 1 && !isdigit(str[0]))
+	if (len == 1 && (str[0] == '.' || !isdigit(str[0])))
 		return true;
-	if (len == 3 && str[0] == '\'' && str[2] == '\'' && !isdigit(str[1]))
+	if (len == 3 && str[0] == '\'' && str[2] == '\'')
 		return true;
 	return false;
 }
@@ -35,56 +37,43 @@ static bool isInt(const std::string &str) {
 		std::cerr << RED << "Integer overflow: Value is out of range for int." << STOP << std::endl;
 		return false;
 	}
-	return true;
+	return str.length() > 0;
 }
 
 static bool isFloat(const std::string &str) {
 	size_t dot = str.find('.');
-	if (dot == std::string::npos){
-		std::cerr << RED << "Invalid input: No dot found." << STOP << std::endl;
+	if (dot == std::string::npos || str.find('.', dot + 1) != std::string::npos) {
+		std::cerr << RED << "Invalid input: Incorrect dot usage." << STOP << std::endl;
 		return false;
 	}
 
-	// Check if there's a digit after the dot
-	if (str.length() <= dot + 1 || !isdigit(str[dot + 1])){
-		std::cerr << RED << "Invalid input" << STOP << std::endl;
+	// ドット前の文字が数値または符号かチェック
+	if (dot > 0 && (str[0] != '+' && str[0] != '-' && !isdigit(str[0]))) {
+		std::cerr << RED << "Invalid input: Invalid start character." << STOP << std::endl;
 		return false;
 	}
-
-	// Check characters before the dot
-	if (0 < dot) {  // Ensure there's at least one character before the dot
-		if (str[0] != '+' && str[0] != '-' && !isdigit(str[0])) {
-			std::cerr << RED << "Invalid input: Invalid start character." << STOP << std::endl;
-			return false;
-		}
-
-		for (size_t j = 1; j < dot; j++) {
-			if (!isdigit(str[j])){
-				std::cerr << RED << "Invalid input: Non-digit characters found before the dot." << STOP << std::endl;
-				return false;
-			}
-		}
-	} else {
-		std::cerr << RED << "Invalid input: No characters found before the dot." << STOP << std::endl;
-		return false;
-	}
-
-	// Check characters after the dot
-	bool foundF = false;
-	for (size_t i = dot + 1; i < str.length(); i++) {
-		if (str[i] == 'f') {
-			if (i != str.length() - 1){
-				std::cerr << RED << "Invalid input: Characters found after 'f' ." << STOP << std::endl;
-				return false;
-			}
-			foundF = true;
-		} else if (!isdigit(str[i])){
-			std::cerr << RED << "Invalid input: Contains non-numeric characters." << STOP << std::endl;
+	for (size_t j = 1; j < dot; j++) {
+		if (!isdigit(str[j])) {
+			std::cerr << RED << "Invalid input: Non-digit characters found before the dot." << STOP << std::endl;
 			return false;
 		}
 	}
-	if (dot + 1 == str.length() || (foundF && dot + 2 == str.length()))
+
+	// ドット後の文字が数値かどうかチェック
+	if (dot + 1 == str.length() || !isdigit(str[dot + 1])) {
+		std::cerr << RED << "Invalid input: No digits after dot." << STOP << std::endl;
 		return false;
+	}
+	for (size_t i = dot + 2; i < str.length(); i++) {
+		if (str[i] == 'f' && i + 1 != str.length()) {
+			std::cerr << RED << "Invalid input: Misplaced 'f' or extra characters." << STOP << std::endl;
+			return false;
+		}
+		if (!isdigit(str[i]) && str[i] != 'f') {
+			std::cerr << RED << "Invalid input: Non-numeric characters after dot." << STOP << std::endl;
+			return false;
+		}
+	}
 	return true;
 }
 
