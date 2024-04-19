@@ -1,6 +1,6 @@
-NAME = Conversion
-src = $(wildcard *.cpp)
-objs = $(src:.cpp=.o)
+NAME = Convert
+srcs = $(wildcard *.cpp)
+objs = $(srcs:.cpp=.o)
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all: $(NAME)
