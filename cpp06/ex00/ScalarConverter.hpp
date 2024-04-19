@@ -38,9 +38,7 @@ private:
 
 public:
 	static void	convert(const std::string &str);
-	static void	display(const std::string &str, int flag);
-	template<typename T>
-	static void	display(T scalar, int flag);
+	static void display(const std::string &type, double value);
 };
 
 /* colors */
