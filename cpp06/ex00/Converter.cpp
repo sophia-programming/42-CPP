@@ -38,35 +38,27 @@ void convertChar(const std::string &str, size_t &len){
 		std::cout << "Non displayable" << std::endl;
 }
 
-void convertInt(const std::string &str)
+void	convertInt(const std::string &str)
 {
-	char *endptr = NULL;
-	errno = 0;
-	long l = std::strtol(str.c_str(), &endptr, 10);
+	long	l = std::atol(str.c_str());
 
-	if (str.empty() || *endptr != '\0') {
-		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: impossible" << std::endl;
-		std::cout << "float: impossible" << std::endl;
-		std::cout << "double: impossible" << std::endl;
-		return;
-	}
-
-	if (errno == ERANGE || l < INT_MIN || l > INT_MAX) {
-		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: impossible" << std::endl;
-	} else {
-		std::cout << "char: ";
-		if (l < 0 || l > 127)
-			std::cout << "impossible" << std::endl;
-		else if (isprint(static_cast<int>(l)))
+	std::cout << "char: ";
+	if (l < 0 || 127 < l)
+		std::cout << "impossible" << std::endl;
+	else
+	{
+		if (isprint(l))
 			std::cout << "'" << static_cast<char>(l) << "'" << std::endl;
 		else
 			std::cout << "Non displayable" << std::endl;
-		std::cout << "int: " << l << std::endl;
 	}
-	std::cout << "float: " << static_cast<float>(l) << "f" << std::endl;
-	std::cout << "double: " << static_cast<double>(l) << std::endl;
+	std::cout << "int: ";
+	if (l < MIN_INT || MAX_INT < l)
+		std::cout << "impossible" << std::endl;
+	else
+		std::cout	<< static_cast<int>(l) << std::endl;
+	std::cout << "float: " << static_cast<float>(l) << ".0f" << std::endl;
+	std::cout << "double: " << static_cast<double>(l) << ".0" << std::endl;
 }
 
 void convertFloat(const std::string &str) {
@@ -93,7 +85,7 @@ void convertFloat(const std::string &str) {
 		else
 			std::cout << f << (tolerance ? ".0f" : "f") << std::endl;
 		std::cout << "double: " << static_cast<double>(f) << (tolerance ? ".0" : "") << std::endl;
-	} catch (const std::exception& e) {
+	} catch (const std::exception &e) {
 		std::cout << "Error: " << e.what() << std::endl;
 	}
 }
