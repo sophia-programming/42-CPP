@@ -21,24 +21,20 @@ ScalarConverter::~ScalarConverter() {
 }
 
 void ScalarConverter::convert(const std::string &str) {
-	if (str.empty() || str.length() == 0)
+	if (str.empty()){
 		std::cerr << RED << "Empty string" << std::endl;
+		return;
+	}
 
-	if (convertInt(str))
-		return ;
-	if (convertChar(str))
-		return ;
-	if (convertDouble(str))
-		return ;
-	if (convertFloat(str))
-		return ;
-	if (convertPseudo(str))
-		return ;
+	if (convertInt(str) || convertChar(str) || convertDouble(str)
+		|| convertFloat(str) || convertPseudo(str)) {
+		return;
+	}
+	//どの変換も成功しなかった場合
 	std::cout << RED << "Invalid input: " << str << STOP << std::endl;
-	return ;
 }
 
-bool	ScalarConverter::convertInt(const std::string& str) {
+bool ScalarConverter::convertInt(const std::string &str) {
 	std::stringstream	ss;
 	int					n;
 
@@ -50,13 +46,12 @@ bool	ScalarConverter::convertInt(const std::string& str) {
 			+ (FLAG_REGULAR << SHIFT_INT) \
 			+ (FLAG_INTEGER << SHIFT_FLOAT) \
 			+ (FLAG_INTEGER << SHIFT_DOUBLE));
-		std::clog << "\033[35;2;3mint\033[m" << std::endl;
 		return (true);
 	}
 	return (false);
 }
 
-bool	ScalarConverter::convertChar(const std::string& str) {
+bool	ScalarConverter::convertChar(const std::string &str) {
 	if (str.length() == 1) {
 		char	c = str[0];
 		display(c, \
@@ -64,13 +59,12 @@ bool	ScalarConverter::convertChar(const std::string& str) {
 			+ (FLAG_CAST << SHIFT_INT) \
 			+ (FLAG_CAST << SHIFT_FLOAT) \
 			+ (FLAG_CAST << SHIFT_DOUBLE));
-		std::clog << "\033[35;2;3mchar\033[m" << std::endl;
 		return (true);
 	}
 	return (false);
 }
 
-bool	ScalarConverter::convertDouble(const std::string& str) {
+bool	ScalarConverter::convertDouble(const std::string &str) {
 	if (convertPseudo(str)) {
 		std::clog << "\033[35;2;3mdouble pseudo\033[m" << std::endl;
 		return (true);
@@ -93,13 +87,12 @@ bool	ScalarConverter::convertDouble(const std::string& str) {
 		else
 			flag += (FLAG_CAST << SHIFT_INT);
 		display(dbl, flag);
-		std::clog << "\033[35;2;3mdouble\033[m" << std::endl;
 		return (true);
 	}
 	return (false);
 }
 
-bool	ScalarConverter::convertFloat(const std::string& str) {
+bool	ScalarConverter::convertFloat(const std::string &str) {
 	if (str[str.length() - 1] != 'f')
 		return (false);
 	std::string	str_trim(str);
@@ -138,7 +131,7 @@ bool	ScalarConverter::convertFloat(const std::string& str) {
 	return (false);
 }
 
-bool	ScalarConverter::convertPseudo(const std::string& str) {
+bool	ScalarConverter::convertPseudo(const std::string &str) {
 	if (str == "inf" || str == "+inf") {
 		display(str, \
 			(FLAG_MAX << SHIFT_CHAR) \
@@ -166,7 +159,7 @@ bool	ScalarConverter::convertPseudo(const std::string& str) {
 	return (false);
 }
 
-void	ScalarConverter::display(const std::string& str, int flag) {
+void	ScalarConverter::display(const std::string &str, int flag) {
 	std::cout << "\033[32mT: \"" << str \
 		<< "\" (" << std::hex << flag << std::dec << ")\033[m" << std::endl;
 
