@@ -5,7 +5,10 @@ bool ScalarConverter::convertInt(const std::string &str) {
 	long long n;
 	ss >> n;
 	if (!ss.fail() && ss.eof()) {
+		display("char", static_cast<char>(n));
 		display("int", n);
+		display("float", static_cast<float>(n));
+		display("double", static_cast<double>(n));
 		return true;
 	}
 	return false;
@@ -14,6 +17,9 @@ bool ScalarConverter::convertInt(const std::string &str) {
 bool ScalarConverter::convertChar(const std::string &str) {
 	if (str.length() == 1 && std::isprint(str[0])) {
 		display("char", str[0]);
+		display("int", static_cast<int>(str[0]));
+		display("float", static_cast<float>(str[0]));
+		display("double", static_cast<double>(str[0]));
 		return true;
 	}
 	return false;
@@ -24,6 +30,9 @@ bool ScalarConverter::convertDouble(const std::string &str) {
 	std::istringstream ss(str);
 	ss >> dbl;
 	if (!ss.fail() && ss.eof()) {
+		display("char", static_cast<char>(dbl));
+		display("int", static_cast<int>(dbl));
+		display("float", static_cast<float>(dbl));
 		display("double", dbl);
 		return true;
 	}
@@ -37,7 +46,10 @@ bool ScalarConverter::convertFloat(const std::string &str) {
 		float f;
 		ss >> f;
 		if (!ss.fail() && ss.eof()) {
+			display("char", static_cast<char>(f));
+			display("int", static_cast<int>(f));
 			display("float", f);
+			display("double", static_cast<double>(f));
 			return true;
 		}
 	}
