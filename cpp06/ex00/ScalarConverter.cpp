@@ -26,10 +26,11 @@ void ScalarConverter::convert(const std::string &str) {
 		return;
 	}
 
+//	if (convertInt(str) || convertChar(str) || convertDouble(str)
+//		|| convertFloat(str) || convertPseudo(str)) {
 	if (convertInt(str) || convertChar(str) || convertDouble(str)
-		|| convertFloat(str) || convertPseudo(str)) {
+		|| convertFloat(str) )
 		return;
-	}
 	//どの変換も成功しなかった場合
 	std::cout << RED << "Invalid input: " << str << STOP << std::endl;
 }

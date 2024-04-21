@@ -1,39 +1,64 @@
 #include "ScalarConverter.hpp"
 
+//bool ScalarConverter::convertPseudo(const std::string &str) {
+//	if (str == "inf" || str == "+inf") {
+//		display(str, \
+//			(0x4 << 12) \
+//			+ (0x4 << 8) \
+//			+ (0x4 << 4) \
+//			+ (0x4 << 0));
+//		return (true);
+//	}
+//	if (str == "-inf") {
+//		display(str, \
+//			(0x2 << 12) \
+//			+ (0x2 << 8) \
+//			+ (0x2 << 4) \
+//			+ (0x2 << 0));
+//		return (true);
+//	}
+//	if (str == "nan") {
+//		display(str, \
+//			(0x8 << 12) \
+//			+ (0x8 << 8) \
+//			+ (0x8 << 4) \
+//			+ (0x8 << 0));
+//		return (true);
+//	}
+//	return (false);
+//}
+//
+//}
+
 bool ScalarConverter::convertInt(const std::string &str) {
 	std::istringstream ss(str);
 	long long n;
 	ss >> n;
 	if (!ss.fail() && ss.eof()) {
-		display("char", static_cast<char>(n));
-		display("int", n);
-		display("float", static_cast<float>(n));
-		display("double", static_cast<double>(n));
+		if (n < std::numeric_limits<int>::min() || n > std::numeric_limits<int>::max()) {
+			displayLongLong(n);
+		} else {
+			display(static_cast<int>(n));
+		}
 		return true;
 	}
 	return false;
 }
 
 bool ScalarConverter::convertChar(const std::string &str) {
-	if (str.length() == 1 && std::isprint(str[0])) {
-		display("char", str[0]);
-		display("int", static_cast<int>(str[0]));
-		display("float", static_cast<float>(str[0]));
-		display("double", static_cast<double>(str[0]));
+	if (str.length() == 1 && isprint(str[0])) {
+		display(str[0]);
 		return true;
 	}
 	return false;
 }
 
 bool ScalarConverter::convertDouble(const std::string &str) {
-	double dbl;
 	std::istringstream ss(str);
+	double dbl;
 	ss >> dbl;
 	if (!ss.fail() && ss.eof()) {
-		display("char", static_cast<char>(dbl));
-		display("int", static_cast<int>(dbl));
-		display("float", static_cast<float>(dbl));
-		display("double", dbl);
+		display(dbl);
 		return true;
 	}
 	return false;
@@ -41,40 +66,56 @@ bool ScalarConverter::convertDouble(const std::string &str) {
 
 bool ScalarConverter::convertFloat(const std::string &str) {
 	if (str.back() == 'f') {
-		std::string str_trim = str.substr(0, str.size() - 1);
-		std::istringstream ss(str_trim);
+		std::string trimmed = str.substr(0, str.size() - 1);
+		std::istringstream ss(trimmed);
 		float f;
 		ss >> f;
 		if (!ss.fail() && ss.eof()) {
-			display("char", static_cast<char>(f));
-			display("int", static_cast<int>(f));
-			display("float", f);
-			display("double", static_cast<double>(f));
+			display(f);
 			return true;
 		}
 	}
 	return false;
 }
 
-bool ScalarConverter::convertPseudo(const std::string &str) {
-	if (str == "inf" || str == "-inf" || str == "+inf" || str == "nan") {
-		std::cout << "pseudo: " << str << "\n";
-		return true;
+void ScalarConverter::display(int value) {
+	std::cout << "char: ";
+	if (std::isprint(static_cast<int>(value))) {
+		std::cout << "'" << std::string(1, static_cast<char>(value)) << "'" << std::endl;
+	} else {
+		std::cout << "Non displayable" << std::endl;
 	}
-	return false;
+	std::cout << "int: " << value << std::endl;
+	std::cout << "float: " << static_cast<float>(value) << 'f' << std::endl;
+	std::cout << "double: " << static_cast<double>(value) << std::endl;
 }
 
-void ScalarConverter::display(const std::string &type, double value) {
-	std::cout << type << ": ";
-	if (type == "char") {
-		std::cout << (std::isprint(static_cast<int>(value)) ? "'" + std::string(1, static_cast<char>(value)) + "'" : "Non displayable");
-	} else if (type == "int" || type == "double" || type == "float") {
-		std::cout << value;
-		if (type == "float") std::cout << "f";
-	} else if (type == "pseudo") {
-		std::cout << value;
+void ScalarConverter::display(double value) {
+	if (value >= std::numeric_limits<int>::min() || value <= std::numeric_limits<int>::max()) {
+		display(static_cast<int>(value));
 	} else {
-		std::cout << "invalid";
+		std::cout << "int: " << "impossible" << std::endl;
 	}
-	std::cout << std::endl;
+	std::cout << "float: " << static_cast<float>(value) << 'f' << std::endl;
+	std::cout << "double: " << value << std::endl;
+}
+
+void ScalarConverter::display(float value) {
+	std::cout << "float: " << value << 'f' << std::endl;
+	display(static_cast<double>(value));
+}
+
+void ScalarConverter::displayLongLong(long long value) {
+	if (isprint(static_cast<int>(value))) {
+		std::cout << "char: " << static_cast<char>(value) << std::endl;
+	} else {
+		std::cout << "char: Non displayable" << std::endl;
+	}
+	if (value >= std::numeric_limits<int>::min() && value <= std::numeric_limits<int>::max()) {
+		std::cout << "int: " << static_cast<int>(value) << std::endl;
+	} else {
+		std::cout << "int: impossible" << std::endl;
+	}
+	std::cout << "float: " << static_cast<float>(value) << 'f' << std::endl;
+	std::cout << "double: " << static_cast<double>(value) << std::endl;
 }
