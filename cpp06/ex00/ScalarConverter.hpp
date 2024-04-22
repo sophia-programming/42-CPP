@@ -3,31 +3,45 @@
 
 # include <iostream>
 # include <iomanip>
-# include <sstream>
-# include <string>
+# include <exception>
+# include <cstdlib>
 # include <limits>
+# include <cmath>
 
-class ScalarConverter
+# define MIN_INT std::numeric_limits<int>::min() //-2147483648
+# define MAX_INT std::numeric_limits<int>::max() //2147483647
+# define MIN_FLOAT std::numeric_limits<float>::lowest() //-3.40282e+38
+# define MAX_FLOAT std::numeric_limits<float>::max() //3.40282e+38
+# define MIN_DOUBLE std::numeric_limits<double>::lowest() //-1.79769e+308
+# define MAX_DOUBLE std::numeric_limits<double>::max() //1.79769e+308
+
+enum    e_type
+{
+	SPECIAL = 0,
+	CHAR = 1,
+	INT = 2,
+	FLOAT = 3,
+	DOUBLE = 4,
+	INVALID = -1
+};
+
+class	ScalarConverter
 {
 private:
-	ScalarConverter();
+	ScalarConverter(void);
 	ScalarConverter(ScalarConverter const &src);
-	ScalarConverter &operator=(ScalarConverter const &src);
-	~ScalarConverter();
-
-	static bool	convertChar(const std::string &str);
-	static bool	convertInt(const std::string &str);
-	static bool	convertDouble(const std::string &str);
-	static bool	convertFloat(const std::string &str);
-//	static bool	convertPseudo(const std::string &str);
-
+	~ScalarConverter(void);
+	ScalarConverter	&operator=(ScalarConverter const &rhs);
 public:
 	static void	convert(const std::string &str);
-	static void display(int value);
-	static void display(float value);
-	static void display(double value);
-	static void displayLongLong(long long value);
 };
+
+e_type	getType(const std::string &str, size_t &len);
+void	printSpecial(const std::string &str);
+void	convertChar(const std::string &str, size_t &len);
+void	convertInt(const std::string &str);
+void	convertFloat(const std::string &str);
+void	convertDouble(const std::string &str);
 
 /* colors */
 const char *const STOP = "\033[0m";

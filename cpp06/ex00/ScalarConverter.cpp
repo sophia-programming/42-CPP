@@ -1,36 +1,48 @@
 #include "ScalarConverter.hpp"
 
-ScalarConverter::ScalarConverter() {
+ScalarConverter::ScalarConverter(void){
 	std::cout << "Default constructor" << std::endl;
 }
 
-ScalarConverter::ScalarConverter(const ScalarConverter &str) {
+ScalarConverter::ScalarConverter(ScalarConverter const &src){
 	std::cout << "Copy constructor" << std::endl;
-	*this = str;
+	*this = src;
 }
 
-ScalarConverter &ScalarConverter::operator=(const ScalarConverter &str) {
+ScalarConverter	&ScalarConverter::operator=(ScalarConverter const &rhs) {
 	std::cout << "Assignation operator" << std::endl;
-	if (this != &str)
-		*this = str;
+	if (this != &rhs)
+		*this = rhs;
 	return *this;
 }
 
-ScalarConverter::~ScalarConverter() {
+ScalarConverter::~ScalarConverter(void){
 	std::cout << "Destructor" << std::endl;
 }
 
-void ScalarConverter::convert(const std::string &str) {
-	if (str.empty()){
-		std::cerr << RED << "Empty string" << std::endl;
-		return;
+void    ScalarConverter::convert(const std::string& str)
+{
+	size_t  len = str.length();
+	e_type  type = getType(str, len);
+	switch(type)
+	{
+		case INVALID:
+			std::cout << "Invalid input" << std::endl;
+			break;
+		case SPECIAL:
+			printSpecial(str);
+			break;
+		case CHAR:
+			convertChar(str, len);
+			break;
+		case INT:
+			convertInt(str);
+			break;
+		case FLOAT:
+			convertFloat(str);
+			break;
+		case DOUBLE:
+			convertDouble(str);
+			break;
 	}
-
-//	if (convertInt(str) || convertChar(str) || convertDouble(str)
-//		|| convertFloat(str) || convertPseudo(str)) {
-	if (convertInt(str) || convertChar(str) || convertDouble(str)
-		|| convertFloat(str) )
-		return;
-	//どの変換も成功しなかった場合
-	std::cout << RED << "Invalid input: " << str << STOP << std::endl;
 }
