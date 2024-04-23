@@ -31,8 +31,7 @@ void	convertChar(const std::string &str, size_t &len)
 
 	if (len == 1)
 		c = str[0];
-	else
-		c = str[1];
+
 	std::cout << "char: ";
 	if (isprint(c))
 	{
@@ -47,6 +46,11 @@ void	convertChar(const std::string &str, size_t &len)
 
 void	convertInt(const std::string &str)
 {
+	if (str.find_first_not_of("0123456789-+") != std::string::npos) {
+		std::cout << RED << "Invalid input" << STOP << std::endl;
+		return;
+	}
+
 	if (11 < str.length()) {
 		std::cout << "char: impossible" << std::endl;
 		std::cout << "int: impossible" << std::endl;
@@ -55,13 +59,6 @@ void	convertInt(const std::string &str)
 		return;
 	}
 
-	if (str.find_first_not_of("0123456789-") != std::string::npos) {
-		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: impossible" << std::endl;
-		std::cout << "float: impossible" << std::endl;
-		std::cout << "double: impossible" << std::endl;
-		return;
-	}
 	long	l = std::atol(str.c_str());
 	std::cout << "char: ";
 	if (l < 0 || 127 < l)

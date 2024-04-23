@@ -20,7 +20,7 @@ ScalarConverter::~ScalarConverter(void){
 	std::cout << "Destructor" << std::endl;
 }
 
-void    ScalarConverter::convert(const std::string& str)
+void    ScalarConverter::convert(const std::string &str)
 {
 	size_t  len = str.length();
 	e_type  type = getType(str, len);

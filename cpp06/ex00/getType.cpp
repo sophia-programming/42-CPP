@@ -18,14 +18,14 @@ static bool	isChar(const std::string &str, size_t &len)
 
 static bool	isInt(const std::string &str, size_t &len)
 {
-	int		i = 0;
+	size_t	i = 0;
 	bool	flag = false;
 
-	if (str[0] == '-' || str[0] == '+')
-	{
+	if (str[i] == '+' || str[i] == '-') {
 		i++;
-		flag = 1;
+		flag = true;
 	}
+
 	while ((str[i] && 0 < len && len < 12) || (str[i] && !flag && 0 < len && len < 11))
 	{
 		if (!isdigit(str[i]))
@@ -37,19 +37,30 @@ static bool	isInt(const std::string &str, size_t &len)
 
 static bool	isFloat(const std::string &str, size_t &len, size_t &dot)
 {
-	for (int j = dot - 1; j >= 0; j--)
+	//小数点前の文字チェック
+	for (int j = dot - 1; 0 <= j; j--)
 	{
 		if (!isdigit(str[j]) && j != 0)
 			return false;
 		if (!isdigit(str[j]) && j == 0 && str[j] != '+' && str[j] != '-')
 			return false;
 	}
+
+	// ドットの後ろに数字がない場合
+	if (len <= dot + 1 || (!isdigit(str[dot + 1]) && str[dot + 1] != 'f'))
+		return false;
+
+	//小数点後の文字チェック
 	for (size_t i = dot + 1; i < len; i++)
 	{
 		if (!isdigit(str[i]) && str[i] != 'f')
 			return false;
-		if (str[i] == 'f' && i != len - 1)
-			return false;
+		if (str[i] == 'f') {
+			if (i != len - 1)
+				return false;
+			if (i == dot + 1)
+				return false;
+		}
 	}
 	return true;
 }
@@ -95,3 +106,4 @@ e_type  getType(const std::string &str, size_t &len)
 		return DOUBLE;
 	return INVALID;
 }
+
