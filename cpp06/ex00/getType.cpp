@@ -58,6 +58,24 @@ e_type  getType(const std::string &str, size_t &len)
 {
 	size_t  dot = str.find('.');
 	size_t  f = str.find('f');
+	size_t dotCount = 0;
+	size_t pos = str.find('.');
+
+	// ドットを探してカウントする
+	while (pos != std::string::npos) {
+		dotCount++;
+		pos = str.find('.', pos + 1);
+	}
+
+	if (dotCount >= 2) {
+		return INVALID;
+	}
+
+	if (dot != std::string::npos){
+		if (dot == str.length() - 1)
+			return INVALID;
+	}
+
 	if (dot == std::string::npos)
 	{
 		if (isSpecial(str))
@@ -67,6 +85,7 @@ e_type  getType(const std::string &str, size_t &len)
 		if (isInt(str, len))
 			return INT;
 	}
+
 	if (f != std::string::npos && dot != std::string::npos)
 	{
 		if (isFloat(str, len, dot))

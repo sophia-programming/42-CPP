@@ -54,10 +54,17 @@ void	convertInt(const std::string &str)
 		std::cout << "double: impossible" << std::endl;
 		return;
 	}
-	long	l = std::atol(str.c_str());
 
+	if (str.find_first_not_of("0123456789-") != std::string::npos) {
+		std::cout << "char: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
+		std::cout << "float: impossible" << std::endl;
+		std::cout << "double: impossible" << std::endl;
+		return;
+	}
+	long	l = std::atol(str.c_str());
 	std::cout << "char: ";
-	if (!isprint(l))
+	if (l < 0 || 127 < l)
 		std::cout << "impossible" << std::endl;
 	else
 	{
@@ -132,5 +139,5 @@ void	convertDouble(const std::string &str)
 	if (d < MIN_DOUBLE || MAX_DOUBLE < d)
 		std::cout << "impossible" << std::endl;
 	else
-		std::cout << d << std::endl;
+		std::cout << d << (tolerance ? ".0" : "") << std::endl;
 }
