@@ -27,10 +27,7 @@ Base *generate(void)
 void identify(Base *p)
 {
 	if (!p)
-	{
-		std::cout << "Unknown (null pointer)" << std::endl;
-		return ;
-	}
+		throw std::invalid_argument("Invalid pointer");
 	if (dynamic_cast<A *>(p))
 		std::cout << "A" << std::endl;
 	else if (dynamic_cast<B *>(p))
