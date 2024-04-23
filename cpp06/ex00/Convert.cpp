@@ -103,7 +103,7 @@ void	convertFloat(const std::string &str)
 
 	std::cout << "float: ";
 	if (f < MIN_FLOAT || MAX_FLOAT < f)
-		std::cout << "impossible" << std::endl;
+		std::cout << "--impossible" << std::endl;
 	else
 		std::cout << f << (tolerance ? ".0f" : "f") << std::endl;
 
