@@ -71,10 +71,10 @@ void	convertInt(const std::string &str)
 			std::cout << "Non displayable" << std::endl;
 	}
 	std::cout << "int: ";
-	if (l < MIN_INT || l > MAX_INT)
+	if (l < MIN_INT || MAX_INT < l)
 		std::cout << "impossible" << std::endl;
 	else
-		std::cout	<< static_cast<int>(l) << std::endl;
+		std::cout << static_cast<int>(l) << std::endl;
 	std::cout << "float: " << static_cast<float>(l) << ".0f" << std::endl;
 	std::cout << "double: " << static_cast<double>(l) << ".0" << std::endl;
 }
@@ -85,7 +85,7 @@ void	convertFloat(const std::string &str)
 	bool	tolerance = std::fabs(f - static_cast<int>(f)) < 0.0000000000001;
 
 	std::cout << "char: ";
-	if (!isprint(f))
+	if (f < 0 && 127 < f)
 		std::cout << "impossible" << std::endl;
 	else
 	{
@@ -94,16 +94,19 @@ void	convertFloat(const std::string &str)
 		else
 			std::cout << "Non displayable" << std::endl;
 	}
+
 	std::cout << "int: ";
-	if (static_cast<long>(f) < MIN_INT || static_cast<long>(f) > MAX_INT)
+	if (static_cast<long>(f) < MIN_INT || MAX_INT < static_cast<long>(f))
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout << static_cast<int>(f) << std::endl;
+
 	std::cout << "float: ";
 	if (f < MIN_FLOAT || MAX_FLOAT < f)
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout << f << (tolerance ? ".0f" : "f") << std::endl;
+
 	std::cout << "double: " << static_cast<double>(f) << (tolerance ? ".0" : "") << std::endl;
 }
 
@@ -113,7 +116,7 @@ void	convertDouble(const std::string &str)
 	bool		tolerance = std::fabs(d - static_cast<int>(d)) < 0.0000000000001;
 
 	std::cout << "char: ";
-	if (!isprint(d))
+	if (d < 0 && 127 < d)
 		std::cout << "impossible" << std::endl;
 	else
 	{
@@ -122,16 +125,19 @@ void	convertDouble(const std::string &str)
 		else
 			std::cout << "Non displayable" << std::endl;
 	}
+
 	std::cout << "int: ";
 	if (d < MIN_INT || MAX_INT < d)
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout << static_cast<int>(d) << std::endl;
+
 	std::cout << "float: ";
 	if (d < MIN_FLOAT || MAX_FLOAT < d)
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout << static_cast<float>(d) << (tolerance ? ".0f" : "f") << std::endl;
+
 	std::cout << "double: ";
 	if (d < MIN_DOUBLE || MAX_DOUBLE < d)
 		std::cout << "impossible" << std::endl;
