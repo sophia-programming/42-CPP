@@ -103,7 +103,7 @@ void	convertFloat(const std::string &str)
 
 	std::cout << "float: ";
 	if (f < MIN_FLOAT || MAX_FLOAT < f)
-		std::cout << "--impossible" << std::endl;
+		std::cout << "impossible" << std::endl;
 	else
 		std::cout << f << (tolerance ? ".0f" : "f") << std::endl;
 
@@ -114,6 +114,12 @@ void	convertDouble(const std::string &str)
 {
 	double		d = std::atof(str.c_str());
 	bool		tolerance = std::fabs(d - static_cast<int>(d)) < 0.0000000000001;
+
+	if (!isdigit(str[0]))
+	{
+		std::cout << RED << "Invalid input" << STOP << std::endl;
+		return;
+	}
 
 	std::cout << "char: ";
 	if (d < 0 && 127 < d)

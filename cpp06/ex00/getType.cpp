@@ -60,6 +60,8 @@ static bool	isFloat(const std::string &str, size_t &len, size_t &dot)
 				return false;
 			if (i == dot + 1)
 				return false;
+			if (!isdigit(str[i - 1]))
+				return false;
 		}
 	}
 	return true;
