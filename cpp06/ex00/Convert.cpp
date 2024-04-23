@@ -47,6 +47,13 @@ void	convertChar(const std::string &str, size_t &len)
 
 void	convertInt(const std::string &str)
 {
+	if (11 < str.length()) {
+		std::cout << "char: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
+		std::cout << "float: impossible" << std::endl;
+		std::cout << "double: impossible" << std::endl;
+		return;
+	}
 	long	l = std::atol(str.c_str());
 
 	std::cout << "char: ";

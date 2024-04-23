@@ -14,6 +14,8 @@
 # define MAX_FLOAT std::numeric_limits<float>::max() //3.40282e+38
 # define MIN_DOUBLE std::numeric_limits<double>::lowest() //-1.79769e+308
 # define MAX_DOUBLE std::numeric_limits<double>::max() //1.79769e+308
+# define MIN_LONG std::numeric_limits<long>::min() //-9223372036854775808
+# define MAX_LONG std::numeric_limits<long>::max() //9223372036854775807
 
 enum    e_type
 {

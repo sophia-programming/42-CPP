@@ -27,7 +27,7 @@ void    ScalarConverter::convert(const std::string& str)
 	switch(type)
 	{
 		case INVALID:
-			std::cout << "Invalid input" << std::endl;
+			std::cout << RED << "Invalid input" << STOP << std::endl;
 			break;
 		case SPECIAL:
 			printSpecial(str);
