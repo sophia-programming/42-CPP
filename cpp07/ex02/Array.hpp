@@ -2,53 +2,7 @@
 #define ARRAY_HPP
 
 #include <iostream>
-
-template <typename T>
-class Array{
-private:
-	T *array;
-	unsigned int n;
-
-public:
-	Array() : n(0) {
-		array = new T[n];
-	}
-
-	Array(unsigned int n) : n(n) {
-		array = new T[n];
-	}
-
-	Array(const Array &src) : n(src.n) {
-		array = new T[n];
-		for(unsigned int i = 0; i < n; i++)
-			array[i] = src.array[i];
-	}
-
-	~Array() {
-		delete[] array;
-	}
-
-	Array &operator=(const Array &rhs) {
-		if (this != &rhs){
-			delete[] array;
-			n = rhs.n;
-			array = new T[n];
-			for(unsigned int i = 0; i < n; i++)
-				array[i] = rhs.array[i];
-		}
-	}
-
-	T &operator[](unsigned int i) const {
-		if (n <= i)
-			throw std::exception();
-		return array[i];
-	}
-
-	unsigned int size() const {
-		return n;
-	}
-};
-
+#include <stdexcept>
 
 /* colors */
 const char *const STOP = "\033[0m";
@@ -62,5 +16,58 @@ const char *const MAGENTA = "\033[35m";
 const char *const CYAN = "\033[36m";
 const char *const WHITE = "\033[37m";
 const char *const UNDERLINE =" \033[4m";
+
+
+template <class T>
+class Array{
+private:
+	T *array_;
+	unsigned int n_;
+
+public:
+	Array() : array_(NULL), n_(0) {
+		std::cout << GREEN << "Default constructor called" << STOP << std::endl;
+	}
+
+	Array(unsigned int n) : array_(new T[n]), n_(n) {
+		std::cout << GREEN << "Constructor called" << STOP << std::endl;
+	}
+
+	Array(const Array &src) : n_(src.n_) {
+		array_ = new T[n_];
+		for(unsigned int i = 0; i < n_; i++)
+			array_[i] = src.array_[i];
+		std::cout << GREEN << "Copy constructor called" << STOP << std::endl;
+	}
+
+	~Array() {
+		std::cout << GREEN << "Destructor called" << STOP << std::endl;
+		if (array_)
+			delete[] array_;
+		array_ = NULL;
+	}
+
+	Array &operator=(const Array &rhs) {
+		if (this != &rhs) {
+			delete[] array_;
+			n_ = rhs.n_;
+			array_ = new T[n_];
+			for (unsigned int i = 0; i < n_; i++)
+				array_[i] = rhs.array_[i];
+		}
+		std::cout << GREEN << "Assignment operator called" << STOP << std::endl;
+		return *this;
+	}
+
+	T &operator[](unsigned int i) const {
+		if (i >= n_ || !array_)
+			throw std::out_of_range("Index out of range");
+		return array_[i];
+	}
+
+	unsigned int size() const {
+		return n_;
+	}
+};
 
 #endif
