@@ -2,8 +2,10 @@
 #define EASYFIND_HPP
 
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
-class EastFindException : public std::exception {
+class EasyFindException : public std::exception {
 	public:
 	const char *what() const throw() {
 		return "Element not found.";
@@ -11,13 +13,21 @@ class EastFindException : public std::exception {
 };
 
 template <typename T>
-bool easyfind(T &container, int to_find) {
-	if (std::find(container.begin(), container.end(), to_find) == container.end()){
-		throw EastFindException();
-		return false;
-	}
+const typename T::value_type &easyfind(const T &container, int toFind) {
+	typename T::const_iterator it = std::find(container.begin(), container.end(), toFind);
+	if (it == container.end())
+		throw EasyFindException();
 	else
-		return true;
+		return *it;
+}
+
+template <typename T, typename U>
+const typename T::value_type &easyfind(const T &container, U toFind) {
+	typename T::const_iterator it = std::find(container.begin(), container.end(), toFind);
+	if (it == container.end())
+		throw EasyFindException();
+	else
+		return *it;
 }
 
 /* colors */
