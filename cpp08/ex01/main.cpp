@@ -50,9 +50,9 @@ int main(void)
 		std::cerr << RED << e.what() << STOP << std::endl;
 	}
 
-	std::cout << GREEN << "=== [RandomNumbers] ===" << STOP << std::endl;
-	Span sp2 = Span(5);
-	sp2.addRandomNumbers(5);
+	std::cout << GREEN << "=== [Random & Large Scale Numbers] ===" << STOP << std::endl;
+	Span sp2 = Span(100);
+	sp2.addRandomNumbers(100);
 	std::cout << "sp2 ";
 	sp2.printStorage();
 	std::cout << "sp2.shortestSpan() = " << sp2.shortestSpan() << std::endl;
