@@ -13,8 +13,8 @@ public:
 
 	void addNumber(int n);
 	void addRandomNumbers(unsigned int n);
-	int shortestSpan();
-	int longestSpan();
+	unsigned int shortestSpan();
+	unsigned int longestSpan();
 
 	void printStorage();
 
@@ -29,8 +29,8 @@ public:
 	};
 
 private:
-	unsigned int max_size;
-	std::vector<int> storage;
+	unsigned int max_size_;
+	std::vector<int> storage_;
 	Span();
 };
 

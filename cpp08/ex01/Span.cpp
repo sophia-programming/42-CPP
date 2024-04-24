@@ -1,26 +1,32 @@
 #include "Span.hpp"
 
-Span::Span(unsigned int N) : max_size(N) , storage(0) {}
+Span::Span(unsigned int N) : max_size_(N) , storage_(0) {
+	std::cout << YELLOW << "Constructor called" << STOP << std::endl;
+}
 
 Span::Span(const Span &to_copy) {
+	std::cout << YELLOW << "Copy constructor called" << STOP << std::endl;
 	*this = to_copy;
 }
 
 Span &Span::operator=(const Span &to_copy) {
+	std::cout << YELLOW << "Assignation operator called" << STOP << std::endl;
 	if (this != &to_copy)
 	{
-		this->max_size = to_copy.max_size;
-		this->storage = to_copy.storage;
+		this->max_size_ = to_copy.max_size_;
+		this->storage_ = to_copy.storage_;
 	}
 	return *this;
 }
 
-Span::~Span() {}
+Span::~Span() {
+	std::cout << YELLOW << "Destructor called" << STOP << std::endl;
+}
 
 void Span::addNumber(int n) {
-	if (this->storage.size() == this->max_size)
+	if (this->storage_.size() == this->max_size_)
 		throw StorageFullException();
-	this->storage.push_back(n);
+	this->storage_.push_back(n);
 }
 
 void Span::addRandomNumbers(unsigned int n) {
@@ -34,8 +40,8 @@ void Span::addRandomNumbers(unsigned int n) {
 	}
 }
 
-int Span::shortestSpan() {
-	std::vector<int> v = this->storage;
+unsigned int Span::shortestSpan() {
+	std::vector<int> v = this->storage_;
 
 	if (v.size() < 2)
 		throw Span::NotEnoughNumbersException();
@@ -50,8 +56,8 @@ int Span::shortestSpan() {
 	return shortest_gap;
 }
 
-int Span::longestSpan() {
-	std::vector<int> v = this->storage;
+unsigned int Span::longestSpan() {
+	std::vector<int> v = this->storage_;
 
 	if (v.size() < 2)
 		throw Span::NotEnoughNumbersException();
@@ -63,10 +69,10 @@ int Span::longestSpan() {
 }
 
 void Span::printStorage() {
-	std::vector<int> v = this->storage;
+	std::vector<int> v = this->storage_;
 	std::vector<int>::iterator i;
 
-	std::cout << "storage = ";
+	std::cout << "storage_ = ";
 	for(i = v.begin(); i != v.end(); i++){
 		std::cout << *i << " ";
 	}
