@@ -7,7 +7,7 @@ int main() {
 	Array<int> emptyArray;
 	std::cout << "Empty array size: " << emptyArray.size() << std::endl;
 	try {
-		std::cout << emptyArray[0] << std::endl;  // これは例外を投げるべき
+		std::cout << emptyArray[2] << std::endl;
 	} catch (const std::exception& e) {
 		std::cout << RED << "Caught exception for accessing empty array: " << e.what() << STOP << std::endl;
 	}
@@ -29,9 +29,9 @@ int main() {
 
 	// 範囲外アクセスのテスト
 	try {
-		std::cout << RED << "index is out of range: " << intArray[intArray.size()] << STOP << std::endl;
+		std::cout << RED << "Testing out of range access: " << intArray[intArray.size()] << STOP << std::endl;
 	} catch (const std::exception& e) {
-		std::cout << RED << "Caught exception for out of bounds access: " << e.what() << STOP << std::endl;
+		std::cout << RED << e.what() << STOP << std::endl;
 	}
 
 	// 代入演算子のテスト
