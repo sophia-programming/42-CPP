@@ -5,8 +5,19 @@
 
 template <typename T>
 void iter(T *array, size_t length, void (*f)(T const &)) {
+	if (!array || !f)
+		return ;
 	for (size_t i = 0; i < length; i++) {
 		f(array[i]);
+	}
+}
+
+template <typename T1, typename T2>
+void iter(T1 *array1, T2 *array2, size_t length, void (*f)(T1 const &, T2 const &)) {
+	if (!array1 || !array2 || !f)
+		return ;
+	for (size_t i = 0; i < length; i++) {
+		f(array1[i], array2[i]);
 	}
 }
 
