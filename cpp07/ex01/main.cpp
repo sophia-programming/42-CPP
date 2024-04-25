@@ -11,6 +11,6 @@ int main() {
 
 	std::cout << GREEN << "=====strArray:=====" << STOP << std::endl;
 	std::string strArray[] = {"one", "two", "three", "four", "five"};
-	iter(strArray, 5, print);
+	iter(strArray, 3, print);
 	return 0;
 }
