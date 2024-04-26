@@ -27,23 +27,21 @@
 # define STR_INF_POS	"+inf"
 # define STR_INF_NEG	"-inf"
 # define STR_DECIMAL	".0"
-# define STR_IMPOS		"impossible"
-# define STR_NODISP		"Non displayable"
 
 class ScalarConverter
 {
 private:
 	ScalarConverter();
 	~ScalarConverter();
-	static bool	forInt(const std::string& str);
-	static bool	forChar(const std::string& str);
-	static bool	forDouble(const std::string& str);
-	static bool	forFloat(const std::string& str);
-	static bool	forPseudo(const std::string& str);
+	static bool	convertInt(const std::string &str);
+	static bool	convertChar(const std::string &str);
+	static bool	convertDouble(const std::string &str);
+	static bool	convertFloat(const std::string &str);
+	static bool	convertPseudo(const std::string &str);
 
 public:
-	static int	convert(std::string& str);
-	static void	display(const std::string& str, int flag);
+	static bool	convert(std::string &str);
+	static void	display(const std::string &str, int flag);
 	template<typename T>
 	static void	display(T scalar, int flag);
 };
