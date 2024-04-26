@@ -3,47 +3,50 @@
 
 # include <iostream>
 # include <iomanip>
-# include <exception>
-# include <cstdlib>
+# include <sstream>
+# include <string>
 # include <limits>
-# include <cmath>
 
-# define MIN_INT std::numeric_limits<int>::min() //-2147483648
-# define MAX_INT std::numeric_limits<int>::max() //2147483647
-# define MIN_FLOAT -std::numeric_limits<float>::max() //-3.40282e+38
-# define MAX_FLOAT std::numeric_limits<float>::max() //3.40282e+38
-# define MIN_DOUBLE std::numeric_limits<double>::min() //-1.79769e+308
-# define MAX_DOUBLE std::numeric_limits<double>::max() //1.79769e+308
-# define MIN_LONG std::numeric_limits<long>::min() //-9223372036854775808
-# define MAX_LONG std::numeric_limits<long>::max() //9223372036854775807
+# define SHIFT_CHAR		12
+# define SHIFT_INT		8
+# define SHIFT_FLOAT	4
+# define SHIFT_DOUBLE	0
+# define FLAG_REGULAR	0x0
+# define FLAG_CAST		0x1
+# define FLAG_NODISP	0x2
+# define FLAG_INTEGER	0x2
+# define FLAG_MIN		0x2
+# define FLAG_MAX		0x4
+# define FLAG_PSEUDO	0x8
+# define FLAG_IMPOS		0x8
+# define MASK_FLAG		0xf
+# define MASK_CHAR		0xff
+# define CHR_FLOAT		'f'
+# define STR_NAN		"nan"
+# define STR_INF		"inf"
+# define STR_INF_POS	"+inf"
+# define STR_INF_NEG	"-inf"
+# define STR_DECIMAL	".0"
+# define STR_IMPOS		"impossible"
+# define STR_NODISP		"Non displayable"
 
-enum    e_type
-{
-	SPECIAL = 0,
-	CHAR = 1,
-	INT = 2,
-	FLOAT = 3,
-	DOUBLE = 4,
-	INVALID = -1
-};
-
-class	ScalarConverter
+class ScalarConverter
 {
 private:
-	ScalarConverter(void);
-	ScalarConverter(ScalarConverter const &src);
-	~ScalarConverter(void);
-	ScalarConverter	&operator=(ScalarConverter const &rhs);
-public:
-	static void	convert(const std::string &str);
-};
+	ScalarConverter();
+	~ScalarConverter();
+	static bool	forInt(const std::string& str);
+	static bool	forChar(const std::string& str);
+	static bool	forDouble(const std::string& str);
+	static bool	forFloat(const std::string& str);
+	static bool	forPseudo(const std::string& str);
 
-e_type	getType(const std::string &str, size_t &len);
-void	printSpecial(const std::string &str);
-void	convertChar(const std::string &str, size_t &len);
-void	convertInt(const std::string &str);
-void	convertFloat(const std::string &str);
-void	convertDouble(const std::string &str);
+public:
+	static int	convert(std::string& str);
+	static void	display(const std::string& str, int flag);
+	template<typename T>
+	static void	display(T scalar, int flag);
+};
 
 /* colors */
 const char *const STOP = "\033[0m";
