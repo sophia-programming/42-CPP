@@ -19,10 +19,10 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 	ss >> n;
 	if (!ss.fail() && ss.eof()) {
 		display(n, \
-			(FLAG_CAST << SHIFT_CHAR) \
-			+ (FLAG_REGULAR << SHIFT_INT) \
-			+ (FLAG_INTEGER << SHIFT_FLOAT) \
-			+ (FLAG_INTEGER << SHIFT_DOUBLE));
+			(FLAG_CAST << BIT_SHIFT_FOR_CHAR) \
+			+ (FLAG_REGULAR << BIT_SHIFT_FOR_INT) \
+			+ (FLAG_INTEGER << BIT_SHIFT_FOR_FLOAT) \
+			+ (FLAG_INTEGER << BIT_SHIFT_FOR_DOUBLE));
 		return (true);
 	}
 	return (false);
@@ -32,10 +32,10 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 	if (str.length() == 1) {
 		char	c = str[0];
 		display(c, \
-			(FLAG_REGULAR << SHIFT_CHAR) \
-			+ (FLAG_CAST << SHIFT_INT) \
-			+ (FLAG_CAST << SHIFT_FLOAT) \
-			+ (FLAG_CAST << SHIFT_DOUBLE));
+			(FLAG_REGULAR << BIT_SHIFT_FOR_CHAR) \
+			+ (FLAG_CAST << BIT_SHIFT_FOR_INT) \
+			+ (FLAG_CAST << BIT_SHIFT_FOR_FLOAT) \
+			+ (FLAG_CAST << BIT_SHIFT_FOR_DOUBLE));
 		return (true);
 	}
 	return (false);
@@ -54,15 +54,15 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 	ss >> dbl;
 	if (!ss.fail() && ss.eof()) {
 		int	flag;
-		flag = (FLAG_CAST << SHIFT_CHAR) \
-			+ (FLAG_CAST << SHIFT_FLOAT) \
-			+ (FLAG_REGULAR << SHIFT_DOUBLE);
+		flag = (FLAG_CAST << BIT_SHIFT_FOR_CHAR) \
+			+ (FLAG_CAST << BIT_SHIFT_FOR_FLOAT) \
+			+ (FLAG_REGULAR << BIT_SHIFT_FOR_DOUBLE);
 		if (dbl > std::numeric_limits<int>::max())
-			flag += (FLAG_MAX << SHIFT_INT);
+			flag += (FLAG_MAX << BIT_SHIFT_FOR_INT);
 		else if (dbl < std::numeric_limits<int>::min())
-			flag += (FLAG_MIN << SHIFT_INT);
+			flag += (FLAG_MIN << BIT_SHIFT_FOR_INT);
 		else
-			flag += (FLAG_CAST << SHIFT_INT);
+			flag += (FLAG_CAST << BIT_SHIFT_FOR_INT);
 		display(dbl, flag);
 		return (true);
 	}
@@ -88,20 +88,20 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 	if (!ss.fail() && ss.eof()) {
 		int	flag;
 		(void)flag; // to avoid warning (unused variable)
-		flag = (FLAG_CAST << SHIFT_CHAR) \
-			+ (FLAG_REGULAR << SHIFT_FLOAT) \
-			+ (FLAG_CAST << SHIFT_DOUBLE);
+		flag = (FLAG_CAST << BIT_SHIFT_FOR_CHAR) \
+			+ (FLAG_REGULAR << BIT_SHIFT_FOR_FLOAT) \
+			+ (FLAG_CAST << BIT_SHIFT_FOR_DOUBLE);
 		if (f > std::numeric_limits<int>::max())
-			flag += (FLAG_MAX << SHIFT_INT);
+			flag += (FLAG_MAX << BIT_SHIFT_FOR_INT);
 		else if (f < std::numeric_limits<int>::min())
-			flag += (FLAG_MIN << SHIFT_INT);
+			flag += (FLAG_MIN << BIT_SHIFT_FOR_INT);
 		else
-			flag += (FLAG_CAST << SHIFT_INT);
+			flag += (FLAG_CAST << BIT_SHIFT_FOR_INT);
 		display(f, \
-			(FLAG_CAST << SHIFT_CHAR) \
-			+ (FLAG_CAST << SHIFT_INT) \
-			+ (FLAG_REGULAR << SHIFT_FLOAT) \
-			+ (FLAG_CAST << SHIFT_DOUBLE));
+			(FLAG_CAST << BIT_SHIFT_FOR_CHAR) \
+			+ (FLAG_CAST << BIT_SHIFT_FOR_INT) \
+			+ (FLAG_REGULAR << BIT_SHIFT_FOR_FLOAT) \
+			+ (FLAG_CAST << BIT_SHIFT_FOR_DOUBLE));
 		return (true);
 	}
 	return (false);
@@ -110,26 +110,26 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 bool	ScalarConverter::convertPseudo(const std::string &str) {
 	if (str == "inf" || str == "+inf") {
 		display(str, \
-			(FLAG_MAX << SHIFT_CHAR) \
-			+ (FLAG_MAX << SHIFT_INT) \
-			+ (FLAG_MAX << SHIFT_FLOAT) \
-			+ (FLAG_MAX << SHIFT_DOUBLE));
+			(FLAG_MAX << BIT_SHIFT_FOR_CHAR) \
+			+ (FLAG_MAX << BIT_SHIFT_FOR_INT) \
+			+ (FLAG_MAX << BIT_SHIFT_FOR_FLOAT) \
+			+ (FLAG_MAX << BIT_SHIFT_FOR_DOUBLE));
 		return (true);
 	}
 	if (str == "-inf") {
 		display(str, \
-			(FLAG_MIN << SHIFT_CHAR) \
-			+ (FLAG_MIN << SHIFT_INT) \
-			+ (FLAG_MIN << SHIFT_FLOAT) \
-			+ (FLAG_MIN << SHIFT_DOUBLE));
+			(FLAG_MIN << BIT_SHIFT_FOR_CHAR) \
+			+ (FLAG_MIN << BIT_SHIFT_FOR_INT) \
+			+ (FLAG_MIN << BIT_SHIFT_FOR_FLOAT) \
+			+ (FLAG_MIN << BIT_SHIFT_FOR_DOUBLE));
 		return (true);
 	}
 	if (str == "nan") {
 		display(str, \
-			(FLAG_IMPOS << SHIFT_CHAR) \
-			+ (FLAG_IMPOS << SHIFT_INT) \
-			+ (FLAG_PSEUDO << SHIFT_FLOAT) \
-			+ (FLAG_PSEUDO << SHIFT_DOUBLE));
+			(FLAG_IMPOS << BIT_SHIFT_FOR_CHAR) \
+			+ (FLAG_IMPOS << BIT_SHIFT_FOR_INT) \
+			+ (FLAG_PSEUDO << BIT_SHIFT_FOR_FLOAT) \
+			+ (FLAG_PSEUDO << BIT_SHIFT_FOR_DOUBLE));
 		return (true);
 	}
 	return (false);
@@ -138,9 +138,9 @@ bool	ScalarConverter::convertPseudo(const std::string &str) {
 void	ScalarConverter::display(const std::string &str, int flag) {
 	std::cout << YELLOW << "char: " << STOP << "impossible" << std::endl;
 
-	if (((flag >> SHIFT_INT) & MASK_FLAG) == FLAG_MAX)
+	if (((flag >> BIT_SHIFT_FOR_INT) & MASK_FLAG) == FLAG_MAX)
 		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::max();
-	else if (((flag >> SHIFT_INT) & MASK_FLAG) == FLAG_MIN)
+	else if (((flag >> BIT_SHIFT_FOR_INT) & MASK_FLAG) == FLAG_MIN)
 		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::min();
 	else
 		std::cout << YELLOW << "int: " << STOP << "impossible";
@@ -156,9 +156,9 @@ void	ScalarConverter::display(T scalar, int flag) {
 	else
 		std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
-	if (((flag >> SHIFT_INT) & MASK_FLAG) == FLAG_MAX)
+	if (((flag >> BIT_SHIFT_FOR_INT) & MASK_FLAG) == FLAG_MAX)
 		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::max();
-	else if (((flag >> SHIFT_INT) & MASK_FLAG) == FLAG_MIN)
+	else if (((flag >> BIT_SHIFT_FOR_INT) & MASK_FLAG) == FLAG_MIN)
 		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::min();
 	else
 		std::cout << YELLOW << "int: " << STOP << static_cast<int>(scalar);

@@ -7,10 +7,11 @@
 # include <string>
 # include <limits>
 
-# define SHIFT_CHAR		12
-# define SHIFT_INT		8
-# define SHIFT_FLOAT	4
-# define SHIFT_DOUBLE	0
+# define BIT_SHIFT_FOR_CHAR		12
+# define BIT_SHIFT_FOR_INT		8
+# define BIT_SHIFT_FOR_FLOAT	4
+# define BIT_SHIFT_FOR_DOUBLE	0
+
 # define FLAG_REGULAR	0x0
 # define FLAG_CAST		0x1
 # define FLAG_NODISP	0x2
