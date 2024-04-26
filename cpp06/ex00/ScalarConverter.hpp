@@ -21,12 +21,6 @@
 # define FLAG_IMPOS		0x8
 # define MASK_FLAG		0xf
 # define MASK_CHAR		0xff
-# define CHR_FLOAT		'f'
-# define STR_NAN		"nan"
-# define STR_INF		"inf"
-# define STR_INF_POS	"+inf"
-# define STR_INF_NEG	"-inf"
-# define STR_DECIMAL	".0"
 
 class ScalarConverter
 {

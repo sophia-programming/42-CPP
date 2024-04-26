@@ -108,7 +108,7 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 }
 
 bool	ScalarConverter::convertPseudo(const std::string &str) {
-	if (str == STR_INF || str == STR_INF_POS) {
+	if (str == "inf" || str == "+inf") {
 		display(str, \
 			(FLAG_MAX << SHIFT_CHAR) \
 			+ (FLAG_MAX << SHIFT_INT) \
@@ -116,7 +116,7 @@ bool	ScalarConverter::convertPseudo(const std::string &str) {
 			+ (FLAG_MAX << SHIFT_DOUBLE));
 		return (true);
 	}
-	if (str == STR_INF_NEG) {
+	if (str == "-inf") {
 		display(str, \
 			(FLAG_MIN << SHIFT_CHAR) \
 			+ (FLAG_MIN << SHIFT_INT) \
@@ -124,7 +124,7 @@ bool	ScalarConverter::convertPseudo(const std::string &str) {
 			+ (FLAG_MIN << SHIFT_DOUBLE));
 		return (true);
 	}
-	if (str == STR_NAN) {
+	if (str == "nan") {
 		display(str, \
 			(FLAG_IMPOS << SHIFT_CHAR) \
 			+ (FLAG_IMPOS << SHIFT_INT) \
@@ -145,7 +145,7 @@ void	ScalarConverter::display(const std::string &str, int flag) {
 	else
 		std::cout << YELLOW << "int: " << STOP << "impossible";
 
-	std::cout << YELLOW << "float: " << STOP << str << CHR_FLOAT << std::endl;
+	std::cout << YELLOW << "float: " << STOP << str << 'f' << std::endl;
 	std::cout << YELLOW << "double: " << STOP << str << std::endl;
 }
 
@@ -170,7 +170,7 @@ void	ScalarConverter::display(T scalar, int flag) {
 		std::cout << std::fixed << std::setprecision(1);
 	else
 		std::cout << std::setprecision(8);
-	std::cout << YELLOW << "float: " << STOP << static_cast<float>(scalar) << CHR_FLOAT << std::endl;
+	std::cout << YELLOW << "float: " << STOP << static_cast<float>(scalar) << 'f' << std::endl;
 	std::cout.flags(flags);
 
 	if (static_cast<double>(scalar) == static_cast<int>(scalar))
