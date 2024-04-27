@@ -1,7 +1,7 @@
 #include "ScalarConverter.hpp"
 
 bool	ScalarConverter::convert(std::string &str) {
-	if (str.empty() || str.length() == 0) {
+	if (str.empty()) {
 		std::cerr << RED << "Empty string" << STOP << std::endl;
 		return false;
 	}
@@ -9,23 +9,6 @@ bool	ScalarConverter::convert(std::string &str) {
 		return true;
 	std::cerr << RED << "Invalid input: " << str << STOP << std::endl;
 	return false;
-}
-
-bool	ScalarConverter::convertInt(const std::string &str) {
-	std::stringstream	ss;
-	int					n;
-
-	ss << str;
-	ss >> n;
-	if (!ss.fail() && ss.eof()) {
-		display(n, \
-			(FlagCast << ShiftChar) \
-			+ (FlagRegular << ShiftInt) \
-			+ (FlagInteger << ShiftFloat) \
-			+ (FlagInteger << ShiftDouble));
-		return (true);
-	}
-	return (false);
 }
 
 bool	ScalarConverter::convertChar(const std::string &str) {
@@ -41,14 +24,26 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 	return (false);
 }
 
-bool	ScalarConverter::convertDouble(const std::string &str) {
-	if (convertPseudo(str)) {
-		std::cout << YELLOW << "double pseudo" << STOP << std::endl;
+bool	ScalarConverter::convertInt(const std::string &str) {
+	std::stringstream ss;
+	int n;
+
+	ss << str;
+	ss >> n;
+	if (!ss.fail() && ss.eof()) {
+		display(n, \
+			(FlagCast << ShiftChar) \
+			+ (FlagRegular << ShiftInt) \
+			+ (FlagInteger << ShiftFloat) \
+			+ (FlagInteger << ShiftDouble));
 		return (true);
 	}
+	return (false);
+}
 
-	std::stringstream	ss;
-	double				dbl;
+bool	ScalarConverter::convertDouble(const std::string &str) {
+	std::stringstream ss;
+	double dbl;
 
 	ss << str;
 	ss >> dbl;
@@ -57,7 +52,7 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 		flag = (FlagCast << ShiftChar) \
 			+ (FlagCast << ShiftFloat) \
 			+ (FlagRegular << ShiftDouble);
-		if (dbl > std::numeric_limits<int>::max())
+		if (std::numeric_limits<int>::max() < dbl)
 			flag += (FlagMax << ShiftInt);
 		else if (dbl < std::numeric_limits<int>::min())
 			flag += (FlagMin << ShiftInt);
@@ -75,13 +70,8 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 	std::string	str_trim(str);
 	str_trim.erase(str_trim.length() - 1);
 
-	if (convertPseudo(str_trim)) {
-		std::cout << YELLOW << "float pseudo" << STOP << std::endl;
-		return (true);
-	}
-
-	std::stringstream	ss;
-	float	f;
+	std::stringstream ss;
+	float f;
 
 	ss << str_trim;
 	ss >> f;
@@ -91,7 +81,7 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 		flag = (FlagCast << ShiftChar) \
 			+ (FlagRegular << ShiftFloat) \
 			+ (FlagCast << ShiftDouble);
-		if (f > std::numeric_limits<int>::max())
+		if (std::numeric_limits<int>::max() < f)
 			flag += (FlagMax << ShiftInt);
 		else if (f < std::numeric_limits<int>::min())
 			flag += (FlagMin << ShiftInt);

@@ -8,26 +8,25 @@
 # include <limits>
 
 enum BitShift {
-	ShiftChar = 12,
-	ShiftInt = 8,
-	ShiftFloat = 4,
-	ShiftDouble = 0
+	ShiftChar = 12,       // 文字のビット位置: 12ビット右シフト
+	ShiftInt = 8,         // 整数値のビット位置: 8ビット右シフト
+	ShiftFloat = 4,       // フロート値のビット位置: 4ビット右シフト
+	ShiftDouble = 0       // ダブル値のビット位置: 最下位（基準点）
 };
 
 enum Flags {
-	FlagRegular = 0x0,
-	FlagCast = 0x1,
-	FlagNoDisplay = 0x2,
-	FlagInteger = 0x2,
-	FlagMin = 0x2,
-	FlagMax = 0x4,
-	FlagPseudo = 0x8,
-	FlagImpossible = 0x8
+	FlagRegular = 0x0,    // 何もフラグを立てない状態: 0000
+	FlagCast = 0x1,       // 型変換が行われた: 0001
+	FlagNoDisplay = 0x2,  // 表示不可能な値: 0010
+	FlagInteger = 0x4,    // 整数値: 0100
+	FlagMin = 0x8,        // 最小値を示す: 1000
+	FlagMax = 0x10,       // 最大値を示す: 0001 0000
+	FlagPseudo = 0x20,    // 擬似値(例えば無限大など): 0010 0000
+	FlagImpossible = 0x40 // 不可能な値、またはエラー: 0100 0000
 };
 
 enum Masks {
-	MaskFlags = 0xf,
-	MaskChar = 0xff
+	MaskFlags = 0xf       // フラグを取り出すためのマスク: 1111
 };
 
 class ScalarConverter
