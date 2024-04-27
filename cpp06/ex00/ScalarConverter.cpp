@@ -5,6 +5,9 @@ bool	ScalarConverter::convert(std::string &str) {
 		std::cerr << RED << "Empty string" << STOP << std::endl;
 		return false;
 	}
+	if (convertPseudo(str))
+		return true;
+
 	if (convertInt(str) || convertChar(str) || convertDouble(str) || convertFloat(str))
 		return true;
 	std::cerr << RED << "Invalid input: " << str << STOP << std::endl;
@@ -87,11 +90,7 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 			flag += (FlagMin << ShiftInt);
 		else
 			flag += (FlagCast << ShiftInt);
-		display(f, \
-			(FlagCast << ShiftChar) \
-			+ (FlagCast << ShiftInt) \
-			+ (FlagRegular << ShiftFloat) \
-			+ (FlagCast << ShiftDouble));
+		display(f, flag);
 		return (true);
 	}
 	return (false);
@@ -133,7 +132,7 @@ void	ScalarConverter::display(const std::string &str, int flag) {
 	else if (((flag >> ShiftInt) & MaskFlags) == FlagMin)
 		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::min();
 	else
-		std::cout << YELLOW << "int: " << STOP << "impossible";
+		std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 
 	std::cout << YELLOW << "float: " << STOP << str << 'f' << std::endl;
 	std::cout << YELLOW << "double: " << STOP << str << std::endl;
@@ -154,19 +153,20 @@ void	ScalarConverter::display(T scalar, int flag) {
 		std::cout << YELLOW << "int: " << STOP << static_cast<int>(scalar);
 	std::cout << std::endl;
 
-	const std::ios::fmtflags flags = std::cout.flags();
+	const std::ios::fmtflags flags = std::cout.flags(); // フラグを保存
 
 	if (static_cast<float>(scalar) == static_cast<int>(scalar))
-		std::cout << std::fixed << std::setprecision(1);
+		std::cout << std::fixed << std::setprecision(1); //小数点以下1桁
 	else
 		std::cout << std::setprecision(8);
-	std::cout << YELLOW << "float: " << STOP << static_cast<float>(scalar) << 'f' << std::endl;
-	std::cout.flags(flags);
+		std::cout << YELLOW << "float: " << STOP << static_cast<float>(scalar) << 'f' << std::endl;
+
+	std::cout.flags(flags); // フラグを元に戻す
 
 	if (static_cast<double>(scalar) == static_cast<int>(scalar))
 		std::cout << std::fixed << std::setprecision(1);
 	else
-		std::cout << std::setprecision(27);
+		std::cout << std::setprecision(20);
 	std::cout << YELLOW << "double: " << STOP << static_cast<double>(scalar) << std::endl;
 	std::cout.flags(flags);
 }
