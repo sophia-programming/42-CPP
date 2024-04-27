@@ -7,21 +7,28 @@
 # include <string>
 # include <limits>
 
-# define BIT_SHIFT_FOR_CHAR		12
-# define BIT_SHIFT_FOR_INT		8
-# define BIT_SHIFT_FOR_FLOAT	4
-# define BIT_SHIFT_FOR_DOUBLE	0
+enum BitShift {
+	ShiftChar = 12,
+	ShiftInt = 8,
+	ShiftFloat = 4,
+	ShiftDouble = 0
+};
 
-# define FLAG_REGULAR	0x0
-# define FLAG_CAST		0x1
-# define FLAG_NODISP	0x2
-# define FLAG_INTEGER	0x2
-# define FLAG_MIN		0x2
-# define FLAG_MAX		0x4
-# define FLAG_PSEUDO	0x8
-# define FLAG_IMPOS		0x8
-# define MASK_FLAG		0xf
-# define MASK_CHAR		0xff
+enum Flags {
+	FlagRegular = 0x0,
+	FlagCast = 0x1,
+	FlagNoDisplay = 0x2,
+	FlagInteger = 0x2,
+	FlagMin = 0x2,
+	FlagMax = 0x4,
+	FlagPseudo = 0x8,
+	FlagImpossible = 0x8
+};
+
+enum Masks {
+	MaskFlags = 0xf,
+	MaskChar = 0xff
+};
 
 class ScalarConverter
 {
