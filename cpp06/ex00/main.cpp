@@ -16,6 +16,8 @@ void tester() {
 	ScalarConverter::convert("-42");
 	ScalarConverter::convert("0");
 	ScalarConverter::convert("-0");
+	ScalarConverter::convert("2147483647");
+	ScalarConverter::convert("-2147483648");
 	ScalarConverter::convert("4.39408f");
 	ScalarConverter::convert("4.39408");
 	ScalarConverter::convert(".5");
@@ -33,17 +35,17 @@ void tester() {
 	ScalarConverter::convert("inff");
 	ScalarConverter::convert("+inff");
 	ScalarConverter::convert("-inff");
-//
-//	std::cout << GREEN << "======= test_overflow_int ========" << STOP << std::endl;
-//	ScalarConverter::convert("2147483648");
-//	ScalarConverter::convert("2147483711");
-//	ScalarConverter::convert("-2147483649");
-//	ScalarConverter::convert("-2147483712");
-//	ScalarConverter::convert("9223372036854775807");
-//	ScalarConverter::convert("9223372036854775808");
-//	ScalarConverter::convert("-9223372036854775808");
-//	ScalarConverter::convert("-9223372036854775809");
-//
+
+	std::cout << GREEN << "======= test_overflow_int ========" << STOP << std::endl;
+	ScalarConverter::convert("2147483648");
+	ScalarConverter::convert("2147483711");
+	ScalarConverter::convert("-2147483649");
+	ScalarConverter::convert("-2147483712");
+	ScalarConverter::convert("9223372036854775807");
+	ScalarConverter::convert("9223372036854775808");
+	ScalarConverter::convert("-9223372036854775808");
+	ScalarConverter::convert("-9223372036854775809");
+
 //	std::cout << GREEN << "======= test_overflow_float ========" << STOP << std::endl;
 //	ScalarConverter::convert("3.402823466E+39");
 //	ScalarConverter::convert("-1.175494351E-39");
