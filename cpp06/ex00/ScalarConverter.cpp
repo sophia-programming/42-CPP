@@ -117,40 +117,43 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 }
 
 bool	ScalarConverter::convertPseudo(const std::string &str) {
-	if (str == "inf" || str == "+inf") {
-		display(str, \
-			(FlagMax << ShiftChar) \
-			+ (FlagMax << ShiftInt) \
-			+ (FlagMax << ShiftFloat) \
-			+ (FlagMax << ShiftDouble));
+	if (str == "inf" || str == "+inf" || str == "-inf") {
+		std::cout << YELLOW << "char: " << STOP << "impossible" << std::endl;
+		std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
+		std::cout << YELLOW << "float: " << STOP << str << 'f' << std::endl;
+		std::cout << YELLOW << "double: " << STOP << str << std::endl;
 		return (true);
 	}
-	if (str == "-inf") {
-		display(str, \
-			(FlagMin << ShiftChar) \
-			+ (FlagMin << ShiftInt) \
-			+ (FlagMin << ShiftFloat) \
-			+ (FlagMin << ShiftDouble));
+	if (str == "inff" || str == "+inff" || str == "-inff") {
+		std::cout << YELLOW << "char: " << STOP << "impossible" << std::endl;
+		std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
+		std::cout << YELLOW << "float: " << STOP << str << std::endl;
+		if (str == "inff")
+			std::cout << YELLOW << "double: " << STOP << "inf" << std::endl;
+		else if (str == "+inff")
+			std::cout << YELLOW << "double: " << STOP << "+inf" << std::endl;
+		else
+			std::cout << YELLOW << "double: " << STOP << "-inf" << std::endl;
 		return (true);
 	}
-	if (str == "nan") {
-		display(str, \
-			(FlagImpossible << ShiftChar) \
-			+ (FlagImpossible << ShiftInt) \
-			+ (FlagPseudo << ShiftFloat) \
-			+ (FlagPseudo << ShiftDouble));
+	if (str == "nan" || str == "+nan") {
+		std::cout << YELLOW << "char: " << STOP << "impossible" << std::endl;
+		std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
+		std::cout << YELLOW << "float: " << STOP << str << 'f' << std::endl;
+		std::cout << YELLOW << "double: " << STOP << str << std::endl;
+		return (true);
+	}
+	if (str == "nanf" || str == "+nanf") {
+		std::cout << YELLOW << "char: " << STOP << "impossible" << std::endl;
+		std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
+		std::cout << YELLOW << "float: " << STOP << str << std::endl;
+		if (str == "nanf")
+			std::cout << YELLOW << "double: " << STOP << "nan" << std::endl;
+		else
+			std::cout << YELLOW << "double: " << STOP << "+nan" << std::endl;
 		return (true);
 	}
 	return (false);
-}
-
-void	ScalarConverter::display(const std::string &str, int flag) {
-	(void) flag;
-	std::cout << YELLOW << "char: " << STOP << "impossible" << std::endl;
-	std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
-
-	std::cout << YELLOW << "float: " << STOP << str << 'f' << std::endl;
-	std::cout << YELLOW << "double: " << STOP << str << std::endl;
 }
 
 template <typename T>
