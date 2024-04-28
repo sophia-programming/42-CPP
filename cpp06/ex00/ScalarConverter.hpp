@@ -31,20 +31,22 @@ enum Masks {
 
 class ScalarConverter
 {
-private:
+public:
 	ScalarConverter();
+	ScalarConverter(const ScalarConverter &src);
+	ScalarConverter &operator=(const ScalarConverter &src);
 	~ScalarConverter();
+	static bool	convert(std::string str);
+	static void	display(const std::string &str, int flag);
+	template<typename T>
+	static void	display(T scalar, int flag);
+
+private:
 	static bool	convertInt(const std::string &str);
 	static bool	convertChar(const std::string &str);
 	static bool	convertDouble(const std::string &str);
 	static bool	convertFloat(const std::string &str);
 	static bool	convertPseudo(const std::string &str);
-
-public:
-	static bool	convert(std::string &str);
-	static void	display(const std::string &str, int flag);
-	template<typename T>
-	static void	display(T scalar, int flag);
 };
 
 /* colors */

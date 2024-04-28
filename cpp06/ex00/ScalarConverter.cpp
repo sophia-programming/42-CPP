@@ -1,13 +1,33 @@
 #include "ScalarConverter.hpp"
 
-bool	ScalarConverter::convert(std::string &str) {
+ScalarConverter::ScalarConverter() {
+	std::cout << "Default constructor" << std::endl;
+}
+
+ScalarConverter::ScalarConverter(const ScalarConverter &src) {
+	std::cout << "Copy constructor" << std::endl;
+	*this = src;
+}
+
+ScalarConverter	&ScalarConverter::operator=(const ScalarConverter &src) {
+	std::cout << "Assignation operator" << std::endl;
+	if (this != &src) {
+		*this = src;
+	}
+	return *this;
+}
+
+ScalarConverter::~ScalarConverter() {
+	std::cout << "Destructor" << std::endl;
+}
+
+bool	ScalarConverter::convert(std::string str) {
 	if (str.empty()) {
 		std::cerr << RED << "Empty string" << STOP << std::endl;
 		return false;
 	}
 	if (convertPseudo(str))
 		return true;
-
 	if (convertInt(str) || convertChar(str) || convertDouble(str) || convertFloat(str))
 		return true;
 	std::cerr << RED << "Invalid input: " << str << STOP << std::endl;
@@ -125,33 +145,27 @@ bool	ScalarConverter::convertPseudo(const std::string &str) {
 }
 
 void	ScalarConverter::display(const std::string &str, int flag) {
+	(void) flag;
 	std::cout << YELLOW << "char: " << STOP << "impossible" << std::endl;
-
-	if (((flag >> ShiftInt) & MaskFlags) == FlagMax)
-		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::max();
-	else if (((flag >> ShiftInt) & MaskFlags) == FlagMin)
-		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::min();
-	else
-		std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
+	std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 
 	std::cout << YELLOW << "float: " << STOP << str << 'f' << std::endl;
 	std::cout << YELLOW << "double: " << STOP << str << std::endl;
 }
 
 template <typename T>
-void	ScalarConverter::display(T scalar, int flag) {
+void ScalarConverter::display(T scalar, int flag) {
+	(void)flag;
 	if (' ' <= static_cast<char>(scalar) && static_cast<char>(scalar) <= '~')
 		std::cout << YELLOW << "char: " << STOP << static_cast<char>(scalar) << std::endl;
 	else
 		std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
-	if (((flag >> ShiftInt) & MaskFlags) == FlagMax)
-		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::max();
-	else if (((flag >> ShiftInt) & MaskFlags) == FlagMin)
-		std::cout << YELLOW << "int: " << STOP << std::numeric_limits<int>::min();
+	//最大値以上、最小値以下の場合はimpossibleと表示
+	if (static_cast<int>(scalar) <= std::numeric_limits<int>::min() || std::numeric_limits<int>::max() <= static_cast<int>(scalar))
+		std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 	else
-		std::cout << YELLOW << "int: " << STOP << static_cast<int>(scalar);
-	std::cout << std::endl;
+		std::cout << YELLOW << "int: " << STOP << static_cast<int>(scalar) << std::endl;
 
 	const std::ios::fmtflags flags = std::cout.flags(); // フラグを保存
 
@@ -159,7 +173,7 @@ void	ScalarConverter::display(T scalar, int flag) {
 		std::cout << std::fixed << std::setprecision(1); //小数点以下1桁
 	else
 		std::cout << std::setprecision(8);
-		std::cout << YELLOW << "float: " << STOP << static_cast<float>(scalar) << 'f' << std::endl;
+	std::cout << YELLOW << "float: " << STOP << static_cast<float>(scalar) << 'f' << std::endl;
 
 	std::cout.flags(flags); // フラグを元に戻す
 
