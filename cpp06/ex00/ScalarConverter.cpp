@@ -66,7 +66,12 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 			std::cout << std::fixed << std::setprecision(1);
 		else
 			std::cout << std::setprecision(20);
-		std::cout << YELLOW << "double: " << STOP << static_cast<double>(c) << std::endl;
+
+		if (static_cast<char>(c) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<char>(c))
+			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "double: " << STOP << static_cast<double>(c) << std::endl;
+
 		std::cout.flags(flags);
 		return (true);
 	}
@@ -98,7 +103,7 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 			std::cout << std::setprecision(8);
 
 		if (static_cast<float>(n) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<float>(n))
-			std::cout << RED << "float: " << STOP << "impossible" << std::endl;
+			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "float: " << STOP << static_cast<float>(n) << 'f' << std::endl;
 
@@ -108,49 +113,12 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 			std::cout << std::fixed << std::setprecision(1);
 		else
 			std::cout << std::setprecision(20);
-		std::cout << YELLOW << "double: " << STOP << static_cast<double>(n) << std::endl;
-		std::cout.flags(flags);
-		return (true);
-	}
-	return (false);
-}
 
-bool	ScalarConverter::convertDouble(const std::string &str) {
-	std::stringstream ss;
-	double dbl;
-
-	ss << str;
-	ss >> dbl;
-	if (!ss.fail() && ss.eof()) {
-		if (' ' <= static_cast<char>(dbl) && static_cast<char>(dbl) <= '~')
-			std::cout << YELLOW << "char: " << STOP << static_cast<char>(dbl) << std::endl;
+		if (static_cast<double>(n) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<double>(n))
+			std::cout << BLUE << "double: " << STOP << "impossible" << std::endl;
 		else
-			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
+			std::cout << YELLOW << "double: " << STOP << static_cast<double>(n) << std::endl;
 
-		if (static_cast<double>(dbl) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<double>(dbl))
-			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
-		else
-			std::cout << YELLOW << "int: " << STOP << static_cast<int>(dbl) << std::endl;
-
-		const std::ios::fmtflags flags = std::cout.flags(); // フラグを保存
-
-		if (static_cast<float>(dbl) == static_cast<int>(dbl))
-			std::cout << std::fixed << std::setprecision(1); //小数点以下1桁
-		else
-			std::cout << std::setprecision(8);
-
-		if (static_cast<float >(dbl) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<float >(dbl))
-			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
-		else
-			std::cout << YELLOW << "float: " << STOP << static_cast<float>(dbl) << 'f' << std::endl;
-
-		std::cout.flags(flags); // フラグを元に戻す
-
-		if (static_cast<double>(dbl) == static_cast<int>(dbl))
-			std::cout << std::fixed << std::setprecision(1);
-		else
-			std::cout << std::setprecision(20);
-		std::cout << YELLOW << "double: " << STOP << static_cast<double>(dbl) << std::endl;
 		std::cout.flags(flags);
 		return (true);
 	}
@@ -197,7 +165,59 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 			std::cout << std::fixed << std::setprecision(1);
 		else
 			std::cout << std::setprecision(20);
-		std::cout << YELLOW << "double: " << STOP << static_cast<double>(f) << std::endl;
+
+		if (static_cast<float>(f) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<float>(f))
+			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "double: " << STOP << static_cast<double>(f) << std::endl;
+
+		std::cout.flags(flags);
+		return (true);
+	}
+	return (false);
+}
+
+bool	ScalarConverter::convertDouble(const std::string &str) {
+	std::stringstream ss;
+	double dbl;
+
+	ss << str;
+	ss >> dbl;
+	if (!ss.fail() && ss.eof()) {
+		if (' ' <= static_cast<char>(dbl) && static_cast<char>(dbl) <= '~')
+			std::cout << YELLOW << "char: " << STOP << static_cast<char>(dbl) << std::endl;
+		else
+			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
+
+		if (static_cast<double>(dbl) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<double>(dbl))
+			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "int: " << STOP << static_cast<int>(dbl) << std::endl;
+
+		const std::ios::fmtflags flags = std::cout.flags(); // フラグを保存
+
+		if (static_cast<float>(dbl) == static_cast<int>(dbl))
+			std::cout << std::fixed << std::setprecision(1); //小数点以下1桁
+		else
+			std::cout << std::setprecision(8);
+
+		if (static_cast<float >(dbl) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<float >(dbl))
+			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "float: " << STOP << static_cast<float>(dbl) << 'f' << std::endl;
+
+		std::cout.flags(flags); // フラグを元に戻す
+
+		if (static_cast<double>(dbl) == static_cast<int>(dbl))
+			std::cout << std::fixed << std::setprecision(1);
+		else
+			std::cout << std::setprecision(20);
+
+		if (static_cast<double>(dbl) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<double>(dbl))
+			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "double: " << STOP << static_cast<double>(dbl) << std::endl;
+
 		std::cout.flags(flags);
 		return (true);
 	}

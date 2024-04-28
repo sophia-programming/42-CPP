@@ -23,8 +23,8 @@ void tester() {
 	ScalarConverter::convert(".5");
 	ScalarConverter::convert("0.5");
 	ScalarConverter::convert(" 123.4567");
-	ScalarConverter::convert("1.234567890123456E012");
-	ScalarConverter::convert("1.234567890123456e-012");
+	ScalarConverter::convert("1.234567890123456E012"); //数値的には 1,234,567,890,123,456
+	ScalarConverter::convert("1.234567890123456e-012"); //数値的には 0.000000001234567890123456
 
 	std::cout << GREEN << "======= test_Pseudo ========" << STOP << std::endl;
 	ScalarConverter::convert("nan");
