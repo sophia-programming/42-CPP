@@ -43,7 +43,6 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 		else
 			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
-		//最大値以上、最小値以下の場合はimpossibleと表示
 		if (static_cast<char>(c) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<char>(c))
 			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
@@ -76,7 +75,7 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 
 bool	ScalarConverter::convertInt(const std::string &str) {
 	std::stringstream ss;
-	int n;
+	long n;
 
 	ss << str;
 	ss >> n;
@@ -86,7 +85,6 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 		else
 			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
-		//最大値以上、最小値以下の場合はimpossibleと表示
 		if (static_cast<int>(n) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<int>(n))
 			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
@@ -99,8 +97,8 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 		else
 			std::cout << std::setprecision(8);
 
-		if (static_cast<int>(n) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<int>(n))
-			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
+		if (static_cast<float>(n) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<float>(n))
+			std::cout << RED << "float: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "float: " << STOP << static_cast<float>(n) << 'f' << std::endl;
 
@@ -129,7 +127,6 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 		else
 			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
-		//最大値以上、最小値以下の場合はimpossibleと表示
 		if (static_cast<double>(dbl) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<double>(dbl))
 			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
@@ -142,7 +139,7 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 		else
 			std::cout << std::setprecision(8);
 
-		if (static_cast<double>(dbl) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<double>(dbl))
+		if (static_cast<float >(dbl) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<float >(dbl))
 			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "float: " << STOP << static_cast<float>(dbl) << 'f' << std::endl;
@@ -177,7 +174,6 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 		else
 			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
-		//最大値以上、最小値以下の場合はimpossibleと表示
 		if (static_cast<float>(f) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<float>(f))
 			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
