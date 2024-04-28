@@ -55,7 +55,11 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 			std::cout << std::fixed << std::setprecision(1); //小数点以下1桁
 		else
 			std::cout << std::setprecision(8);
-		std::cout << YELLOW << "float: " << STOP << static_cast<float>(c) << 'f' << std::endl;
+
+		if (static_cast<char>(c) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<char>(c))
+			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "float: " << STOP << static_cast<float>(c) << 'f' << std::endl;
 
 		std::cout.flags(flags); // フラグを元に戻す
 
@@ -94,7 +98,11 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 			std::cout << std::fixed << std::setprecision(1); //小数点以下1桁
 		else
 			std::cout << std::setprecision(8);
-		std::cout << YELLOW << "float: " << STOP << static_cast<float>(n) << 'f' << std::endl;
+
+		if (static_cast<int>(n) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<int>(n))
+			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "float: " << STOP << static_cast<float>(n) << 'f' << std::endl;
 
 		std::cout.flags(flags); // フラグを元に戻す
 
@@ -133,7 +141,11 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 			std::cout << std::fixed << std::setprecision(1); //小数点以下1桁
 		else
 			std::cout << std::setprecision(8);
-		std::cout << YELLOW << "float: " << STOP << static_cast<float>(dbl) << 'f' << std::endl;
+
+		if (static_cast<double>(dbl) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<double>(dbl))
+			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "float: " << STOP << static_cast<float>(dbl) << 'f' << std::endl;
 
 		std::cout.flags(flags); // フラグを元に戻す
 
@@ -177,7 +189,11 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 			std::cout << std::fixed << std::setprecision(1); //小数点以下1桁
 		else
 			std::cout << std::setprecision(8);
-		std::cout << YELLOW << "float: " << STOP << static_cast<float>(f) << 'f' << std::endl;
+
+		if (static_cast<float >(f) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<float >(f))
+			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
+		else
+			std::cout << YELLOW << "float: " << STOP << static_cast<float>(f) << 'f' << std::endl;
 
 		std::cout.flags(flags); // フラグを元に戻す
 
