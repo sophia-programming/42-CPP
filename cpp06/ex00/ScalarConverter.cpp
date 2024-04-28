@@ -44,7 +44,7 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
 		//最大値以上、最小値以下の場合はimpossibleと表示
-		if (static_cast<int>(c) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<int>(c))
+		if (static_cast<char>(c) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<char>(c))
 			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "int: " << STOP << static_cast<int>(c) << std::endl;

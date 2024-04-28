@@ -46,16 +46,23 @@ void tester() {
 	ScalarConverter::convert("-9223372036854775808");
 	ScalarConverter::convert("-9223372036854775809");
 
-//	std::cout << GREEN << "======= test_overflow_float ========" << STOP << std::endl;
-//	ScalarConverter::convert("3.402823466E+39");
-//	ScalarConverter::convert("-1.175494351E-39");
-//	ScalarConverter::convert("1.00000011920928955078125f");
-//	ScalarConverter::convert("1.175494e-38f");
-//	ScalarConverter::convert("1.000000059604644775390625f");
-//	ScalarConverter::convert("1.79769313486231570814527424e+308");
-//	ScalarConverter::convert("-1.79769313486231570814527424e+308");
-//	ScalarConverter::convert("2.225074e-308");
-//	ScalarConverter::convert("1.00000000000000000011102230246251565404236316680908203125e-309");
+	std::cout << GREEN << "======= test_overflow_float ========" << STOP << std::endl;
+	ScalarConverter::convert("-1.175494351E-39"); //0に近い
+	ScalarConverter::convert("1.175494e-38f"); //0に近い
+	ScalarConverter::convert("2.225074e-308"); //0に近い
+	ScalarConverter::convert("1.00000000000000000011102230246251565404236316680908203125e-309");
+	ScalarConverter::convert("3.402823466E+40"); //以下infにちかい
+	ScalarConverter::convert("1.00000011920928955078125f");
+	ScalarConverter::convert("1.000000059604644775390625f");
+	ScalarConverter::convert("1.79769313486231570814527424e+308");
+	ScalarConverter::convert("-1.79769313486231570814527424e+308");
+
+	std::cout << GREEN << "======= test_overflow_double ========" << STOP << std::endl;
+	ScalarConverter::convert("1.7976931348623158E+308"); //doubleの最大値
+	ScalarConverter::convert("2.2250738585072014E-308"); //doubleの最小値
+	ScalarConverter::convert("1.7976931348623158E+310");
+	ScalarConverter::convert("2.2250738585072014E-310");
+	ScalarConverter::convert("-1.79769313486231570814527424e+309");
 }
 
 int	main(int argc, char *argv[]) {
