@@ -80,7 +80,7 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 
 bool	ScalarConverter::convertInt(const std::string &str) {
 	std::stringstream ss;
-	long n;
+	int n;
 
 	ss << str;
 	ss >> n;
@@ -200,10 +200,11 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 		else
 			std::cout << std::setprecision(8);
 
-		if (static_cast<float >(dbl) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<float >(dbl))
+		if (fabs(dbl) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < fabs(dbl))
 			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "float: " << STOP << static_cast<float>(dbl) << 'f' << std::endl;
+
 
 		std::cout.flags(flags); // フラグを元に戻す
 
@@ -212,7 +213,7 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 		else
 			std::cout << std::setprecision(20);
 
-		if (dbl < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < dbl)
+		if (fabs(dbl) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < fabs(dbl))
 			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "double: " << STOP << static_cast<double>(dbl) << std::endl;
