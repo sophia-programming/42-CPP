@@ -85,13 +85,10 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 	ss << str;
 	ss >> n;
 	if (!ss.fail() && ss.eof()) {
-		if (' ' <= static_cast<char>(n) && static_cast<char>(n) <= '~')
-			std::cout << YELLOW << "char: " << STOP << static_cast<char>(n) << std::endl;
-		else
-			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
+		std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
-		if (static_cast<int>(n) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<int>(n))
-			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
+		if (n < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < n)
+			std:: cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "int: " << STOP << static_cast<int>(n) << std::endl;
 
@@ -114,10 +111,12 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 		else
 			std::cout << std::setprecision(20);
 
-		if (static_cast<double>(n) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<double>(n))
-			std::cout << BLUE << "double: " << STOP << "impossible" << std::endl;
+		double d = static_cast<double>(n);
+		long restored = static_cast<long>(d);
+		if (restored != n)
+			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
 		else
-			std::cout << YELLOW << "double: " << STOP << static_cast<double>(n) << std::endl;
+			std::cout << YELLOW << "double: " << STOP << d << std::endl;
 
 		std::cout.flags(flags);
 		return (true);
@@ -142,7 +141,7 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 		else
 			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
-		if (static_cast<float>(f) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<float>(f))
+		if (static_cast<int>(f) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<int>(f))
 			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "int: " << STOP << static_cast<int>(f) << std::endl;
@@ -154,7 +153,7 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 		else
 			std::cout << std::setprecision(8);
 
-		if (static_cast<float >(f) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<float >(f))
+		if (f < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < f)
 			std::cout << YELLOW << "float: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "float: " << STOP << static_cast<float>(f) << 'f' << std::endl;
@@ -166,7 +165,7 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 		else
 			std::cout << std::setprecision(20);
 
-		if (static_cast<float>(f) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<float>(f))
+		if (static_cast<double>(f) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<double>(f))
 			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "double: " << STOP << static_cast<double>(f) << std::endl;
@@ -188,7 +187,7 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 			std::cout << YELLOW << "char: " << STOP << static_cast<char>(dbl) << std::endl;
 		else
 			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
-
+//ok
 		if (static_cast<double>(dbl) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<double>(dbl))
 			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
@@ -213,7 +212,7 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 		else
 			std::cout << std::setprecision(20);
 
-		if (static_cast<double>(dbl) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<double>(dbl))
+		if (dbl < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < dbl)
 			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
 		else
 			std::cout << YELLOW << "double: " << STOP << static_cast<double>(dbl) << std::endl;
