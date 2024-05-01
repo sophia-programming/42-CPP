@@ -9,19 +9,19 @@
 
 class ScalarConverter
 {
-public:
+private:
 	ScalarConverter();
 	ScalarConverter(const ScalarConverter &src);
 	ScalarConverter &operator=(const ScalarConverter &src);
 	~ScalarConverter();
-	static bool	convert(std::string str);
-
-private:
 	static bool	convertInt(const std::string &str);
 	static bool	convertChar(const std::string &str);
 	static bool	convertDouble(const std::string &str);
 	static bool	convertFloat(const std::string &str);
 	static bool	convertPseudo(const std::string &str);
+
+public:
+	static bool	convert(std::string str);
 };
 
 /* colors */
