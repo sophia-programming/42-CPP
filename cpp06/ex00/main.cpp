@@ -1,5 +1,5 @@
 #include "ScalarConverter.hpp"
-
+//
 //void tester() {
 //	std::cout << GREEN << "======= test_error ========" << STOP << std::endl;
 //	ScalarConverter::convert("");
@@ -61,6 +61,10 @@
 //	ScalarConverter::convert("1.7976931348623158E+310");
 //	ScalarConverter::convert("2.2250738585072014E-310");
 //	ScalarConverter::convert("-1.79769313486231570814527424e+309");
+//}
+//
+//int main() {
+//	tester();
 //}
 
 int	main(int argc, char *argv[]) {

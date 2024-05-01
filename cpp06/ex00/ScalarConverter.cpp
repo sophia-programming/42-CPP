@@ -85,7 +85,10 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 	ss << str;
 	ss >> n;
 	if (!ss.fail() && ss.eof()) {
-		std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
+		if (' ' <= static_cast<char>(n) && static_cast<char>(n) <= '~')
+			std::cout << YELLOW << "char: " << STOP << static_cast<char>(n) << std::endl;
+		else
+			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
 
 		if (n < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < n)
 			std:: cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
@@ -187,7 +190,7 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 			std::cout << YELLOW << "char: " << STOP << static_cast<char>(dbl) << std::endl;
 		else
 			std::cout << YELLOW << "char: " << STOP << "Non displayable" << std::endl;
-//ok
+
 		if (static_cast<double>(dbl) < std::numeric_limits<int>::min() || std::numeric_limits<int>::max() < static_cast<double>(dbl))
 			std::cout << YELLOW << "int: " << STOP << "impossible" << std::endl;
 		else
