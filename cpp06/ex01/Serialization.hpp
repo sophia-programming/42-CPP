@@ -6,7 +6,7 @@
 
 class Serializer
 {
-public:
+private:
 	Serializer();
 	Serializer(const Serializer &rhs);
 	Serializer &operator=(const Serializer &rhs);
