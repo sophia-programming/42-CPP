@@ -87,9 +87,22 @@ static int my_test (){
 
 	// 代入演算子のテスト
 	std::cout << BLUE << "===== Testing assignment operator =====" << STOP << std::endl;
-	Array<int> assignArray = intArray;
-	assignArray[1] = 200;
-	std::cout << "After assignment, intArray[1] = " << intArray[1] << ", assignArray[1] = " << assignArray[1] << std::endl;
+	Array<int> originalArray(5);
+	for (int i = 0; i < 5; ++i) {
+		originalArray[i] = i * 10;
+	}
+
+	Array<int> copyArray2;
+	copyArray2 = originalArray;
+
+	// 代入後の値を確認
+	for (int i = 0; i < 5; ++i) {
+		std::cout << "originalArray[" << i << "] = " << originalArray[i] << ", copyArray[" << i << "] = " << copyArray2[i] << std::endl;
+	}
+
+	// 値を変更してオリジナルが影響を受けないことを確認
+	copyArray2[0] = 100;
+	std::cout << "After modifying copyArray, originalArray[0] = " << originalArray[0] << ", copyArray[0] = " << copyArray2[0] << std::endl;
 
 	// constがついていないメンバ関数のテスト
 	std::cout << BLUE << "===== Testing non-const member function =====" << STOP << std::endl;

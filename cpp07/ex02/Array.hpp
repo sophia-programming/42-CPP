@@ -49,11 +49,13 @@ public:
 
 	Array &operator=(const Array &rhs) {
 		if (this != &rhs) {
+			T* newArray = new T[rhs.n_];
+			for (unsigned int i = 0; i < rhs.n_; i++)
+				newArray[i] = rhs.array_[i];
+
 			delete[] array_;
+			array_ = newArray;
 			n_ = rhs.n_;
-			array_ = new T[n_];
-			for (unsigned int i = 0; i < n_; i++)
-				array_[i] = rhs.array_[i];
 		}
 		std::cout << GREEN << "Assignment operator called" << STOP << std::endl;
 		return *this;
