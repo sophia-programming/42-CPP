@@ -67,10 +67,7 @@ bool	ScalarConverter::convertChar(const std::string &str) {
 		else
 			std::cout << std::setprecision(20);
 
-		if (static_cast<char>(c) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < static_cast<char>(c))
-			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
-		else
-			std::cout << YELLOW << "double: " << STOP << static_cast<double>(c) << std::endl;
+		std::cout << YELLOW << "double: " << STOP << static_cast<double>(c) << std::endl;
 
 		std::cout.flags(flags);
 		return (true);
@@ -115,11 +112,7 @@ bool	ScalarConverter::convertInt(const std::string &str) {
 			std::cout << std::setprecision(20);
 
 		double d = static_cast<double>(n);
-		long restored = static_cast<long>(d);
-		if (restored != n)
-			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
-		else
-			std::cout << YELLOW << "double: " << STOP << d << std::endl;
+		std::cout << YELLOW << "double: " << STOP << d << std::endl;
 
 		std::cout.flags(flags);
 		return (true);
@@ -168,10 +161,7 @@ bool	ScalarConverter::convertFloat(const std::string &str) {
 		else
 			std::cout << std::setprecision(20);
 
-		if (static_cast<double>(f) < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < static_cast<double>(f))
-			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
-		else
-			std::cout << YELLOW << "double: " << STOP << static_cast<double>(f) << std::endl;
+		std::cout << YELLOW << "double: " << STOP << static_cast<double>(f) << std::endl;
 
 		std::cout.flags(flags);
 		return (true);
@@ -216,10 +206,7 @@ bool	ScalarConverter::convertDouble(const std::string &str) {
 		else
 			std::cout << std::setprecision(20);
 
-		if (fabs(dbl) < std::numeric_limits<double>::min() || std::numeric_limits<double>::max() < fabs(dbl))
-			std::cout << YELLOW << "double: " << STOP << "impossible" << std::endl;
-		else
-			std::cout << YELLOW << "double: " << STOP << static_cast<double>(dbl) << std::endl;
+		std::cout << YELLOW << "double: " << STOP << static_cast<double>(dbl) << std::endl;
 
 		std::cout.flags(flags);
 		return (true);

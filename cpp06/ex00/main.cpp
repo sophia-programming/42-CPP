@@ -1,5 +1,5 @@
 #include "ScalarConverter.hpp"
-//
+
 //void tester() {
 //	std::cout << GREEN << "======= test_error ========" << STOP << std::endl;
 //	ScalarConverter::convert("");
