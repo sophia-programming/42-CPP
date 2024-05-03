@@ -91,6 +91,16 @@ static int my_test (){
 	assignArray[1] = 200;
 	std::cout << "After assignment, intArray[1] = " << intArray[1] << ", assignArray[1] = " << assignArray[1] << std::endl;
 
+	// constがついていないメンバ関数のテスト
+	std::cout << BLUE << "===== Testing non-const member function =====" << STOP << std::endl;
+	Array<int> nonConstArray(3);
+	nonConstArray[0] = 10;
+	nonConstArray[1] = 20;
+	nonConstArray[2] = 30;
+	for (unsigned int i = 0; i < nonConstArray.size(); i++) {
+		nonConstArray[i] = nonConstArray[i] * 2;
+		std::cout << "nonConstArray[" << i << "] = " << nonConstArray[i] << std::endl;
+	}
 	return 0;
 }
 
