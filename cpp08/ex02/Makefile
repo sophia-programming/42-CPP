@@ -6,7 +6,7 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic
 all: $(NAME)
 
 $(NAME): $(objs)
-	clang++ $(CXXFLAGS) -o $(NAME) $(objs)
+	c++ $(CXXFLAGS) -o $(NAME) $(objs)
 
 clean:
 	$(RM) $(objs)

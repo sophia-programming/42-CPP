@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <exception>
 
 class EasyFindException : public std::exception {
 	public:

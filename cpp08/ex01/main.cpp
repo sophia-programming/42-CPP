@@ -22,7 +22,7 @@ int main(void)
 	std::cout << GREEN << "=== [ok] ===" << STOP << std::endl;
 	Span sp = Span(5);
 
-	sp.addNumber(1);
+	sp.addNumber(12);
 	sp.addNumber(-3);
 	sp.addNumber(17);
 	sp.addNumber(9);
@@ -40,9 +40,20 @@ int main(void)
 		std::cerr << RED << e.what() << STOP << std::endl;
 	}
 
+	std::cout << GREEN << "=== [less than 0 elemnts on the vector] ===" << STOP << std::endl;
+	Span sp0 = Span(0);
+	sp0.printStorage();
+	try {
+		std::cout << sp0.shortestSpan() << std::endl;
+	}
+	catch(const std::exception& e) {
+		std::cerr << RED << e.what() << STOP << std::endl;
+	}
+
 	std::cout << GREEN << "=== [less than 2 elements on the vector] ===" << STOP << std::endl;
 	Span sp1 = Span(1);
-	sp1.addNumber(1);
+	sp1.addNumber(20);
+	sp1.printStorage();
 	try {
 		std::cout << sp1.shortestSpan() << std::endl;
 	}
@@ -53,9 +64,15 @@ int main(void)
 	std::cout << GREEN << "=== [Random & Large Scale Numbers] ===" << STOP << std::endl;
 	Span sp2 = Span(100);
 	sp2.addRandomNumbers(100);
-	std::cout << "sp2 ";
 	sp2.printStorage();
-	std::cout << "sp2.shortestSpan() = " << sp2.shortestSpan() << std::endl;
-	std::cout << "sp2.longestSpan() = " << sp2.longestSpan() << std::endl;
+	try {
+//		sp2.addNumber(1);
+		std::cout << "sp2.shortestSpan() = " << sp2.shortestSpan() << std::endl;
+		std::cout << "sp2.longestSpan() = " << sp2.longestSpan() << std::endl;
+	}
+	catch(const std::exception& e) {
+		std::cerr << RED << e.what() << STOP << std::endl;
+
+	}
 	return EXIT_SUCCESS;
 }
