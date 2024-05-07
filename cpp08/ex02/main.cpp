@@ -1,5 +1,4 @@
 #include "MutantStack.hpp"
-#include "list"
 
 void pdf_test()
 {
@@ -35,7 +34,7 @@ void my_test()
 {
 	std::cout << GREEN << "=== [MutantStack with int] ===" << STOP << std::endl;
 	MutantStack<int> ms1;
-	std::cout << "empty(): " << ms1.empty() << std::endl;
+	std::cout << "empty(): " << ms1.empty() << std::endl; //emtpy()はスタックが空かどうかを返す(1:true, 0:false)
 	ms1.push(5);
 	ms1.push(17);
 	ms1.pop();

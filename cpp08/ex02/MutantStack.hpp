@@ -16,6 +16,7 @@ const char *const UNDERLINE =" \033[4m";
 
 #include <iostream>
 #include <stack>
+#include <list>
 
 template <typename T>
 class MutantStack : public std::stack<T> {
