@@ -107,15 +107,25 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 bool BitcoinExchange::validatePriceFormat(const std::string& priceStr)
 {
 	if (priceStr.at(0) == '-')
+	{
 		std::cerr << RED << "Error: not a positive number." << STOP << std::endl;
-	else if (priceStr.empty() || priceStr.find_first_not_of("0123456789.") != std::string::npos
-		||  priceStr.at(0) == '.' || priceStr.find('.', priceStr.length() - 1) != std::string::npos)
+		return false;
+	}
+	else if (priceStr.empty() || priceStr.find_first_not_of("0123456789.") != std::string::npos ||
+		priceStr.at(0) == '.' || priceStr.find('.', priceStr.length() - 1) != std::string::npos)
+	{
 		std::cerr << RED << "Error: invalid priceStr => " << "\"" << priceStr << "\"" << STOP << std::endl;
-	else if (10 < priceStr.length() || (priceStr.length() == 10 && "2147483647" < priceStr))
+		return false;
+	}
+
+	float price = ft_stof(priceStr);
+	if (price < 0 || 1000 < price) // 範囲を0から1000に限定
+	{
 		std::cerr << RED << "Error: too large a number." << STOP << std::endl;
-	else
-		return true;
-	return false;
+		return false;
+	}
+
+	return true;
 }
 
 void BitcoinExchange::loadPricesFromCSV(std::ifstream &csvFile)
