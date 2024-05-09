@@ -34,6 +34,11 @@ BitcoinExchange::~BitcoinExchange(void) {}
 
 float BitcoinExchange::findClosestPrice(const std::string &date)
 {
+	if (this->dataBase.empty()) {
+		std::cerr << RED << "Error: Database is empty." << STOP << std::endl;
+		return -1.0;
+	}
+
 	if (0 < this->dataBase.count(date))
 		return this->dataBase.at(date);
 	return (--this->dataBase.lower_bound(date))->second;
@@ -42,8 +47,10 @@ float BitcoinExchange::findClosestPrice(const std::string &date)
 bool BitcoinExchange::validateDateFormat(const std::string &date)
 {
 	if (date.empty())
+	{
+		std::cerr << RED << "Error: empty date." << STOP << std::endl;
 		return false;
-
+	}
 	size_t first_hyphen = date.find('-');
 	size_t second_hyphen = date.find('-', first_hyphen + 1);
 
@@ -104,7 +111,7 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 	return true;
 }
 
-bool BitcoinExchange::validatePriceFormat(const std::string& priceStr)
+bool BitcoinExchange::validatePriceFormat(const std::string &priceStr)
 {
 	if (priceStr.at(0) == '-')
 	{
@@ -132,14 +139,30 @@ void BitcoinExchange::loadPricesFromCSV(std::ifstream &csvFile)
 {
 	std::string line;
 	size_t delim;
-	// skip first line
-	std::getline(csvFile, line);
+
+	if (!std::getline(csvFile, line)) {
+		std::cerr << RED << "Error: CSV file is empty or cannot be read." << STOP << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
+
+	// データ行がない場合を確認
+	bool hasData = false;
 	while (std::getline(csvFile, line))
 	{
+		hasData = true;
 		delim = line.find(',');
+		if (delim == std::string::npos) {
+			std::cerr << RED << "Error: Invalid format in database => " << line << STOP << std::endl;
+			continue;
+		}
+
+		std::string date = line.substr(0, delim);
 		std::string priceStr = line.substr(delim + 1);
-		// set a new pair on the map <date, priceStr>
-		this->dataBase[line.substr(0, delim)] = ft_stof(priceStr);
+		// set a new pair on the map <date, price>
+		this->dataBase[date] = ft_stof(priceStr);
+	}
+	if (!hasData) {
+		std::cerr << RED << "Error: CSV file contains no data entries." << STOP << std::endl;
 	}
 	csvFile.close();
 }
