@@ -106,7 +106,7 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 
 bool BitcoinExchange::validatePriceFormat(const std::string& priceStr)
 {
-	if (priceStr.empty() || priceStr.find_first_not_of("0123456789.-") != std::string::npos
+	if (priceStr.empty() || priceStr.find_first_not_of("0123456789.") != std::string::npos
 		||  priceStr.at(0) == '.' || priceStr.find('.', priceStr.length() - 1) != std::string::npos)
 		std::cerr << RED << "Error: invalid priceStr => " << "\"" << priceStr << "\"" << STOP << std::endl;
 	else if (priceStr.at(0) == '-')
