@@ -10,7 +10,10 @@ unsigned int ft_stou(const std::string &str){
 
 int main(int argc, char **argv) {
 	if (argc == 1)
-		return EXIT_SUCCESS;
+	{
+		std::cout << RED << "No arguments provided" << STOP << std::endl;
+		return EXIT_FAILURE;
+	}
 	PmergeMe pmm;
 
 	try {
@@ -34,7 +37,7 @@ int main(int argc, char **argv) {
 			}
 		}
 	catch (PmergeMe::InvalidElementException &e) {
-		std::cerr << RED << e.what() << STOP << std::endl;
+		std::cout << RED << e.what() << STOP << std::endl;
 		return EXIT_FAILURE;
 	}
 	pmm.sortVector(argc, argv);
