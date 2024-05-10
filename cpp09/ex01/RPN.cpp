@@ -5,6 +5,8 @@ static int ft_stoi(std::string &str){
 	std::stringstream ss(str);
 
 	ss >> num;
+	if (10 <= num)
+		throw std::invalid_argument("Error: Input number must be less than 10");
 	return num;
 }
 
@@ -35,17 +37,17 @@ uint64_t RPN::calculate(const std::string &expression) {
 	int result;
 
 	std::stringstream postfix(expression);
-	std::stack<int> temp;
+	std::stack<int> tmp;
 	std::string s;
 
 	while (postfix >> s){
 		if (s == "+" || s == "-" || s == "/" || s == "*"){
-			if (temp.size() < 2)
+			if (tmp.size() < 2)
 				throw NoResultException();
-			right = temp.top();
-			temp.pop();
-			left = temp.top();
-			temp.pop();
+			right = tmp.top();
+			tmp.pop();
+			left = tmp.top();
+			tmp.pop();
 			if (s == "+")
 				result = left + right;
 			else if (s == "-")
@@ -57,12 +59,12 @@ uint64_t RPN::calculate(const std::string &expression) {
 			}
 			else if (s == "*")
 				result = left * right;
-			temp.push(result);
+			tmp.push(result);
 		}
 		else
-			temp.push(ft_stoi(s));
+			tmp.push(ft_stoi(s));
 	}
-	return temp.top();
+	return tmp.top();
 }
 
 const char *RPN::NoResultException::what() const throw() {
