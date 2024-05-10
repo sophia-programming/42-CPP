@@ -107,7 +107,9 @@ protected:
 		return (low);
 	};
 
-	MergeInsertionSort(const MergeInsertionSort &sort) { (void)sort; };
+	MergeInsertionSort(const MergeInsertionSort &sort) {
+		(void)sort;
+	};
 
 private:
 	void displayContainer(const std::string &prefix,

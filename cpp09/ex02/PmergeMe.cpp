@@ -47,8 +47,19 @@ void CommandLineParser::parseArgument(const int argc, const char *argv[]) {
 	}
 }
 
+
 // VectorMergeInsertionSort
 VectorMergeInsertionSort::VectorMergeInsertionSort() {}
+
+VectorMergeInsertionSort::VectorMergeInsertionSort(const VectorMergeInsertionSort &sort): MergeInsertionSort(sort) {
+	*this = sort;
+}
+
+VectorMergeInsertionSort &VectorMergeInsertionSort::operator=(const VectorMergeInsertionSort &sort) {
+	if (this != &sort) {
+	}
+	return (*this);
+}
 
 VectorMergeInsertionSort::~VectorMergeInsertionSort() {}
 
@@ -86,19 +97,19 @@ void VectorMergeInsertionSort::sort(std::vector<long> &container) {
 	container = larger;
 }
 
-VectorMergeInsertionSort::VectorMergeInsertionSort(const VectorMergeInsertionSort &sort): MergeInsertionSort(sort) {
-	(void)sort;
+
+// ListMergeInsertionSort
+ListMergeInsertionSort::ListMergeInsertionSort() {}
+
+ListMergeInsertionSort::ListMergeInsertionSort(const ListMergeInsertionSort &sort) : MergeInsertionSort(sort) {
+	*this = sort;
 }
 
-VectorMergeInsertionSort &VectorMergeInsertionSort::operator=(const VectorMergeInsertionSort &sort) {
+ListMergeInsertionSort &ListMergeInsertionSort::operator=(const ListMergeInsertionSort &sort) {
 	if (this != &sort) {
 	}
 	return (*this);
 }
-
-
-// ListMergeInsertionSort
-ListMergeInsertionSort::ListMergeInsertionSort() {}
 
 ListMergeInsertionSort::~ListMergeInsertionSort() {}
 
@@ -133,8 +144,7 @@ void ListMergeInsertionSort::sort(std::list<long> &container) {
 	sort(larger);
 
 	// 3. insert small container elements into the already sorted large container
-	for (std::list<long>::iterator it = smaller.begin(); it != smaller.end();
-		 it++) {
+	for (std::list<long>::iterator it = smaller.begin(); it != smaller.end(); it++) {
 		std::list<long>::iterator insertPos = larger.begin();
 		while (insertPos != larger.end() && *insertPos < *it) {
 			insertPos++;
@@ -142,14 +152,4 @@ void ListMergeInsertionSort::sort(std::list<long> &container) {
 		larger.insert(insertPos, *it);
 	}
 	container = larger;
-}
-
-ListMergeInsertionSort::ListMergeInsertionSort(const ListMergeInsertionSort &sort) : MergeInsertionSort(sort) {
-	(void)sort;
-}
-
-ListMergeInsertionSort &ListMergeInsertionSort::operator=(const ListMergeInsertionSort &sort) {
-	if (this != &sort) {
-	}
-	return (*this);
 }
