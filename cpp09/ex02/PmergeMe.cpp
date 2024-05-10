@@ -53,7 +53,7 @@ static std::vector<unsigned int> mergeVecs(std::vector<unsigned int> &left, std:
 }
 
 static std::vector<unsigned int> mergeInsertVec(std::vector<unsigned int> &vec){
-	if (1 <= vec.size()) {
+	if (vec.size() <= 1) {
 		return vec;
 	}
 
@@ -88,7 +88,7 @@ void PmergeMe::sortVector(int argc, char **argv){
 	std::cout << GREEN << "<Vector>After: " << STOP;
 	printVec(vec);
 	std::cout << "Time to process a range of " << argc - 1 << " elements "
-	          << "with std::vector<unsigned int> : " << RED << time_taken << "  us" << STOP << std::endl;
+	          << "with" << GREEN << " std::vector<unsigned int> : " << STOP << RED << time_taken << "  us" << STOP << std::endl;
 }
 
 static void printList(std::list<unsigned int> &lst){
@@ -128,7 +128,7 @@ static std::list<unsigned int> mergeLists(std::list<unsigned int> &left, std::li
 }
 
 static std::list<unsigned int> mergeInsertList(std::list<unsigned int> &lst){
-	if (1 <= lst.size()) {
+	if (lst.size() <= 1) {
 		return lst;
 	}
 
@@ -169,7 +169,7 @@ void PmergeMe::sortList(int argc, char **argv){
 	std::cout << YELLOW << "<list>After: " << STOP;
 	printList(lst);
 	std::cout << "Time to process a range of " << argc - 1 << " elements "
-	          << "with std::list<unsigned int> : " << RED << time_taken << "  us" << STOP << std::endl;
+	          << "with" << YELLOW << " std::list<unsigned int> : " << STOP << RED << time_taken << "  us" << STOP << std::endl;
 }
 
 const char *PmergeMe::InvalidElementException::what() const throw() {
