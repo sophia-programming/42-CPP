@@ -1,177 +1,155 @@
 #include "PmergeMe.hpp"
 
-#define MICROSECOND 1000000
-
-PmergeMe::PmergeMe() {}
-
-PmergeMe::PmergeMe(const PmergeMe &to_copy){
-	*this = to_copy;
+CommandLineParser::CommandLineParser(const int argc, const char *argv[]) {
+	parseArgument(argc, argv);
 }
 
-PmergeMe &PmergeMe::operator=(const PmergeMe &to_copy){
-	if (this != &to_copy){
-		*this = to_copy;
+CommandLineParser::CommandLineParser() {}
+
+CommandLineParser::CommandLineParser(const CommandLineParser &parser) {
+	*this = parser;
+}
+
+CommandLineParser &CommandLineParser::operator=(const CommandLineParser &parser) {
+	if (this != &parser) {
+		numVec_ = parser.numVec_;
+		numList_ = parser.numList_;
 	}
-	return *this;
+	return (*this);
 }
 
-PmergeMe::~PmergeMe() {}
+CommandLineParser::~CommandLineParser() {}
 
-static void printVec(std::vector<unsigned int> &vec) {
-	std::vector<unsigned int>::const_iterator itr;
-	for (itr = vec.begin(); itr != vec.end(); itr++) {
-		std::cout << *itr << " ";
-	}
-	std::cout << std::endl;
+const std::vector<long> &CommandLineParser::getVector() const {
+	return (this->numVec_);
 }
 
-static std::vector<unsigned int> mergeVecs(std::vector<unsigned int> &left, std::vector<unsigned int> &right){
-	std::vector<unsigned int> result;
+const std::list<long> &CommandLineParser::getList() const {
+	return (this->numList_);
+}
 
-	// Merge the two vectors until one of them is empty
-	while (0 < left.size() && 0 < right.size()) {
-		if (left.front() <= right.front()) {
-			result.push_back(left.front());
-			left.erase(left.begin());
-		} else {
-			result.push_back(right.front());
-			right.erase(right.begin());
+void CommandLineParser::parseArgument(const int argc, const char *argv[]) {
+	long num;
+
+	if (argc == 1)
+		throw std::invalid_argument("Argument is empty");
+
+	for (long i = 1; i < argc; i++) {
+		std::istringstream iss(argv[i]);
+		iss >> num;
+		if (iss.fail() || iss.peek() != EOF) {
+			throw std::invalid_argument("Invalid input: " + std::string(argv[i]));
+		} else if (num <= 0) {
+			throw std::invalid_argument("Minus or Zero value: " + std::string(argv[i]));
 		}
+		numVec_.push_back(num);
+		numList_.push_back(num);
 	}
-	// Add the remaining elements of the left vector
-	while (0 < left.size()) {
-		result.push_back(left.front());
-		left.erase(left.begin());
-	}
-
-	// Add the remaining elements of the right vector
-	while (0 < right.size()) {
-		result.push_back(right.front());
-		right.erase(right.begin());
-	}
-	return result;
 }
 
-static std::vector<unsigned int> mergeInsertVec(std::vector<unsigned int> &vec){
-	if (vec.size() <= 1) {
-		return vec;
+// VectorMergeInsertionSort
+VectorMergeInsertionSort::VectorMergeInsertionSort() {}
+
+VectorMergeInsertionSort::~VectorMergeInsertionSort() {}
+
+void VectorMergeInsertionSort::sort(std::vector<long> &container) {
+	if (container.size() <= 1) {
+		return;
 	}
 
-	// Split the vector in two
-	int middle = vec.size() / 2;
-	std::vector<unsigned int> left(vec.begin(), vec.begin() + middle);
-	std::vector<unsigned int> right(vec.begin() + middle, vec.end());
+	std::vector<long> smaller, larger;
 
-	// Recursively merge the two vectors
-	left = mergeInsertVec(left);
-	right = mergeInsertVec(right);
-
-	// Merge the two vectors
-	return mergeVecs(left, right);
-}
-
-void PmergeMe::sortVector(int argc, char **argv){
-	std::vector<unsigned int> vec;
-	for (int i = 1; i < argc; i++) {
-		vec.push_back(ft_stou(argv[i]));
-	}
-
-	std::cout << GREEN << "<Vector>Before: " << STOP;
-	printVec(vec);
-
-	std::clock_t start = std::clock();
-	vec = mergeInsertVec(vec);
-
-	double time_taken
-		= static_cast<double>(std::clock() - start) / static_cast<double>(CLOCKS_PER_SEC) * MICROSECOND;
-
-	std::cout << GREEN << "<Vector>After: " << STOP;
-	printVec(vec);
-	std::cout << "Time to process a range of " << argc - 1 << " elements "
-	          << "with" << GREEN << " std::vector<unsigned int> : " << STOP << RED << time_taken << "  us" << STOP << std::endl;
-}
-
-static void printList(std::list<unsigned int> &lst){
-	std::list<unsigned int>::const_iterator itr;
-	for (itr = lst.begin(); itr != lst.end(); itr++) {
-		std::cout << *itr << " ";
-	}
-	std::cout << std::endl;
-}
-
-static std::list<unsigned int> mergeLists(std::list<unsigned int> &left, std::list<unsigned int> &right){
-	std::list<unsigned int> result;
-
-	// Merge the two lists until one of them is empty
-	while (0 < left.size() && 0 < right.size()) {
-		if (left.front() <= right.front()) {
-			result.push_back(left.front());
-			left.erase(left.begin());
+	// 1. pair of elements are compared;
+	for (std::size_t i = 0; i < container.size(); i += 2) {
+		if (i + 1 < container.size()) {
+			if (container.at(i) < container.at(i + 1)) {
+				smaller.push_back(container.at(i));
+				larger.push_back(container.at(i + 1));
+			} else {
+				smaller.push_back(container.at(i + 1));
+				larger.push_back(container.at(i));
+			}
 		} else {
-			result.push_back(right.front());
-			right.erase(right.begin());
+			larger.push_back(container.at(i));
 		}
 	}
 
-	// Add the remaining elements of the left list
-	while (0 < left.size()) {
-		result.push_back(left.front());
-		left.erase(left.begin());
-	}
+	// 2. the larger elements are sorted recursively;
+	sort(larger);
 
-	// Add the remaining elements of the right list
-	while (0 < right.size()) {
-		result.push_back(right.front());
-		right.erase(right.begin());
+	// 3. insert small container elements into the already sorted large container
+	for (std::size_t i = 0; i < smaller.size(); i++) {
+		std::vector<long>::iterator insertPos =
+				binarySearchInsertPosition(larger, smaller.at(i));
+		larger.insert(insertPos, smaller.at(i));
 	}
-	return result;
+	container = larger;
 }
 
-static std::list<unsigned int> mergeInsertList(std::list<unsigned int> &lst){
-	if (lst.size() <= 1) {
-		return lst;
-	}
-
-	// Split the list in two
-	int middle = lst.size() / 2;
-	std::list<unsigned int> left;
-	std::list<unsigned int> right;
-
-	for (int i = 0; i < middle; i++) {
-		left.push_back(lst.front());
-		lst.pop_front();
-	}
-	right = lst;
-
-	// Recursively merge the two lists
-	left = mergeInsertList(left);
-	right = mergeInsertList(right);
-
-	// Merge the two lists
-	return mergeLists(left, right);
+VectorMergeInsertionSort::VectorMergeInsertionSort(const VectorMergeInsertionSort &sort): MergeInsertionSort(sort) {
+	(void)sort;
 }
 
-void PmergeMe::sortList(int argc, char **argv){
-	std::list<unsigned int> lst;
-	for (int i = 1; i < argc; i++) {
-		lst.push_back(ft_stou(argv[i]));
+VectorMergeInsertionSort &VectorMergeInsertionSort::operator=(const VectorMergeInsertionSort &sort) {
+	if (this != &sort) {
 	}
-
-	std::cout << YELLOW << "<list>Before: " << STOP;
-	printList(lst);
-
-	std::clock_t start = std::clock();
-	lst = mergeInsertList(lst);
-
-	double time_taken
-		= static_cast<double>(std::clock() - start) / static_cast<double>(CLOCKS_PER_SEC) * MICROSECOND;
-
-	std::cout << YELLOW << "<list>After: " << STOP;
-	printList(lst);
-	std::cout << "Time to process a range of " << argc - 1 << " elements "
-	          << "with" << YELLOW << " std::list<unsigned int> : " << STOP << RED << time_taken << "  us" << STOP << std::endl;
+	return (*this);
 }
 
-const char *PmergeMe::InvalidElementException::what() const throw() {
-	return "Invalid element exception";
+
+// ListMergeInsertionSort
+ListMergeInsertionSort::ListMergeInsertionSort() {}
+
+ListMergeInsertionSort::~ListMergeInsertionSort() {}
+
+void ListMergeInsertionSort::sort(std::list<long> &container) {
+	if (container.size() <= 1) {
+		return;
+	}
+
+	std::list<long> smaller, larger;
+
+	// 1. pair of elements are compared;
+	std::list<long>::iterator it = container.begin();
+	std::list<long>::iterator current;
+
+	while (it != container.end()) {
+		current = it++;
+		if (it != container.end()) {
+			if (*current < *it) {
+				smaller.push_back(*current);
+				larger.push_back(*it);
+			} else {
+				smaller.push_back(*it);
+				larger.push_back(*current);
+			}
+			it++;
+		} else {
+			larger.push_back(*current);
+		}
+	}
+
+	// 2. the larger elements are sorted recursively;
+	sort(larger);
+
+	// 3. insert small container elements into the already sorted large container
+	for (std::list<long>::iterator it = smaller.begin(); it != smaller.end();
+		 it++) {
+		std::list<long>::iterator insertPos = larger.begin();
+		while (insertPos != larger.end() && *insertPos < *it) {
+			insertPos++;
+		}
+		larger.insert(insertPos, *it);
+	}
+	container = larger;
+}
+
+ListMergeInsertionSort::ListMergeInsertionSort(const ListMergeInsertionSort &sort) : MergeInsertionSort(sort) {
+	(void)sort;
+}
+
+ListMergeInsertionSort &ListMergeInsertionSort::operator=(const ListMergeInsertionSort &sort) {
+	if (this != &sort) {
+	}
+	return (*this);
 }

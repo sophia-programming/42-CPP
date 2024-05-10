@@ -1,48 +1,34 @@
 #include "PmergeMe.hpp"
 
-unsigned int ft_stou(const std::string &str){
-	unsigned int num;
-	std::stringstream ss(str);
-
-	ss >> num;
-	return num;
-}
-
-int main(int argc, char **argv) {
-	if (argc == 1)
-	{
-		std::cout << RED << "No arguments provided" << STOP << std::endl;
-		return EXIT_FAILURE;
-	}
-	PmergeMe pmm;
-
+int main(int argc, const char *argv[]) {
 	try {
-		for (int i = 1; i < argc; i++) {
-			if (std::string(argv[i]).find_first_not_of("0123456789 ") != std::string::npos)
-				throw PmergeMe::InvalidElementException();
-		}
+		CommandLineParser parser(argc, argv);
 
-		std::vector<unsigned int> vec;
-		for (int i = 0; i < argc; i++) {
-			vec.push_back(ft_stou(argv[i]));
-		}
+		std::vector<long> numVec = parser.getVector();
+		std::list<long> numList = parser.getList();
 
-		std::vector<unsigned int>::iterator itr;
-		std::vector<unsigned int>::iterator itr2;
-		for (itr = vec.begin(); itr != vec.end(); itr++) {
-			for (itr2 = itr + 1; itr2 != vec.end(); itr2++) {
-				if (*itr == *itr2)
-					throw PmergeMe::InvalidElementException();
-				}
-			}
-		}
-	catch (PmergeMe::InvalidElementException &e) {
-		std::cout << RED << e.what() << STOP << std::endl;
-		return EXIT_FAILURE;
+		VectorMergeInsertionSort sortVec;
+		ListMergeInsertionSort sortList;
+
+		// display input
+		sortVec.displayInput(numVec);
+//		sortList.displayInput(numList);
+
+		// sort
+		long timeVec = sortVec.sortAndMeasure(numVec);
+		long timeList = sortList.sortAndMeasure(numList);
+
+		// display output
+		sortVec.displayOutput(numVec);
+//		sortList.displayOutput(numList);
+
+		// display time
+		sortVec.displayTime(numVec, "std::vector", timeVec);
+		sortList.displayTime(numList, "std::list", timeList);
+
+	} catch (const std::exception &e) {
+		std::cout << RED << "Error: " << e.what() << STOP << std::endl;
+		std::exit(EXIT_FAILURE);
 	}
-	pmm.sortVector(argc, argv);
-	std::cout << std::endl;
-	pmm.sortList(argc, argv);
-
-	return EXIT_SUCCESS;
+	return (0);
 }
