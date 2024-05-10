@@ -1,7 +1,7 @@
 #include "RPN.hpp"
 
 static int error_message(const std::string &message){
-	std::cerr << RED << message << STOP << std::endl;
+	std::cout << RED << message << STOP << std::endl;
 	return EXIT_FAILURE;
 }
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv){
 		std::cout << RPN::calculate(argv[1]) << std::endl;
 	}
 	catch (const std::exception &e){
-		std::cerr << RED << e.what() << STOP << std::endl;
+		std::cout << RED << e.what() << STOP << std::endl;
 	}
 	return EXIT_SUCCESS;
 }

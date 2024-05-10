@@ -6,6 +6,8 @@
 #include <string>
 #include <exception>
 #include <sstream>
+#include <stdexcept>
+#include <cctype>
 
 class RPN {
 public:
@@ -15,7 +17,7 @@ public:
 	~RPN();
 
 	static bool valid_expression(const std::string &expression);
-	static uint64_t calculate(const std::string &expression);
+	static int calculate(const std::string &expression);
 
 	class NoResultException : public std::exception {
 	public:

@@ -5,8 +5,10 @@ static int ft_stoi(std::string &str){
 	std::stringstream ss(str);
 
 	ss >> num;
-	if (10 <= num)
+	if (10 <= num )
 		throw std::invalid_argument("Error: Input number must be less than 10");
+	else if (num <= -10)
+		throw std::invalid_argument("Error: Input number must be greater than -10");
 	return num;
 }
 
@@ -31,39 +33,39 @@ bool RPN::valid_expression(const std::string &expression) {
 	return false;
 }
 
-uint64_t RPN::calculate(const std::string &expression) {
-	int left;
-	int right;
-	int result;
-
+int RPN::calculate(const std::string &expression) {
 	std::stringstream postfix(expression);
 	std::stack<int> tmp;
 	std::string s;
 
-	while (postfix >> s){
-		if (s == "+" || s == "-" || s == "/" || s == "*"){
-			if (tmp.size() < 2)
+	while (postfix >> s) {
+		if (std::isdigit(s[0]) || (s[0] == '-' && s.length() > 1))
+			tmp.push(ft_stoi(s));
+		else if (s == "+" || s == "-" || s == "/" || s == "*") {
+			if (tmp.size() < 2) {
 				throw NoResultException();
-			right = tmp.top();
+			}
+			int right = tmp.top();
 			tmp.pop();
-			left = tmp.top();
+			int left = tmp.top();
 			tmp.pop();
+
 			if (s == "+")
-				result = left + right;
+				tmp.push(left + right);
 			else if (s == "-")
-				result = left - right;
-			else if (s == "/"){
+				tmp.push(left - right);
+			else if (s == "/") {
 				if (right == 0)
 					throw DivisionByZeroException();
-				result = left / right;
+				tmp.push(left / right);
 			}
 			else if (s == "*")
-				result = left * right;
-			tmp.push(result);
-		}
-		else
+				tmp.push(left * right);
+		} else
 			tmp.push(ft_stoi(s));
 	}
+	if (tmp.size() != 1)
+		throw NoResultException(); // Ensures only one result is left in the stack, indicating proper RPN format
 	return tmp.top();
 }
 
