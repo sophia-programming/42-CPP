@@ -34,6 +34,17 @@ private:
 template <typename Container> class MergeInsertionSort {
 public:
 	MergeInsertionSort(){};
+
+	MergeInsertionSort(const MergeInsertionSort &sort) {
+		*this = sort;
+	};
+
+	MergeInsertionSort &operator=(const MergeInsertionSort &sort){
+		if (this != &sort) {
+		}
+		return (*this);
+	};
+
 	virtual ~MergeInsertionSort(){};
 
 	void displayInput(const Container &container) const {
@@ -63,52 +74,31 @@ public:
 				  << std::endl;
 	};
 
-	void showContainerElement(Container &container) {
+	void displayContainerElement(Container &container) {
 		typename Container::const_iterator it = container.begin();
 		for (; it != container.end(); it++) {
 			std::cout << *it << std::endl;
 		}
 	};
 
-	bool isEqualContainer(const Container &first, const Container &second) {
-		if (first.size() != second.size()) {
-			return (false);
-		}
-
-		typename Container::const_iterator itFirst = first.begin();
-		typename Container::const_iterator itSecond = second.begin();
-		while (itFirst != first.end()) {
-			if (*itFirst != *itSecond) {
-				return (false);
-			}
-			itFirst++;
-			itSecond++;
-		}
-		return (true);
-	}
-
 protected:
 	virtual void sort(Container &container) = 0;
 
 	typename Container::iterator binarySearchInsertPosition(Container &container,
 															long num) {
-		typename Container::iterator low = container.begin();
-		typename Container::iterator high = container.end();
+		typename Container::iterator start = container.begin();
+		typename Container::iterator end = container.end();
 		typename Container::iterator mid;
 
-		while (low < high) {
-			mid = low + (std::distance(low, high) / 2);
+		while (start < end) {
+			mid = start + (std::distance(start, end) / 2);
 			if (num < *mid) {
-				high = mid;
+				end = mid;
 			} else {
-				low = mid + 1;
+				start = mid + 1;
 			}
 		}
-		return (low);
-	};
-
-	MergeInsertionSort(const MergeInsertionSort &sort) {
-		(void)sort;
+		return (start);
 	};
 
 private:
@@ -128,10 +118,6 @@ private:
 			}
 			std::cout << "[...]" << std::endl;
 		}
-	};
-
-	MergeInsertionSort &operator=(const MergeInsertionSort &sort){
-		(void)sort;
 	};
 };
 
