@@ -25,8 +25,11 @@ int main(int argc, char **argv)
 	btc.loadPricesFromCSV(csvFile);
 
 	std::string line;
-	// skip first line
-	std::getline(input_db, line);
+
+	// ヘッダーを確認して読み飛ばす
+	if (!std::getline(input_db, line) || line != "date | value")
+		return error_message("Error: the input file must start with 'date | value' header.");
+
 	while (std::getline(input_db, line))
 	{
 		size_t delim = line.find('|');
