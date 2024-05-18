@@ -46,7 +46,12 @@ int main(int argc, char **argv)
 		std::string priceStr_as_str = line.substr(delim + 2);
 		if (!btc.validatePriceFormat(priceStr_as_str))
 			continue;
+
 		float priceStr = ft_stof(priceStr_as_str);
+		float exchangeRate = btc.findClosestPrice(date);
+		if (exchangeRate < 0) {
+			continue; // エラーメッセージが表示された場合、次の行に進む
+		}
 
 		std::cout << date << " => " << priceStr << " = " << std::setprecision(2) << priceStr * btc.findClosestPrice(date) << std::endl;
 	}

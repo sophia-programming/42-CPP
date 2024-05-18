@@ -39,9 +39,24 @@ float BitcoinExchange::findClosestPrice(const std::string &date)
 		return -1.0;
 	}
 
-	if (0 < this->dataBase.count(date))
-		return this->dataBase.at(date);
-	return (--this->dataBase.lower_bound(date))->second;
+	std::map<std::string, float>::const_iterator it = this->dataBase.lower_bound(date);
+
+	if (it != this->dataBase.end() && it->first == date) {
+		// 日付が正確に存在する場合、その値を返す
+		return it->second;
+	} else if (it == this->dataBase.begin()) {
+		// 日付がデータベースの最初の日付より前の場合、エラーとして扱う
+		std::cerr << RED << "Error: date is before the database starts => " << "\"" << date << "\"" << STOP << std::endl;
+		return -1.0;
+	} else if (it == this->dataBase.end()) {
+		// 日付がデータベースの最後の日付より後の場合、最新の値を返す
+		--it;
+		return it->second;
+	} else {
+		// それ以外の場合、最も近い小さい日付の値を返す
+		--it;
+		return it->second;
+	}
 }
 
 bool BitcoinExchange::validateDateFormat(const std::string &date)
@@ -75,11 +90,13 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 		if (i == 0)
 		{
 			year = ft_stou(s);
-			if (year < 2009 || 2022 < year)
+			if (year < 2009)
 			{
 				std::cerr << RED << "Error: year is not at the database => " << "\"" << date << "\"" << STOP << std::endl;
 				return false;
 			}
+			else if (year > 2023)
+				return true;
 		}
 		if (i == 1)
 		{
@@ -94,8 +111,9 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 		{
 			day = ft_stou(s);
 			if ((day < 1 || 31 < day)
-				||  (day == 31 && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11))
-				||  (28 < day && month == 2))
+				|| (day == 31 && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11))
+				|| (month == 2 && day > 29)
+				|| (month == 2 && day == 29 && (year % 4 != 0 || (year % 100 == 0 && year % 400 != 0))))
 			{
 				std::cerr << RED << "Error: incorrect day => " << "\"" << date << "\"" << STOP << std::endl;
 				return false;
