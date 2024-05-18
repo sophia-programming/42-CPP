@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 		size_t delim = line.find('|');
 		if (delim == std::string::npos || line.length() < delim + 2)
 		{
-			std::cerr << RED << "Error: bad input => " << "\"" << line << "\"" << STOP << std::endl;
+			std::cerr << RED << "Error: bad input => " << line << STOP << std::endl;
 			continue ;
 		}
 
