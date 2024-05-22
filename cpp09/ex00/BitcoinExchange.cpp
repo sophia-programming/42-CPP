@@ -93,7 +93,6 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 		return false;
 	}
 
-
 	while (std::getline(ss, s, '-'))
 	{
 		if (i == 0)
