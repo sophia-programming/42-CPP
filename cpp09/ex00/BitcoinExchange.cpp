@@ -15,6 +15,8 @@ float ft_stof(const std::string &str)
 	std::stringstream ss(str);
 
 	ss >> num;
+	if (ss.fail())
+		throw std::runtime_error("Error: invalid number format: " + str);
 	return num;
 }
 
@@ -159,8 +161,7 @@ void BitcoinExchange::loadPricesFromCSV(std::ifstream &csvFile)
 	size_t delim;
 
 	if (!std::getline(csvFile, line)) {
-		std::cerr << RED << "Error: CSV file is empty or cannot be read." << STOP << std::endl;
-		std::exit(EXIT_FAILURE);
+		std::cerr << RED << "Error: No data in the CSV file." << STOP << std::endl;
 	}
 
 	// データ行がない場合を確認
@@ -180,7 +181,7 @@ void BitcoinExchange::loadPricesFromCSV(std::ifstream &csvFile)
 		this->dataBase[date] = ft_stof(priceStr);
 	}
 	if (!hasData) {
-		std::cerr << RED << "Error: CSV file contains no data entries." << STOP << std::endl;
+		std::cerr << RED << "Error: No data in the CSV file." << STOP << std::endl;
 	}
 	csvFile.close();
 }
