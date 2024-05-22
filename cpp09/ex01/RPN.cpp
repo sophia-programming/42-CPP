@@ -20,7 +20,6 @@ RPN::RPN(const RPN &to_copy) {
 
 RPN &RPN::operator=(const RPN &to_copy) {
 	if (this != &to_copy) {
-		*this = to_copy;
 	}
 	return *this;
 }
