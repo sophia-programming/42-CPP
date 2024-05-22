@@ -87,6 +87,13 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 	int year, month, day;
 	int i = 0;
 
+	// 日付の長さと区切り文字をチェック
+	if (date.length() != 10 || date[4] != '-' || date[7] != '-') {
+		std::cerr << RED << "Error: date format should be YYYY-MM-DD => " << "\"" << date << "\"" << STOP << std::endl;
+		return false;
+	}
+
+
 	while (std::getline(ss, s, '-'))
 	{
 		if (i == 0)
