@@ -5,6 +5,8 @@ static int ft_stoi(std::string &str){
 	std::stringstream ss(str);
 
 	ss >> num;
+	if (!ss || !ss.eof())
+		throw std::invalid_argument("Error: Invalid input: " + str);
 	if (10 <= num )
 		throw std::invalid_argument("Error: Input number must be less than 10");
 	else if (num <= -10)
