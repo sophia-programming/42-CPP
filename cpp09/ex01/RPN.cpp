@@ -7,10 +7,8 @@ static int ft_stoi(std::string &str){
 	ss >> num;
 	if (!ss || !ss.eof())
 		throw std::invalid_argument("Error: Invalid input: " + str);
-	if (10 <= num )
-		throw std::invalid_argument("Error: Input number must be less than 10");
-	else if (num <= -10)
-		throw std::invalid_argument("Error: Input number must be greater than -10");
+	if (num < 0 || 10 <= num)
+		throw std::invalid_argument("Error: Input number must be in the range 0 to 9");
 	return num;
 }
 
@@ -29,9 +27,7 @@ RPN &RPN::operator=(const RPN &to_copy) {
 RPN::~RPN() {}
 
 bool RPN::valid_expression(const std::string &expression) {
-	if (expression.find_first_not_of("0123456789+-*/ ") == std::string::npos)
-		return true;
-	return false;
+	return expression.find_first_not_of("0123456789+-*/ ") == std::string::npos;
 }
 
 int RPN::calculate(const std::string &expression) {
@@ -40,7 +36,7 @@ int RPN::calculate(const std::string &expression) {
 	std::string s;
 
 	while (postfix >> s) {
-		if (std::isdigit(s[0]) || (s[0] == '-' && s.length() > 1))
+		if (std::isdigit(s[0]))
 			tmp.push(ft_stoi(s));
 		else if (s == "+" || s == "-" || s == "/" || s == "*") {
 			if (tmp.size() < 2) {
@@ -51,22 +47,43 @@ int RPN::calculate(const std::string &expression) {
 			int left = tmp.top();
 			tmp.pop();
 
-			if (s == "+")
+			if (s == "+") {
+				// オーバーフローをチェックする
+				if ((right > 0 && left > std::numeric_limits<int>::max() - right) ||
+					(right < 0 && left < std::numeric_limits<int>::min() - right)) {
+					throw std::overflow_error("Error: Addition overflow");
+				}
 				tmp.push(left + right);
-			else if (s == "-")
+			} else if (s == "-") {
+				// アンダーフローをチェックする
+				if ((right < 0 && left > std::numeric_limits<int>::max() + right) ||
+					(right > 0 && left < std::numeric_limits<int>::min() + right)) {
+					throw std::underflow_error("Error: Subtraction underflow");
+				}
 				tmp.push(left - right);
-			else if (s == "/") {
-				if (right == 0)
+			} else if (s == "/") {
+				if (right == 0) {
 					throw DivisionByZeroException();
+				}
+				// INT_MIN / -1をチェックする
+				if (left == std::numeric_limits<int>::min() && right == -1) {
+					throw std::overflow_error("Error: Division overflow");
+				}
 				tmp.push(left / right);
-			}
-			else if (s == "*")
+			} else if (s == "*") {
+				// オーバーフローをチェックする
+				if (left > std::numeric_limits<int>::max() / right) {
+					throw std::overflow_error("Error: Multiplication overflow");
+				}
 				tmp.push(left * right);
-		} else
-			tmp.push(ft_stoi(s));
+			}
+		} else {
+			throw std::invalid_argument("Error: Invalid operator: " + s);
+		}
 	}
-	if (tmp.size() != 1)
+	if (tmp.size() != 1) {
 		throw NoResultException(); // Ensures only one result is left in the stack, indicating proper RPN format
+	}
 	return tmp.top();
 }
 
