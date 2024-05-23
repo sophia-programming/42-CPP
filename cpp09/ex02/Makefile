@@ -1,7 +1,7 @@
 NAME = PmergeMe
 srcs = $(wildcard *.cpp)
 objs = $(srcs:.cpp=.o)
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all: $(NAME)
 
