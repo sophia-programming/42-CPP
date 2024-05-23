@@ -54,6 +54,7 @@ int RPN::calculate(const std::string &expression) {
 					throw std::overflow_error("Error: Addition overflow");
 				}
 				tmp.push(left + right);
+
 			} else if (s == "-") {
 				// アンダーフローをチェックする
 				if ((right < 0 && left > std::numeric_limits<int>::max() + right) ||
@@ -61,6 +62,7 @@ int RPN::calculate(const std::string &expression) {
 					throw std::underflow_error("Error: Subtraction underflow");
 				}
 				tmp.push(left - right);
+
 			} else if (s == "/") {
 				if (right == 0) {
 					throw DivisionByZeroException();
@@ -70,9 +72,16 @@ int RPN::calculate(const std::string &expression) {
 					throw std::overflow_error("Error: Division overflow");
 				}
 				tmp.push(left / right);
+
 			} else if (s == "*") {
-				// オーバーフローをチェックする
-				if (left > std::numeric_limits<int>::max() / right) {
+				// 正の数同士の乗算オーバーフロー, 負の数同士の乗算オーバーフローをチェック
+				if ((left > 0 && right > 0 && left > std::numeric_limits<int>::max() / right) ||
+				(left < 0 && right < 0 && left < std::numeric_limits<int>::max() / right)) {
+					throw std::overflow_error("Error: Multiplication overflow");
+				}
+				//正の数と負の数の乗算オーバーフローをチェック
+				if ((left > 0 && right < 0 && right < std::numeric_limits<int>::min() / left) ||
+				(left < 0 && right > 0 && left < std::numeric_limits<int>::min() / right)) {
 					throw std::overflow_error("Error: Multiplication overflow");
 				}
 				tmp.push(left * right);
@@ -81,8 +90,9 @@ int RPN::calculate(const std::string &expression) {
 			throw std::invalid_argument("Error: Invalid operator: " + s);
 		}
 	}
+	// 演算子が多すぎる場合
 	if (tmp.size() != 1) {
-		throw NoResultException(); // Ensures only one result is left in the stack, indicating proper RPN format
+		throw NoResultException();
 	}
 	return tmp.top();
 }
