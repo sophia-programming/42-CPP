@@ -76,12 +76,12 @@ int RPN::calculate(const std::string &expression) {
 			} else if (s == "*") {
 				// 正の数同士の乗算オーバーフロー, 負の数同士の乗算オーバーフローをチェック
 				if ((left > 0 && right > 0 && left > std::numeric_limits<int>::max() / right) ||
-				(left < 0 && right < 0 && left < std::numeric_limits<int>::max() / right)) {
+				    (left < 0 && right < 0 && left < std::numeric_limits<int>::max() / right)) {
 					throw std::overflow_error("Error: Multiplication overflow");
 				}
 				//正の数と負の数の乗算オーバーフローをチェック
 				if ((left > 0 && right < 0 && right < std::numeric_limits<int>::min() / left) ||
-				(left < 0 && right > 0 && left < std::numeric_limits<int>::min() / right)) {
+				    (left < 0 && right > 0 && left < std::numeric_limits<int>::min() / right)) {
 					throw std::overflow_error("Error: Multiplication overflow");
 				}
 				tmp.push(left * right);
