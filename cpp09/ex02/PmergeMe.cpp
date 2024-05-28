@@ -1,5 +1,6 @@
 #include "PmergeMe.hpp"
 
+// CommandLineParserクラスの実装
 CommandLineParser::CommandLineParser(const int argc, const char *argv[]) {
 	parseArgument(argc, argv);
 }
@@ -47,109 +48,159 @@ void CommandLineParser::parseArgument(const int argc, const char *argv[]) {
 	}
 }
 
-
-// VectorMergeInsertionSort
+// VectorMergeInsertionSortクラスの実装
 VectorMergeInsertionSort::VectorMergeInsertionSort() {}
-
-VectorMergeInsertionSort::VectorMergeInsertionSort(const VectorMergeInsertionSort &sort): MergeInsertionSort(sort) {
+VectorMergeInsertionSort::VectorMergeInsertionSort(const VectorMergeInsertionSort &sort) {
 	*this = sort;
 }
-
 VectorMergeInsertionSort &VectorMergeInsertionSort::operator=(const VectorMergeInsertionSort &sort) {
-	if (this != &sort) {
-	}
+	if (this != &sort) {}
 	return (*this);
 }
-
 VectorMergeInsertionSort::~VectorMergeInsertionSort() {}
 
-void VectorMergeInsertionSort::sort(std::vector<long> &container) {
-	if (container.size() <= 1) {
-		return;
-	}
+void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
+	size_t n = vec.size();
+	std::vector<std::pair<int, int> > pairs;
+	std::vector<long> mainChain;
 
-	std::vector<long> smaller, larger;
-
-	// 1. pair of elements are compared;
-	for (std::size_t i = 0; i < container.size(); i += 2) {
-		if (i + 1 < container.size()) {
-			if (container.at(i) < container.at(i + 1)) {
-				smaller.push_back(container.at(i));
-				larger.push_back(container.at(i + 1));
-			} else {
-				smaller.push_back(container.at(i + 1));
-				larger.push_back(container.at(i));
-			}
+	// Step 1: ペアを作成し、ソート
+	for (size_t i = 0; i < n; i += 2) {
+		if (i + 1 < n) {
+			pairs.push_back(std::make_pair(vec[i], vec[i + 1]));
 		} else {
-			larger.push_back(container.at(i));
+			pairs.push_back(std::make_pair(vec[i], vec[i]));
 		}
 	}
 
-	// 2. the larger elements are sorted recursively;
-	sort(larger);
+	// Step 2: ペアのa要素を再帰的にソート
+	pairSortVec(pairs, mainChain);
+	std::sort(mainChain.begin(), mainChain.end());
 
-	// 3. insert small container elements into the already sorted large container
-	for (std::size_t i = 0; i < smaller.size(); i++) {
-		std::vector<long>::iterator insertPos =
-				binarySearchInsertPosition(larger, smaller.at(i));
-		larger.insert(insertPos, smaller.at(i));
+	// Step 3: b要素をJacobsthal数列の順に挿入
+	std::vector<long> bs;
+	for (size_t i = 0; i < pairs.size(); ++i) {
+		bs.push_back(pairs[i].second);
 	}
-	container = larger;
+
+	std::vector<long> order;
+	vecInsertionOrder(order, bs.size());
+
+	mergeInsertVec(mainChain, bs, order);
+
+	// ソートされた要素を元のvectorにコピー
+	for (size_t i = 0; i < n; ++i) {
+		vec[i] = mainChain[i];
+	}
 }
 
-
-// ListMergeInsertionSort
+// ListMergeInsertionSortクラスの実装
 ListMergeInsertionSort::ListMergeInsertionSort() {}
-
-ListMergeInsertionSort::ListMergeInsertionSort(const ListMergeInsertionSort &sort) : MergeInsertionSort(sort) {
+ListMergeInsertionSort::ListMergeInsertionSort(const ListMergeInsertionSort &sort) {
 	*this = sort;
 }
-
 ListMergeInsertionSort &ListMergeInsertionSort::operator=(const ListMergeInsertionSort &sort) {
-	if (this != &sort) {
-	}
+	if (this != &sort) {}
 	return (*this);
 }
-
 ListMergeInsertionSort::~ListMergeInsertionSort() {}
 
-void ListMergeInsertionSort::sort(std::list<long> &container) {
-	if (container.size() <= 1) {
-		return;
+void ListMergeInsertionSort::sort(std::list<long> &lst) {
+	std::list<std::pair<int, int> > pairs;
+	std::list<long> mainChain;
+
+	// Step 1: ペアを作成し、ソート
+	std::list<long>::iterator it = lst.begin();
+	while (it != lst.end()) {
+		int first = *it;
+		++it;
+		int second = (it != lst.end()) ? *it : first;
+		pairs.push_back(std::make_pair(first, second));
+		if (it != lst.end()) ++it;
 	}
 
-	std::list<long> smaller, larger;
+	// Step 2: ペアのa要素を再帰的にソート
+	pairSortList(pairs, mainChain);
+	mainChain.sort();
 
-	// 1. pair of elements are compared;
-	std::list<long>::iterator it = container.begin();
-	std::list<long>::iterator current;
+	// Step 3: b要素をJacobsthal数列の順に挿入
+	std::list<long> bs;
+	for (std::list<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+		bs.push_back(it->second);
+	}
 
-	while (it != container.end()) {
-		current = it++;
-		if (it != container.end()) {
-			if (*current < *it) {
-				smaller.push_back(*current);
-				larger.push_back(*it);
-			} else {
-				smaller.push_back(*it);
-				larger.push_back(*current);
-			}
-			it++;
-		} else {
-			larger.push_back(*current);
+	std::vector<long> order;
+	listInsertionOrder(order, bs.size());
+
+	mergeInsertList(mainChain, bs, order);
+
+	// ソートされた要素を元のlistにコピー
+	lst = mainChain;
+}
+
+// ヘルパー関数の実装
+void pairSortVec(std::vector<std::pair<int, int> > &pairs, std::vector<long> &mainChain) {
+	for (size_t i = 0; i < pairs.size(); ++i) {
+		if (pairs[i].first > pairs[i].second) {
+			std::swap(pairs[i].first, pairs[i].second);
+		}
+		mainChain.push_back(pairs[i].first);
+	}
+}
+
+void pairSortList(std::list<std::pair<int, int> > &pairs, std::list<long> &mainChain) {
+	for (std::list<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+		if (it->first > it->second) {
+			std::swap(it->first, it->second);
+		}
+		mainChain.push_back(it->first);
+	}
+}
+
+void vecInsertionOrder(std::vector<long> &order, int n) {
+	for (int i = 1; i <= n; ++i) {
+		int value = (int)(std::log(i * 3 / 4.0) / std::log(2.0));
+		if (value < n) {
+			order.push_back(value);
 		}
 	}
+}
 
-	// 2. the larger elements are sorted recursively;
-	sort(larger);
-
-	// 3. insert small container elements into the already sorted large container
-	for (std::list<long>::iterator it = smaller.begin(); it != smaller.end(); it++) {
-		std::list<long>::iterator insertPos = larger.begin();
-		while (insertPos != larger.end() && *insertPos < *it) {
-			insertPos++;
+void listInsertionOrder(std::vector<long> &order, int n) {
+	for (int i = 1; i <= n; ++i) {
+		int value = (int)(std::log(i * 3 / 4.0) / std::log(2.0));
+		if (value < n) {
+			order.push_back(value);
 		}
-		larger.insert(insertPos, *it);
 	}
-	container = larger;
+}
+
+void mergeInsertVec(std::vector<long> &mainChain, std::vector<long> &bs, const std::vector<long> &order) {
+	for (size_t i = 0; i < order.size(); ++i) {
+		int value = bs[order[i] - 1];
+		std::vector<long>::iterator it = std::upper_bound(mainChain.begin(), mainChain.end(), value);
+		mainChain.insert(it, value);
+	}
+}
+
+void mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order) {
+	for (size_t i = 0; i < order.size(); ++i) {
+		int value = *(std::next(bs.begin(), order[i] - 1));
+		std::list<long>::iterator it = mainChain.begin();
+		while (it != mainChain.end() && *it < value) {
+			++it;
+		}
+		mainChain.insert(it, value);
+	}
+}
+
+// ソート関数の実装
+void mergeInsertionSort(std::vector<long> &vec) {
+	VectorMergeInsertionSort sorter;
+	sorter.sort(vec);
+}
+
+void mergeInsertionSort(std::list<long> &lst) {
+	ListMergeInsertionSort sorter;
+	sorter.sort(lst);
 }

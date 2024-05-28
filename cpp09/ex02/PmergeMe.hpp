@@ -1,17 +1,17 @@
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
 
-#include <algorithm>
-#include <cstdio>
-#include <cstdlib>
-#include <exception>
 #include <iostream>
-#include <list>
 #include <sstream>
-#include <sys/time.h>
+#include <list>
 #include <vector>
-#include "Color.hpp"
+#include <algorithm>
+#include <stdexcept>
+#include <sys/time.h>
+#include <utility>
+#include <cmath>
 
+// CommandLineParserクラスの宣言
 class CommandLineParser {
 public:
 	CommandLineParser();
@@ -30,29 +30,26 @@ private:
 	void parseArgument(const int argc, const char *argv[]);
 };
 
-
-template <typename Container> class MergeInsertionSort {
+// MergeInsertionSortテンプレートクラスの宣言と定義
+template <typename Container>
+class MergeInsertionSort {
 public:
-	MergeInsertionSort(){};
-
+	MergeInsertionSort() {};
 	MergeInsertionSort(const MergeInsertionSort &sort) {
 		*this = sort;
 	};
-
-	MergeInsertionSort &operator=(const MergeInsertionSort &sort){
-		if (this != &sort) {
-		}
+	MergeInsertionSort &operator=(const MergeInsertionSort &sort) {
+		if (this != &sort) {}
 		return (*this);
 	};
-
-	virtual ~MergeInsertionSort(){};
+	virtual ~MergeInsertionSort() {};
 
 	void displayInput(const Container &container) const {
-		displayContainer("before: ", container);
+		displayContainer("before:\t", container);
 	};
 
 	void displayOutput(const Container &container) const {
-		displayContainer("after: ", container);
+		displayContainer("after:\t", container);
 	};
 
 	long sortAndMeasure(Container &container) {
@@ -60,32 +57,24 @@ public:
 
 		gettimeofday(&start, NULL);
 		sort(container);
-		(void)(container);
 		gettimeofday(&end, NULL);
 
 		long second = end.tv_sec - start.tv_sec;
-		long micoro = (second * 1000000) + (end.tv_usec - start.tv_usec);
-		return (micoro);
+		long micro = (second * 1000000) + (end.tv_usec - start.tv_usec);
+		return (micro);
 	};
 
 	void displayTime(Container &container, std::string str, long time) {
 		std::cout << "Time to process a range of " << container.size()
-				  << " elements with " << GREEN << str << STOP << " : " << time << " us"
+				  << " elements with " << str << " : " << time << " us"
 				  << std::endl;
 	};
 
-	void displayContainerElement(Container &container) {
-		typename Container::const_iterator it = container.begin();
-		for (; it != container.end(); it++) {
-			std::cout << *it << std::endl;
-		}
-	};
 
 protected:
 	virtual void sort(Container &container) = 0;
 
-	typename Container::iterator binarySearchInsertPosition(Container &container,
-															long num) {
+	typename Container::iterator binarySearchInsertPosition(Container &container, long num) {
 		typename Container::iterator start = container.begin();
 		typename Container::iterator end = container.end();
 		typename Container::iterator mid;
@@ -102,8 +91,7 @@ protected:
 	};
 
 private:
-	void displayContainer(const std::string &prefix,
-						  const Container &container) const {
+	void displayContainer(const std::string &prefix, const Container &container) const {
 		std::cout << prefix;
 		if (container.size() <= 5) {
 			for (typename Container::const_iterator it = container.begin();
@@ -121,7 +109,7 @@ private:
 	};
 };
 
-
+// VectorMergeInsertionSortクラスの宣言
 class VectorMergeInsertionSort : public MergeInsertionSort<std::vector<long> > {
 public:
 	VectorMergeInsertionSort();
@@ -129,11 +117,10 @@ public:
 	VectorMergeInsertionSort &operator=(const VectorMergeInsertionSort &sort);
 	~VectorMergeInsertionSort();
 
-private:
 	void sort(std::vector<long> &container);
 };
 
-
+// ListMergeInsertionSortクラスの宣言
 class ListMergeInsertionSort : public MergeInsertionSort<std::list<long> > {
 public:
 	ListMergeInsertionSort();
@@ -141,8 +128,20 @@ public:
 	ListMergeInsertionSort &operator=(const ListMergeInsertionSort &sort);
 	~ListMergeInsertionSort();
 
-private:
 	void sort(std::list<long> &container);
 };
+
+// ヘルパー関数の宣言
+void pairSortVec(std::vector<std::pair<int, int> > &pairs, std::vector<long> &mainChain);
+void pairSortList(std::list<std::pair<int, int> > &pairs, std::list<long> &mainChain);
+
+void vecInsertionOrder(std::vector<long> &order, int n);
+void listInsertionOrder(std::vector<long> &order, int n);
+
+void mergeInsertVec(std::vector<long> &mainChain, std::vector<long> &bs, const std::vector<long> &order);
+void mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order);
+
+void mergeInsertionSort(std::vector<long> &vec);
+void mergeInsertionSort(std::list<long> &lst);
 
 #endif

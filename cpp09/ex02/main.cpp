@@ -1,4 +1,5 @@
 #include "PmergeMe.hpp"
+#include "Color.hpp"
 
 int main(int argc, const char *argv[]) {
 	try {
