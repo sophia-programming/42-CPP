@@ -35,7 +35,7 @@ void CommandLineParser::parseArgument(const int argc, const char *argv[]) {
 	if (argc == 1)
 		throw std::invalid_argument("Argument is empty");
 
-	for (long i = 1; i < argc; i++) {
+	for (int i = 1; i < argc; i++) {
 		std::istringstream iss(argv[i]);
 		iss >> num;
 		if (iss.fail() || iss.peek() != EOF) {
@@ -61,11 +61,13 @@ VectorMergeInsertionSort::~VectorMergeInsertionSort() {}
 
 void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
 	size_t n = vec.size();
-	std::vector<std::pair<int, int> > pairs;
+	std::vector<std::pair<long, long> > pairs;
 	std::vector<long> mainChain;
 
 	// Step 1: ペアを作成し、ソート
 	for (size_t i = 0; i < n; i += 2) {
+		// i+1の必要性：要素数が奇数の場合、最後の要素をペアにする
+		// 例) 1 2 3 4 5 -> (1, 2) (3, 4) (5, 5)
 		if (i + 1 < n) {
 			pairs.push_back(std::make_pair(vec[i], vec[i + 1]));
 		} else {
@@ -74,23 +76,34 @@ void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
 	}
 
 	// Step 2: ペアのa要素を再帰的にソート
+	// 例) (1, 2) (3, 4) (5, 5) -> 1 3 5がmainChainに追加される
 	pairSortVec(pairs, mainChain);
 	std::sort(mainChain.begin(), mainChain.end());
 
-	// Step 3: b要素をJacobsthal数列の順に挿入
+	// 残ったb要素(2 4 5)をbsに追加
 	std::vector<long> bs;
 	for (size_t i = 0; i < pairs.size(); ++i) {
 		bs.push_back(pairs[i].second);
 	}
 
+	// bsの要素を順番に並び替える
 	std::vector<long> order;
 	vecInsertionOrder(order, bs.size());
 
+	// Step 3:　b要素をsortされたmainChainに挿入
 	mergeInsertVec(mainChain, bs, order);
 
 	// ソートされた要素を元のvectorにコピー
 	for (size_t i = 0; i < n; ++i) {
 		vec[i] = mainChain[i];
+	}
+}
+
+void VectorMergeInsertionSort::mergeInsertVec(std::vector<long> &mainChain, std::vector<long> &bs, const std::vector<long> &order) {
+	for (size_t i = 0; i < order.size(); ++i) {
+		long value = bs[order[i] - 1];
+		std::vector<long>::iterator it = binarySearchInsertPosition(mainChain, value);
+		mainChain.insert(it, value);
 	}
 }
 
@@ -106,15 +119,15 @@ ListMergeInsertionSort &ListMergeInsertionSort::operator=(const ListMergeInserti
 ListMergeInsertionSort::~ListMergeInsertionSort() {}
 
 void ListMergeInsertionSort::sort(std::list<long> &lst) {
-	std::list<std::pair<int, int> > pairs;
+	std::list<std::pair<long, long> > pairs;
 	std::list<long> mainChain;
 
 	// Step 1: ペアを作成し、ソート
 	std::list<long>::iterator it = lst.begin();
 	while (it != lst.end()) {
-		int first = *it;
+		long first = *it;
 		++it;
-		int second = (it != lst.end()) ? *it : first;
+		long second = (it != lst.end()) ? *it : first;
 		pairs.push_back(std::make_pair(first, second));
 		if (it != lst.end()) ++it;
 	}
@@ -123,23 +136,38 @@ void ListMergeInsertionSort::sort(std::list<long> &lst) {
 	pairSortList(pairs, mainChain);
 	mainChain.sort();
 
-	// Step 3: b要素をJacobsthal数列の順に挿入
+	// 残ったb要素をbsに追加
 	std::list<long> bs;
-	for (std::list<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+	for (std::list<std::pair<long, long> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
 		bs.push_back(it->second);
 	}
 
+	// bsの要素を順番に並び替える
 	std::vector<long> order;
 	listInsertionOrder(order, bs.size());
 
+	// Step 3:　b要素をsortされたmainChainに挿入
 	mergeInsertList(mainChain, bs, order);
 
 	// ソートされた要素を元のlistにコピー
 	lst = mainChain;
 }
 
+/* 二分探索で挿入位置を探す
+ * 引数1: mainChain: ソート済みのvector
+ * 引数2: bs: 挿入する値
+ * 引数3: order: 挿入する順番 */
+void ListMergeInsertionSort::mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order) {
+	for (size_t i = 0; i < order.size(); ++i) {
+		if (order[i] <= 0 || order[i] > static_cast<int>(bs.size())) continue;
+		long value = *(std::next(bs.begin(), order[i] - 1));
+		std::list<long>::iterator it = binarySearchInsertPosition(mainChain, value);
+		mainChain.insert(it, value);
+	}
+}
+
 // ヘルパー関数の実装
-void pairSortVec(std::vector<std::pair<int, int> > &pairs, std::vector<long> &mainChain) {
+void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain) {
 	for (size_t i = 0; i < pairs.size(); ++i) {
 		if (pairs[i].first > pairs[i].second) {
 			std::swap(pairs[i].first, pairs[i].second);
@@ -148,8 +176,8 @@ void pairSortVec(std::vector<std::pair<int, int> > &pairs, std::vector<long> &ma
 	}
 }
 
-void pairSortList(std::list<std::pair<int, int> > &pairs, std::list<long> &mainChain) {
-	for (std::list<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain) {
+	for (std::list<std::pair<long, long> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
 		if (it->first > it->second) {
 			std::swap(it->first, it->second);
 		}
@@ -157,9 +185,12 @@ void pairSortList(std::list<std::pair<int, int> > &pairs, std::list<long> &mainC
 	}
 }
 
+/* bsを並び替える関数
+   引数1: order: 挿入する順番
+   引数2: n: Jacobsthal数列の長さ */
 void vecInsertionOrder(std::vector<long> &order, int n) {
 	for (int i = 1; i <= n; ++i) {
-		int value = (int)(std::log(i * 3 / 4.0) / std::log(2.0));
+		int value = static_cast<int>(std::log(i * 3 / 4.0) / std::log(2.0));
 		if (value < n) {
 			order.push_back(value);
 		}
@@ -168,33 +199,13 @@ void vecInsertionOrder(std::vector<long> &order, int n) {
 
 void listInsertionOrder(std::vector<long> &order, int n) {
 	for (int i = 1; i <= n; ++i) {
-		int value = (int)(std::log(i * 3 / 4.0) / std::log(2.0));
+		int value = static_cast<int>(std::log(i * 3 / 4.0) / std::log(2.0));
 		if (value < n) {
 			order.push_back(value);
 		}
 	}
 }
 
-void mergeInsertVec(std::vector<long> &mainChain, std::vector<long> &bs, const std::vector<long> &order) {
-	for (size_t i = 0; i < order.size(); ++i) {
-		int value = bs[order[i] - 1];
-		std::vector<long>::iterator it = std::upper_bound(mainChain.begin(), mainChain.end(), value);
-		mainChain.insert(it, value);
-	}
-}
-
-void mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order) {
-	for (size_t i = 0; i < order.size(); ++i) {
-		int value = *(std::next(bs.begin(), order[i] - 1));
-		std::list<long>::iterator it = mainChain.begin();
-		while (it != mainChain.end() && *it < value) {
-			++it;
-		}
-		mainChain.insert(it, value);
-	}
-}
-
-// ソート関数の実装
 void mergeInsertionSort(std::vector<long> &vec) {
 	VectorMergeInsertionSort sorter;
 	sorter.sort(vec);

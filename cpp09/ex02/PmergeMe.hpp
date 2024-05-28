@@ -70,7 +70,6 @@ public:
 				  << std::endl;
 	};
 
-
 protected:
 	virtual void sort(Container &container) = 0;
 
@@ -79,12 +78,13 @@ protected:
 		typename Container::iterator end = container.end();
 		typename Container::iterator mid;
 
-		while (start < end) {
-			mid = start + (std::distance(start, end) / 2);
+		while (start != end) {
+			mid = start;
+			std::advance(mid, std::distance(start, end) / 2);
 			if (num < *mid) {
 				end = mid;
 			} else {
-				start = mid + 1;
+				start = ++mid;
 			}
 		}
 		return (start);
@@ -118,6 +118,9 @@ public:
 	~VectorMergeInsertionSort();
 
 	void sort(std::vector<long> &container);
+
+private:
+	void mergeInsertVec(std::vector<long> &mainChain, std::vector<long> &bs, const std::vector<long> &order);
 };
 
 // ListMergeInsertionSortクラスの宣言
@@ -129,17 +132,17 @@ public:
 	~ListMergeInsertionSort();
 
 	void sort(std::list<long> &container);
+
+private:
+	void mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order);
 };
 
 // ヘルパー関数の宣言
-void pairSortVec(std::vector<std::pair<int, int> > &pairs, std::vector<long> &mainChain);
-void pairSortList(std::list<std::pair<int, int> > &pairs, std::list<long> &mainChain);
+void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain);
+void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain);
 
 void vecInsertionOrder(std::vector<long> &order, int n);
 void listInsertionOrder(std::vector<long> &order, int n);
-
-void mergeInsertVec(std::vector<long> &mainChain, std::vector<long> &bs, const std::vector<long> &order);
-void mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order);
 
 void mergeInsertionSort(std::vector<long> &vec);
 void mergeInsertionSort(std::list<long> &lst);
