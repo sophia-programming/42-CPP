@@ -62,21 +62,22 @@ VectorMergeInsertionSort::~VectorMergeInsertionSort() {}
 void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
 	size_t n = vec.size();
 	std::vector<std::pair<long, long> > pairs;
-	std::vector<long> mainChain;
+	std::vector<long> mainChain; // a要素を格納
+	std::vector<long> remainingBs; // b要素を格納
 
 	// Step 1: ペアを作成し、ソート
 	for (size_t i = 0; i < n; i += 2) {
-		// i+1の必要性：要素数が奇数の場合、最後の要素をペアにする
-		// 例) 1 2 3 4 5 -> (1, 2) (3, 4) (5, 5)
+		// i+1の必要性：要素数が奇数の場合、最後の要素はb要素になる
+		// 例) 1 2 3 4 5 -> (1, 2) (3, 4) (5)
 		if (i + 1 < n) {
 			pairs.push_back(std::make_pair(vec[i], vec[i + 1]));
 		} else {
-			pairs.push_back(std::make_pair(vec[i], vec[i]));
+			remainingBs.push_back(vec[i]);
 		}
 	}
 
 	// Step 2: ペアのa要素を再帰的にソート
-	// 例) (1, 2) (3, 4) (5, 5) -> 1 3 5がmainChainに追加される
+	// 例) (1, 2) (3, 4) (5) -> 1 3がmainChainに追加。5はremainingBsに追加
 	pairSortVec(pairs, mainChain);
 	std::sort(mainChain.begin(), mainChain.end());
 
@@ -84,6 +85,11 @@ void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
 	std::vector<long> bs;
 	for (size_t i = 0; i < pairs.size(); ++i) {
 		bs.push_back(pairs[i].second);
+	}
+
+	// remainingBsをbsに追加
+	for (size_t i = 0; i < remainingBs.size(); ++i) {
+		bs.push_back(remainingBs[i]);
 	}
 
 	// bsの要素を順番に並び替える
@@ -168,11 +174,15 @@ void ListMergeInsertionSort::mergeInsertList(std::list<long> &mainChain, std::li
 
 // ヘルパー関数の実装
 void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain) {
+//	for (size_t i = 0; i < pairs.size(); ++i) {
+//		if (pairs[i].first > pairs[i].second) {
+//			std::swap(pairs[i].first, pairs[i].second);
+//		}
+//		mainChain.push_back(pairs[i].first);
+//	}
 	for (size_t i = 0; i < pairs.size(); ++i) {
-		if (pairs[i].first > pairs[i].second) {
-			std::swap(pairs[i].first, pairs[i].second);
-		}
 		mainChain.push_back(pairs[i].first);
+		remainingBs.push_back(pairs[i].second);
 	}
 }
 
