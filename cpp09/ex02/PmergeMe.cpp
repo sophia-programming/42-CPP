@@ -79,7 +79,6 @@ void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
 	// Step 2: ペアのa要素を再帰的にソート
 	// 例) (1, 2) (3, 4) (5) -> 1 3がmainChainに追加。5はremainingBsに追加
 	pairSortVec(pairs, mainChain);
-	std::sort(mainChain.begin(), mainChain.end());
 
 	// 残ったb要素(2 4 5)をbsに追加
 	std::vector<long> bs;
@@ -88,9 +87,7 @@ void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
 	}
 
 	// remainingBsをbsに追加
-	for (size_t i = 0; i < remainingBs.size(); ++i) {
-		bs.push_back(remainingBs[i]);
-	}
+	bs.insert(bs.end(), remainingBs.begin(), remainingBs.end());
 
 	// bsの要素を順番に並び替える
 	std::vector<long> order;
@@ -107,6 +104,9 @@ void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
 
 void VectorMergeInsertionSort::mergeInsertVec(std::vector<long> &mainChain, std::vector<long> &bs, const std::vector<long> &order) {
 	for (size_t i = 0; i < order.size(); ++i) {
+		for (size_t j = 0; j <= order.size(); ++j) {
+			std::cout << RED << order[j] << ' ' << STOP ;
+		}
 		long value = bs[order[i] - 1];
 		std::vector<long>::iterator it = binarySearchInsertPosition(mainChain, value);
 		mainChain.insert(it, value);
@@ -174,15 +174,11 @@ void ListMergeInsertionSort::mergeInsertList(std::list<long> &mainChain, std::li
 
 // ヘルパー関数の実装
 void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain) {
-//	for (size_t i = 0; i < pairs.size(); ++i) {
-//		if (pairs[i].first > pairs[i].second) {
-//			std::swap(pairs[i].first, pairs[i].second);
-//		}
-//		mainChain.push_back(pairs[i].first);
-//	}
 	for (size_t i = 0; i < pairs.size(); ++i) {
+		if (pairs[i].first > pairs[i].second) {
+			std::swap(pairs[i].first, pairs[i].second);
+		}
 		mainChain.push_back(pairs[i].first);
-		remainingBs.push_back(pairs[i].second);
 	}
 }
 
@@ -214,14 +210,4 @@ void listInsertionOrder(std::vector<long> &order, int n) {
 			order.push_back(value);
 		}
 	}
-}
-
-void mergeInsertionSort(std::vector<long> &vec) {
-	VectorMergeInsertionSort sorter;
-	sorter.sort(vec);
-}
-
-void mergeInsertionSort(std::list<long> &lst) {
-	ListMergeInsertionSort sorter;
-	sorter.sort(lst);
 }

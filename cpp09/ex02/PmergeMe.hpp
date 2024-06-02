@@ -1,15 +1,16 @@
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
 
-#include <iostream>
-#include <sstream>
-#include <list>
-#include <vector>
-#include <algorithm>
-#include <stdexcept>
-#include <sys/time.h>
-#include <utility>
+#include <iostream> // std::cout, std::endl
+#include <sstream> // std::istringstream
+#include <list> // std::list
+#include <vector> // std::vector
+#include <algorithm> // std::lower_bound
+#include <stdexcept> // std::invalid_argument
+#include <sys/time.h> // gettimeofday
+#include <utility> // std::pair
 #include <cmath>
+#include "Color.hpp"
 
 // CommandLineParserクラスの宣言
 class CommandLineParser {
@@ -74,21 +75,8 @@ protected:
 	virtual void sort(Container &container) = 0;
 
 	typename Container::iterator binarySearchInsertPosition(Container &container, long num) {
-		typename Container::iterator start = container.begin();
-		typename Container::iterator end = container.end();
-		typename Container::iterator mid;
-
-		while (start != end) {
-			mid = start;
-			std::advance(mid, std::distance(start, end) / 2);
-			if (num < *mid) {
-				end = mid;
-			} else {
-				start = ++mid;
-			}
-		}
-		return (start);
-	};
+		return std::lower_bound(container.begin(), container.end(), num);
+	}
 
 private:
 	void displayContainer(const std::string &prefix, const Container &container) const {
@@ -143,8 +131,5 @@ void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mai
 
 void vecInsertionOrder(std::vector<long> &order, int n);
 void listInsertionOrder(std::vector<long> &order, int n);
-
-void mergeInsertionSort(std::vector<long> &vec);
-void mergeInsertionSort(std::list<long> &lst);
 
 #endif
