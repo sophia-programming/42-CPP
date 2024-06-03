@@ -66,7 +66,7 @@ void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
 	std::vector<long> remainingBs; // b要素を格納
 
 
-	// Step 1: ペアを作成し、ソート
+	// Step 1: ペアを作成
 	for (size_t i = 0; i < n; i += 2) {
 		// i+1の必要性：要素数が奇数の場合、最後の要素はb要素になる
 		// 例) 1 2 3 4 5 -> (1, 2) (3, 4) (5)
@@ -111,15 +111,17 @@ void ListMergeInsertionSort::sort(std::list<long> &lst) {
 	std::list<long> mainChain;
 	std::list<long> remainingBs;
 
-//	 Step 1: ペアを作成し、ソート
+//	 Step 1: ペアを作成
 	std::list<long>::iterator it = lst.begin();
 	while (it != lst.end()) {
 		long first = *it;
 		++it;
-		long second = (it != lst.end()) ? *it : first;
-		pairs.push_back(std::make_pair(first, second));
-		if (it != lst.end())
+		if (it != lst.end()) {
+			long second = *it;
+			pairs.push_back(std::make_pair(first, second));
 			++it;
+		} else
+			remainingBs.push_back(first);
 	}
 
 //	 Step 2: ペアをsortしてmainChainにa要素（小さい方の値）を追加
@@ -159,8 +161,8 @@ void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mai
 // Jacobsthal数列を生成する関数
 std::vector<int> generateJacobsthalSequence(int n) {
 	std::vector<int> jacobsthal;
-	jacobsthal.push_back(1); // 初期値 Jacobsthal(1) = 1
-	jacobsthal.push_back(3); // 初期値 Jacobsthal(2) = 3
+	jacobsthal.push_back(0); // 初期値 Jacobsthal(1) = 0
+	jacobsthal.push_back(1); // 初期値 Jacobsthal(2) = 1
 	int i = 2;
 	while (true) {
 		int next = jacobsthal[i - 1] + 2 * jacobsthal[i - 2];
@@ -172,20 +174,43 @@ std::vector<int> generateJacobsthalSequence(int n) {
 }
 
 
-// 二分探索で挿入位置を探す
+// 二分探索で挿入位置を探す　（Vector用）
 size_t binarySearchInsertPosition (const std::vector<long>& mainChain, long value) {
 	return std::lower_bound(mainChain.begin(), mainChain.end(), value) - mainChain.begin();
 }
 
-std::list<long>::iterator binarySearchInsertPosition (std::list<long>& mainChain, long value) {
-	return std::lower_bound(mainChain.begin(), mainChain.end(), value);
+// 二分探索で挿入位置を探す　（List用）
+std::list<long>::iterator binarySearchInsertPosition(std::list<long>& mainChain, long value) {
+	std::list<long>::iterator begin = mainChain.begin();
+	std::list<long>::iterator end = mainChain.end();
+	std::list<long>::iterator mid;
+	std::ptrdiff_t len = std::distance(begin, end);
+
+	while (0 < len) {
+		std::ptrdiff_t step = len / 2;
+		mid = begin;
+		// midをbeginからstep分進める
+		std::advance(mid, step);
+		if (*mid < value) {
+			// 次の探索範囲を後半に設定
+			begin = ++mid;
+			// 残りの探索範囲を更新
+			len -= step + 1;
+		} else {
+			// 次の探索範囲を前半に設定
+			len = step;
+		}
+	}
+	// beginは挿入位置（value以上の最初の要素を指す）
+	return begin;
 }
 
 
 // (Vector用) Jacobsthal数列に基づいてremainingBsの要素を挿入する関数
 void insertRemainingBsUsingJacobsthal(std::vector<long>& mainChain, const std::vector<long>& remainingBs) {
 	std::vector<int> jacobsthal = generateJacobsthalSequence(remainingBs.size());
-	std::reverse(jacobsthal.begin(), jacobsthal.end());  // 大きい数から順に使用するため逆順にする
+	// 大きい数から順に使用するため逆順にする
+	std::reverse(jacobsthal.begin(), jacobsthal.end());
 
 	for (size_t j = 0; j < jacobsthal.size(); ++j) {
 		int index = jacobsthal[j];
@@ -210,10 +235,10 @@ void insertRemainingBsUsingJacobsthal(std::vector<long>& mainChain, const std::v
 // (List用) Jacobsthal数列に基づいてremainingBsの要素を挿入する関数
 void insertRemainingBsUsingJacobsthal(std::list<long>& mainChain, const std::list<long>& remainingBs) {
 	std::vector<int> jacobsthal = generateJacobsthalSequence(remainingBs.size());
-	std::reverse(jacobsthal.begin(), jacobsthal.end());  // 大きい数から順に使用するため逆順にする
+	std::reverse(jacobsthal.begin(), jacobsthal.end());
 
 	for (size_t j = 0; j < jacobsthal.size(); ++j) {
-		int index = jacobsthal[j] - 1; // 1-based index to 0-based index
+		int index = jacobsthal[j] - 1;
 		if (index < static_cast<int>(remainingBs.size())) {
 			std::list<long>::const_iterator it = remainingBs.begin();
 			std::advance(it, index);
@@ -223,7 +248,6 @@ void insertRemainingBsUsingJacobsthal(std::list<long>& mainChain, const std::lis
 		}
 	}
 
-	// Jacobsthal数列に含まれていないremainingBsの要素を挿入
 	for (std::list<long>::const_iterator it = remainingBs.begin(); it != remainingBs.end(); ++it) {
 		int i = std::distance(remainingBs.begin(), it);
 		if (std::find(jacobsthal.begin(), jacobsthal.end(), i + 1) == jacobsthal.end()) {

@@ -9,6 +9,7 @@
 #include <stdexcept> // std::invalid_argument
 #include <sys/time.h> // gettimeofday
 #include <utility> // std::pair
+#include <iterator> // std::distance
 #include <cmath>
 #include "Color.hpp"
 
