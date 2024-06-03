@@ -180,8 +180,8 @@ void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &
 // Jacobsthal数列を生成する関数
 std::vector<int> generateJacobsthalSequence(int n) {
 	std::vector<int> jacobsthal;
-	jacobsthal.push_back(0);
-	jacobsthal.push_back(1);
+	jacobsthal.push_back(1); // 初期値 Jacobsthal(1) = 1
+	jacobsthal.push_back(3); // 初期値 Jacobsthal(2) = 3
 	int i = 2;
 	while (true) {
 		int next = jacobsthal[i - 1] + 2 * jacobsthal[i - 2];
