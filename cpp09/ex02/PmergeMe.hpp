@@ -74,10 +74,6 @@ public:
 protected:
 	virtual void sort(Container &container) = 0;
 
-	typename Container::iterator binarySearchInsertPosition(Container &container, long num) {
-		return std::lower_bound(container.begin(), container.end(), num);
-	}
-
 private:
 	void displayContainer(const std::string &prefix, const Container &container) const {
 		std::cout << prefix;
@@ -119,17 +115,19 @@ public:
 	ListMergeInsertionSort &operator=(const ListMergeInsertionSort &sort);
 	~ListMergeInsertionSort();
 
-	void sort(std::list<long> &container);
+//	void sort(std::list<long> &container);
 
 private:
-	void mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order);
+//	void mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order);
 };
 
 // ヘルパー関数の宣言
 void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain);
-void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain);
+//void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain);
 
-void vecInsertionOrder(std::vector<long> &order, int n);
-void listInsertionOrder(std::vector<long> &order, int n);
+size_t binarySearchInsertPosition (const std::vector<long>& mainChain, long value);
+void insertRemainingBsUsingJacobsthal(std::vector<long>& mainChain, const std::vector<long>& remainingBs);
+
+//void listInsertionOrder(std::vector<long> &order, int n);
 
 #endif
