@@ -115,19 +115,14 @@ public:
 	ListMergeInsertionSort &operator=(const ListMergeInsertionSort &sort);
 	~ListMergeInsertionSort();
 
-//	void sort(std::list<long> &container);
-
-private:
-//	void mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order);
+	void sort(std::list<long> &container);
 };
 
 // ヘルパー関数の宣言
 void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain);
-//void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain);
+void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain);
 
 size_t binarySearchInsertPosition (const std::vector<long>& mainChain, long value);
 void insertRemainingBsUsingJacobsthal(std::vector<long>& mainChain, const std::vector<long>& remainingBs);
-
-//void listInsertionOrder(std::vector<long> &order, int n);
-
+void insertRemainingBsUsingJacobsthal(std::list<long>& mainChain, const std::list<long>& remainingBs);
 #endif

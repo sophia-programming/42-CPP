@@ -9,7 +9,7 @@ int main(int argc, const char *argv[]) {
 		std::list<long> numList = parser.getList();
 
 		VectorMergeInsertionSort sortVec;
-//		ListMergeInsertionSort sortList;
+		ListMergeInsertionSort sortList;
 
 		// display input
 		sortVec.displayInput(numVec);
@@ -17,7 +17,7 @@ int main(int argc, const char *argv[]) {
 
 		// sort
 		long timeVec = sortVec.sortAndMeasure(numVec);
-//		long timeList = sortList.sortAndMeasure(numList);
+		long timeList = sortList.sortAndMeasure(numList);
 
 		// display output
 		sortVec.displayOutput(numVec);
@@ -25,7 +25,7 @@ int main(int argc, const char *argv[]) {
 
 		// display time
 		sortVec.displayTime(numVec, "std::vector", timeVec);
-//		sortList.displayTime(numList, "std::list", timeList);
+		sortList.displayTime(numList, "std::list", timeList);
 
 	} catch (const std::exception &e) {
 		std::cout << RED << "Error: " << e.what() << STOP << std::endl;

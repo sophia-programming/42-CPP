@@ -1,5 +1,4 @@
 #include "PmergeMe.hpp"
-#include <stdio.h>
 
 // CommandLineParserクラスの実装
 CommandLineParser::CommandLineParser(const int argc, const char *argv[]) {
@@ -107,74 +106,54 @@ ListMergeInsertionSort &ListMergeInsertionSort::operator=(const ListMergeInserti
 }
 ListMergeInsertionSort::~ListMergeInsertionSort() {}
 
-//void ListMergeInsertionSort::sort(std::list<long> &lst) {
-//	std::list<std::pair<long, long> > pairs;
-//	std::list<long> mainChain;
-//
-//	 Step 1: ペアを作成し、ソート
-//	std::list<long>::iterator it = lst.begin();
-//	while (it != lst.end()) {
-//		long first = *it;
-//		++it;
-//		long second = (it != lst.end()) ? *it : first;
-//		pairs.push_back(std::make_pair(first, second));
-//		if (it != lst.end()) ++it;
-//	}
-//
-//	 Step 2: ペアのa要素を再帰的にソート
-//	pairSortList(pairs, mainChain);
-//	mainChain.sort();
-//
-//	 残ったb要素をbsに追加
-//	std::list<long> bs;
-//	for (std::list<std::pair<long, long> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
-//		bs.push_back(it->second);
-//	}
-//
-//
-//	 bsの要素を順番に並び替える
-//	std::vector<long> order;
-//	listInsertionOrder(order, bs.size());
-//
-//	 Step 3:　b要素をsortされたmainChainに挿入
-//	mergeInsertList(mainChain, bs, order);
-//
-//	 ソートされた要素を元のlistにコピー
-//	lst = mainChain;
-//}
-//
-///* 二分探索で挿入位置を探す
-// * 引数1: mainChain: ソート済みのvector
-// * 引数2: bs: 挿入する値
-// * 引数3: order: 挿入する順番 */
-//void ListMergeInsertionSort::mergeInsertList(std::list<long> &mainChain, std::list<long> &bs, const std::vector<long> &order) {
-//	for (size_t i = 0; i < order.size(); ++i) {
-//		if (order[i] <= 0 || order[i] > static_cast<int>(bs.size())) continue;
-//		long value = *(std::next(bs.begin(), order[i] - 1));
-//		std::list<long>::iterator it = binarySearchInsertPosition(mainChain, value);
-//		mainChain.insert(it, value);
-//	}
-//}
+void ListMergeInsertionSort::sort(std::list<long> &lst) {
+	std::list<std::pair<long, long> > pairs;
+	std::list<long> mainChain;
+	std::list<long> remainingBs;
 
+//	 Step 1: ペアを作成し、ソート
+	std::list<long>::iterator it = lst.begin();
+	while (it != lst.end()) {
+		long first = *it;
+		++it;
+		long second = (it != lst.end()) ? *it : first;
+		pairs.push_back(std::make_pair(first, second));
+		if (it != lst.end())
+			++it;
+	}
+
+//	 Step 2: ペアをsortしてmainChainにa要素（小さい方の値）を追加
+	pairSortList(pairs, mainChain);
+
+	// 残ったb要素をremainingBsに追加
+	for (std::list<std::pair<long, long> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+		remainingBs.push_back(it->second);
+	}
+
+//	Step 3: remainingBsの要素をJacobsthal数列に基づいてmainChainに挿入
+	insertRemainingBsUsingJacobsthal(mainChain, remainingBs);
+
+//	 ソートされた要素を元のlistにコピー
+	lst = mainChain;
+}
 
 // ペアをソートし、mainChainにa要素を追加
 void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain) {
 	for (size_t i = 0; i < pairs.size(); ++i) {
-		if (pairs[i].first > pairs[i].second) {
+		if (pairs[i].first > pairs[i].second)
 			std::swap(pairs[i].first, pairs[i].second);
-		}
 		mainChain.push_back(pairs[i].first);
 	}
 }
 
-//void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain) {
-//	for (std::list<std::pair<long, long> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
-//		if (it->first > it->second) {
-//			std::swap(it->first, it->second);
-//		}
-//		mainChain.push_back(it->first);
-//	}
-//}
+void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain) {
+	for (std::list<std::pair<long, long> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+		if (it->first > it->second) {
+			std::swap(it->first, it->second);
+		}
+		mainChain.push_back(it->first);
+	}
+}
 
 
 // Jacobsthal数列を生成する関数
@@ -198,8 +177,12 @@ size_t binarySearchInsertPosition (const std::vector<long>& mainChain, long valu
 	return std::lower_bound(mainChain.begin(), mainChain.end(), value) - mainChain.begin();
 }
 
+std::list<long>::iterator binarySearchInsertPosition (std::list<long>& mainChain, long value) {
+	return std::lower_bound(mainChain.begin(), mainChain.end(), value);
+}
 
-// Jacobsthal数列に基づいてremainingBsの要素を挿入する関数
+
+// (Vector用) Jacobsthal数列に基づいてremainingBsの要素を挿入する関数
 void insertRemainingBsUsingJacobsthal(std::vector<long>& mainChain, const std::vector<long>& remainingBs) {
 	std::vector<int> jacobsthal = generateJacobsthalSequence(remainingBs.size());
 	std::reverse(jacobsthal.begin(), jacobsthal.end());  // 大きい数から順に使用するため逆順にする
@@ -224,11 +207,29 @@ void insertRemainingBsUsingJacobsthal(std::vector<long>& mainChain, const std::v
 }
 
 
-void listInsertionOrder(std::vector<long> &order, int n) {
-	for (int i = 1; i <= n; ++i) {
-		int value = static_cast<int>(std::log(i * 3 / 4.0) / std::log(2.0));
-		if (value < n) {
-			order.push_back(value);
+// (List用) Jacobsthal数列に基づいてremainingBsの要素を挿入する関数
+void insertRemainingBsUsingJacobsthal(std::list<long>& mainChain, const std::list<long>& remainingBs) {
+	std::vector<int> jacobsthal = generateJacobsthalSequence(remainingBs.size());
+	std::reverse(jacobsthal.begin(), jacobsthal.end());  // 大きい数から順に使用するため逆順にする
+
+	for (size_t j = 0; j < jacobsthal.size(); ++j) {
+		int index = jacobsthal[j] - 1; // 1-based index to 0-based index
+		if (index < static_cast<int>(remainingBs.size())) {
+			std::list<long>::const_iterator it = remainingBs.begin();
+			std::advance(it, index);
+			long value = *it;
+			std::list<long>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), value);
+			mainChain.insert(pos, value);
+		}
+	}
+
+	// Jacobsthal数列に含まれていないremainingBsの要素を挿入
+	for (std::list<long>::const_iterator it = remainingBs.begin(); it != remainingBs.end(); ++it) {
+		int i = std::distance(remainingBs.begin(), it);
+		if (std::find(jacobsthal.begin(), jacobsthal.end(), i + 1) == jacobsthal.end()) {
+			long value = *it;
+			std::list<long>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), value);
+			mainChain.insert(pos, value);
 		}
 	}
 }
