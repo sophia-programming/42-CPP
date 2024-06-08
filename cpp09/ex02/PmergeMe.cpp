@@ -1,259 +1,388 @@
 #include "PmergeMe.hpp"
 
-// CommandLineParserクラスの実装
-CommandLineParser::CommandLineParser(const int argc, const char *argv[]) {
-	parseArgument(argc, argv);
+PmergeMe::PmergeMe( void )
+{
+	this->_unpairedNumberDeq = -1;
+	this->_unpairedNumberVec = -1;
 }
 
-CommandLineParser::CommandLineParser() {}
+PmergeMe::~PmergeMe( void )
+{
 
-CommandLineParser::CommandLineParser(const CommandLineParser &parser) {
-	*this = parser;
 }
 
-CommandLineParser &CommandLineParser::operator=(const CommandLineParser &parser) {
-	if (this != &parser) {
-		numVec_ = parser.numVec_;
-		numList_ = parser.numList_;
-	}
+PmergeMe::PmergeMe( const PmergeMe &obj )
+{
+	*this = obj;
+}
+
+PmergeMe &PmergeMe::operator=( const PmergeMe &toCopyFrom )
+{
+	if (this != &toCopyFrom)
+		return (*this);
 	return (*this);
 }
 
-CommandLineParser::~CommandLineParser() {}
-
-const std::vector<long> &CommandLineParser::getVector() const {
-	return (this->numVec_);
+void	PmergeMe::merge( int argc, char **argv )
+{
+	PmergeMe::populateContainers(argc, argv);
+	PmergeMe::printUnsortedSequence(argc);
+	PmergeMe::sortVector();
+	PmergeMe::sortDeque();
 }
 
-const std::list<long> &CommandLineParser::getList() const {
-	return (this->numList_);
-}
+void PmergeMe::populateContainers( int argc, char **argv )
+{
+	std::set<int>	numbers;
 
-void CommandLineParser::parseArgument(const int argc, const char *argv[]) {
-	long num;
-
-	if (argc == 1)
-		throw std::invalid_argument("Argument is empty");
-
-	for (int i = 1; i < argc; i++) {
-		std::istringstream iss(argv[i]);
-		iss >> num;
-		if (iss.fail() || iss.peek() != EOF) {
-			throw std::invalid_argument("Invalid input: " + std::string(argv[i]));
-		} else if (num <= 0) {
-			throw std::invalid_argument("Minus or Zero value: " + std::string(argv[i]));
+	for (int i = 1; i < argc; i++)
+	{
+		int length = std::strlen(argv[i]);
+		for (int j = 0; j < length; j++ )
+		{
+			if (!isdigit(argv[i][j]) && argv[i][j] != '+')
+				throw std::invalid_argument("Error: Invalid argument.");
 		}
-		numVec_.push_back(num);
-		numList_.push_back(num);
+
+		int	num = atoi(argv[i]);
+		if (num < 0)
+			throw std::runtime_error("Error: Negative Numbers are invalid");
+		if (!numbers.insert(num).second)
+			throw std::runtime_error("Error: Duplicate number detected.");
+		_input.push_back(num);
+		_inputDeq.push_back(num);
 	}
 }
 
-// VectorMergeInsertionSortクラスの実装
-VectorMergeInsertionSort::VectorMergeInsertionSort() {}
-VectorMergeInsertionSort::VectorMergeInsertionSort(const VectorMergeInsertionSort &sort) {
-	*this = sort;
-}
-VectorMergeInsertionSort &VectorMergeInsertionSort::operator=(const VectorMergeInsertionSort &sort) {
-	if (this != &sort) {}
-	return (*this);
-}
-VectorMergeInsertionSort::~VectorMergeInsertionSort() {}
-
-void VectorMergeInsertionSort::sort(std::vector<long> &vec) {
-	size_t n = vec.size();
-	std::vector<std::pair<long, long> > pairs;
-	std::vector<long> mainChain; // a要素を格納
-	std::vector<long> remainingBs; // b要素を格納
-
-
-	// Step 1: ペアを作成
-	for (size_t i = 0; i < n; i += 2) {
-		// i+1の必要性：要素数が奇数の場合、最後の要素はb要素になる
-		// 例) 1 2 3 4 5 -> (1, 2) (3, 4) (5)
-		if (i + 1 < n)
-			pairs.push_back(std::make_pair(vec[i], vec[i + 1]));
-		else
-			remainingBs.push_back(vec[i]);
-	}
-
-	// Step 2: ペアをsortしてmainChainにa要素（小さい方の値）を追加
-	// 例) (1, 2) (3, 4) (5) -> 1 3がmainChainに追加。5はremainingBsに追加
-	pairSortVec(pairs, mainChain);
-
-	// 残ったb要素(2 4 5)をremainingBsに追加
-	for (size_t i = 0; i < pairs.size(); ++i){
-		remainingBs.push_back(pairs[i].second);
-	}
-
-	// Step 3: remainingBsの要素をJacobsthal数列に基づいてmainChainに挿入
-	insertRemainingBsUsingJacobsthal(mainChain, remainingBs);
-
-	// ソートされた要素を元のvectorにコピー
-	for (size_t i = 0; i < n; ++i) {
-		vec[i] = mainChain[i];
-	}
-}
-
-
-// ListMergeInsertionSortクラスの実装
-ListMergeInsertionSort::ListMergeInsertionSort() {}
-ListMergeInsertionSort::ListMergeInsertionSort(const ListMergeInsertionSort &sort) {
-	*this = sort;
-}
-ListMergeInsertionSort &ListMergeInsertionSort::operator=(const ListMergeInsertionSort &sort) {
-	if (this != &sort) {}
-	return (*this);
-}
-ListMergeInsertionSort::~ListMergeInsertionSort() {}
-
-void ListMergeInsertionSort::sort(std::list<long> &lst) {
-	std::list<std::pair<long, long> > pairs;
-	std::list<long> mainChain;
-	std::list<long> remainingBs;
-
-//	 Step 1: ペアを作成
-	std::list<long>::iterator it = lst.begin();
-	while (it != lst.end()) {
-		long first = *it;
-		++it;
-		if (it != lst.end()) {
-			long second = *it;
-			pairs.push_back(std::make_pair(first, second));
-			++it;
-		} else
-			remainingBs.push_back(first);
-	}
-
-//	 Step 2: ペアをsortしてmainChainにa要素（小さい方の値）を追加
-	pairSortList(pairs, mainChain);
-
-	// 残ったb要素をremainingBsに追加
-	for (std::list<std::pair<long, long> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
-		remainingBs.push_back(it->second);
-	}
-
-//	Step 3: remainingBsの要素をJacobsthal数列に基づいてmainChainに挿入
-	insertRemainingBsUsingJacobsthal(mainChain, remainingBs);
-
-//	 ソートされた要素を元のlistにコピー
-	lst = mainChain;
-}
-
-// ペアをソートし、mainChainにa要素を追加
-void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain) {
-	for (size_t i = 0; i < pairs.size(); ++i) {
-		if (pairs[i].first > pairs[i].second)
-			std::swap(pairs[i].first, pairs[i].second);
-		mainChain.push_back(pairs[i].first);
-	}
-}
-
-void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain) {
-	for (std::list<std::pair<long, long> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
-		if (it->first > it->second) {
-			std::swap(it->first, it->second);
+template<typename T>
+void	PmergeMe::printSequence(const T& sequence)
+{
+	typename T::const_iterator it;
+	int	i =  0;
+	for (it = sequence.begin(); it != sequence.end(); ++it) {
+		std::cout << *it << " ";
+		if (i == 15){
+			std::cout << "[...]";
+			break;
 		}
-		mainChain.push_back(it->first);
+		i++;
+	}
+	std::cout << std::endl;
+}
+
+void	PmergeMe::printUnsortedSequence( int argc )
+{
+	std::cout << "Before: ";
+	for(int i = 0; i < (argc - 1) ; i++)
+	{
+		std::cout << _input[i] << " ";
+		if (i == 15)
+		{
+			std::cout << "[...]";
+			break;
+		}
+	}
+	std::cout << std::endl;
+}
+
+int PmergeMe::jacobsthal( int nbr )
+{
+	if (nbr == 0)
+		return (0);
+	if (nbr == 1)
+		return (1);
+
+	int prev1 = 0;
+	int prev2 = 1;
+	int current = 0;
+
+	for (int i = 2; i <= nbr; ++i)
+	{
+		current = prev1 + 2 * prev2;
+		prev1 = prev2;
+		prev2 = current;
+	}
+	return current;
+}
+
+template<typename T>
+void PmergeMe::jacobsthalInsertSequence( T& sequence, size_t maxSize )
+{
+	size_t	jacobIndex;
+	int		index;
+
+	index = 3;
+	while ((jacobIndex = PmergeMe::jacobsthal(index)) < maxSize - 1)
+	{
+		sequence.push_back(jacobIndex);
+		index++;
 	}
 }
 
+void PmergeMe::positionsVector( void )
+{
+	if (this->_pendVector.empty())
+		return;
+	PmergeMe::jacobsthalInsertSequence(_jacobSeqVector, _pendVector.size());
+	size_t lastPos = 1;
+	size_t val = 1;
+	for (size_t i = 0; i < _jacobSeqVector.size(); i++)
+	{
+		val = _jacobSeqVector.at(i);
+		_posVec.push_back(val);
 
-// Jacobsthal数列を生成する関数
-std::vector<int> generateJacobsthalSequence(int n) {
-	std::vector<int> jacobsthal;
-	jacobsthal.push_back(0); // 初期値 Jacobsthal(1) = 0
-	jacobsthal.push_back(1); // 初期値 Jacobsthal(2) = 1
-	int i = 2;
-	while (true) {
-		int next = jacobsthal[i - 1] + 2 * jacobsthal[i - 2];
-		if (next >= n) break;
-		jacobsthal.push_back(next);
-		++i;
+		size_t pos = val - 1;
+		while (pos > lastPos)
+		{
+			_posVec.push_back(pos);
+			pos--;
+		}
+		lastPos = val;
 	}
-	return jacobsthal;
+
+	while (val++ < _pendVector.size())
+		_posVec.push_back(val);
 }
 
+void PmergeMe::insertNumbersVector( void )
+{
+	std::vector<int>::iterator	it;
+	size_t	addCount = 0;
 
-// 二分探索で挿入位置を探す　（Vector用）
-size_t binarySearchInsertPosition (const std::vector<long>& mainChain, long value) {
-	return std::lower_bound(mainChain.begin(), mainChain.end(), value) - mainChain.begin();
+	PmergeMe::positionsVector();
+	for (it = _posVec.begin(); it < _posVec.end(); it++)
+	{
+		int nbr = _pendVector.at(*it - 1);
+		size_t endPos = *it + addCount;
+		size_t pos = PmergeMe::binarySearch(_mainVector, nbr, 0, endPos);
+		_mainVector.insert(_mainVector.begin() + pos, nbr);
+		addCount++;
+	}
+	if (_unpairedNumberVec != -1)
+	{
+		size_t nbr = _unpairedNumberVec;
+		size_t pos = PmergeMe::binarySearch(_mainVector, nbr, 0, _mainVector.size() - 1);
+		_mainVector.insert(_mainVector.begin() + pos, nbr);
+	}
 }
 
-// 二分探索で挿入位置を探す　（List用）
-std::list<long>::iterator binarySearchInsertPosition(std::list<long>& mainChain, long value) {
-	std::list<long>::iterator begin = mainChain.begin();
-	std::list<long>::iterator end = mainChain.end();
-	std::list<long>::iterator mid;
-	std::ptrdiff_t len = std::distance(begin, end);
+void PmergeMe::mergeSort( std::vector<int>& vector, int start, int end )
+{
+	if (start >= end)
+		return;
 
-	while (0 < len) {
-		std::ptrdiff_t step = len / 2;
-		mid = begin;
-		// midをbeginからstep分進める
-		std::advance(mid, step);
-		if (*mid < value) {
-			// 次の探索範囲を後半に設定
-			begin = ++mid;
-			// 残りの探索範囲を更新
-			len -= step + 1;
+	int mid = (start + end) / 2;
+
+	PmergeMe::mergeSort(vector, start, mid);
+	PmergeMe::mergeSort(vector, mid + 1, end);
+
+	std::vector<int> sorted;
+
+	int left = start;
+	int right = mid + 1;
+
+	while (left <= mid && right <= end)
+	{
+		if (vector[left] <= vector[right]) {
+			sorted.push_back(vector[left]);
+			left++;
 		} else {
-			// 次の探索範囲を前半に設定
-			len = step;
+			sorted.push_back(vector[right]);
+			right++;
 		}
 	}
-	// beginは挿入位置（value以上の最初の要素を指す）
-	return begin;
+	while (left <= mid)
+	{
+		sorted.push_back(vector[left]);
+		left++;
+	}
+	while (right <= end)
+	{
+		sorted.push_back(vector[right]);
+		right++;
+	}
+	for (int i = start; i <= end; i++)
+		vector[i] = sorted[i - start];
 }
 
+void	PmergeMe::sortVector( void )
+{
+	clock_t start = clock();
+	size_t	size = _input.size();
 
-// (Vector用) Jacobsthal数列に基づいてremainingBsの要素を挿入する関数
-void insertRemainingBsUsingJacobsthal(std::vector<long>& mainChain, const std::vector<long>& remainingBs) {
-	std::vector<int> jacobsthal = generateJacobsthalSequence(remainingBs.size());
-	// 大きい数から順に使用するため逆順にする
-	std::reverse(jacobsthal.begin(), jacobsthal.end());
-
-	for (size_t j = 0; j < jacobsthal.size(); ++j) {
-		int index = jacobsthal[j];
-		if (index < static_cast<int>(remainingBs.size())) {
-			long value = remainingBs[index];
-			size_t pos = binarySearchInsertPosition(mainChain, value);
-			mainChain.insert(mainChain.begin() + pos, value);
-		}
+	if (size % 2 == 1)
+	{
+		_unpairedNumberVec = _input.back();
+		_input.pop_back();
 	}
 
-	// Jacobsthal数列に含まれていないremainingBsの要素を挿入
-	for (size_t i = 0; i < remainingBs.size(); ++i) {
-		if (std::find(jacobsthal.begin(), jacobsthal.end(), i) == jacobsthal.end()) {
-			long value = remainingBs[i];
-			size_t pos = binarySearchInsertPosition(mainChain, value);
-			mainChain.insert(mainChain.begin() + pos, value);
+	for (size_t i = 0; i < size - 1; i += 2)
+		_pairVec.push_back(std::make_pair(_input[i], _input[i + 1]));
+
+	for (size_t i = 0; i < _pairVec.size(); i++)
+	{
+		if (_pairVec[i].first < _pairVec[i].second){
+			std::swap(_pairVec[i].first, _pairVec[i].second);
 		}
+		_mainVector.push_back(_pairVec[i].first);
+		_pendVector.push_back(_pairVec[i].second);
+	}
+	PmergeMe::mergeSort(_mainVector, 0, _mainVector.size() - 1);
+	_mainVector.insert(_mainVector.begin(), _pendVector[0]);
+	PmergeMe::insertNumbersVector();
+	PmergeMe::displaySortInfo(start, _mainVector);
+}
+
+void PmergeMe::positionsDeque( void )
+{
+	if (_pendDeque.empty())
+		return;
+
+	PmergeMe::jacobsthalInsertSequence(_jacobSeqDeq, _pendDeque.size());
+	size_t lastPos = 1;
+	size_t val = 1;
+	while (!_jacobSeqDeq.empty())
+	{
+		val = _jacobSeqDeq.front();
+
+		_jacobSeqDeq.pop_front();
+		_posDeq.push_back(val);
+
+		size_t pos = val - 1;
+		while (pos > lastPos)
+		{
+			_posDeq.push_back(pos);
+			pos--;
+		}
+		lastPos = val;
+	}
+	while (val++ < _pendDeque.size())
+		_posDeq.push_back(val);
+}
+
+void PmergeMe::insertNumbersDeque( void )
+{
+	std::deque<int>::iterator it;
+	size_t addCount = 0;
+
+	PmergeMe::positionsDeque();
+	for (it = _posDeq.begin(); it < _posDeq.end(); it++)
+	{
+		int n = _pendDeque.at(*it - 1);
+
+		size_t endPos = *it + addCount;
+		size_t pos = PmergeMe::binarySearch(_mainDeque, n, 0, endPos);
+		_mainDeque.insert(_mainDeque.begin() + pos, n);
+		addCount++;
+	}
+	if (_unpairedNumberDeq != -1)
+	{
+		size_t nbr = _unpairedNumberDeq;
+		size_t pos = PmergeMe::binarySearch(_mainDeque, nbr, 0, _mainDeque.size() - 1);
+		_mainDeque.insert(_mainDeque.begin() + pos, nbr);
 	}
 }
 
+void PmergeMe::mergeSort( std::deque<int>& deq, int start, int end )
+{
+	if (start >= end)
+		return ;
 
-// (List用) Jacobsthal数列に基づいてremainingBsの要素を挿入する関数
-void insertRemainingBsUsingJacobsthal(std::list<long>& mainChain, const std::list<long>& remainingBs) {
-	std::vector<int> jacobsthal = generateJacobsthalSequence(remainingBs.size());
-	std::reverse(jacobsthal.begin(), jacobsthal.end());
+	int mid = (start + end) / 2;
 
-	for (size_t j = 0; j < jacobsthal.size(); ++j) {
-		int index = jacobsthal[j] - 1;
-		if (index < static_cast<int>(remainingBs.size())) {
-			std::list<long>::const_iterator it = remainingBs.begin();
-			std::advance(it, index);
-			long value = *it;
-			std::list<long>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), value);
-			mainChain.insert(pos, value);
+	mergeSort(deq, start, mid);
+	mergeSort(deq, mid + 1, end);
+
+	std::vector<int> sorted;
+
+	int left = start;
+	int right = mid + 1;
+
+	while (left <= mid && right <= end)
+	{
+		if (deq[left] <= deq[right]) {
+			sorted.push_back(deq[left]);
+			left++;
+		} else {
+			sorted.push_back(deq[right]);
+			right++;
 		}
 	}
-
-	for (std::list<long>::const_iterator it = remainingBs.begin(); it != remainingBs.end(); ++it) {
-		int i = std::distance(remainingBs.begin(), it);
-		if (std::find(jacobsthal.begin(), jacobsthal.end(), i + 1) == jacobsthal.end()) {
-			long value = *it;
-			std::list<long>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), value);
-			mainChain.insert(pos, value);
-		}
+	while (left <= mid)
+	{
+		sorted.push_back(deq[left]);
+		left++;
 	}
+	while (right <= end)
+	{
+		sorted.push_back(deq[right]);
+		right++;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		deq[i] = sorted[i - start];
+	}
+}
+
+void	PmergeMe::sortDeque( void )
+{
+	clock_t start = clock();
+	size_t	size = _inputDeq.size();
+
+	if (size % 2 == 1)
+	{
+		_unpairedNumberDeq = _inputDeq.back();
+		_inputDeq.pop_back();
+	}
+	for (size_t i = 0; i < size - 1; i += 2){
+		_pairDeq.push_back(std::make_pair(_inputDeq[i], _inputDeq[i + 1]));
+	}
+	for (size_t i = 0; i < _pairDeq.size(); i++){
+		if (_pairDeq[i].first < _pairDeq[i].second)
+			std::swap(_pairDeq[i].first, _pairDeq[i].second);
+		_mainDeque.push_back(_pairDeq[i].first);
+		_pendDeque.push_back(_pairDeq[i].second);
+	}
+
+	mergeSort(_mainDeque, 0, _mainDeque.size() - 1);
+	_mainDeque.push_front(_pendDeque[0]);
+
+	insertNumbersDeque();
+
+	displaySortInfo(start, _mainDeque);
+}
+
+template<typename T>
+void PmergeMe::displaySortInfo(clock_t start, const T& mainSequence)
+{
+	clock_t end = clock();
+	double timePassedMs = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000;
+
+	std::cout << "After:  ";
+	printSequence(mainSequence);
+	std::cout << "Time to process a range of " << mainSequence.size();
+	std::cout << " elements with " << (typeid(mainSequence) == typeid(std::vector<int>) ? "std::vector" : "std::deque");
+	std::cout << " : " << timePassedMs << " ms" << std::endl;
+}
+
+template<typename T>
+int PmergeMe::binarySearch(T& container, int nbr, int begin, int end)
+{
+	int mid;
+
+	while (begin <= end)
+	{
+		mid = begin + (end - begin) / 2;
+		if (nbr == container.at(mid))
+			return (mid);
+
+		if (nbr > container.at(mid))
+			begin = mid + 1;
+		else
+			end = mid - 1;
+	}
+	if (nbr > container.at(mid))
+		return (mid + 1);
+	else
+		return (mid);
 }

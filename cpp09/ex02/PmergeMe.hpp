@@ -1,129 +1,74 @@
 #ifndef PMERGEME_HPP
-#define PMERGEME_HPP
+# define PMERGEME_HPP
 
-#include <iostream> // std::cout, std::endl
-#include <sstream> // std::istringstream
-#include <list> // std::list
-#include <vector> // std::vector
-#include <algorithm> // std::lower_bound
-#include <stdexcept> // std::invalid_argument
-#include <sys/time.h> // gettimeofday
-#include <utility> // std::pair
-#include <iterator> // std::distance
-#include <cmath>
-#include "Color.hpp"
+#include <iostream> //std::cout
+#include <vector> //std::vector
+#include <deque> //std::deque
+#include <cstring> //std::strcmp
+#include <algorithm> //std::sort
+#include <set> //std::set
+#include <typeinfo> //typeid
+#include "Color.hpp" //Color
 
-// CommandLineParserクラスの宣言
-class CommandLineParser {
-public:
-	CommandLineParser();
-	CommandLineParser(const int argc, const char *argv[]);
-	CommandLineParser(const CommandLineParser &parser);
-	CommandLineParser &operator=(const CommandLineParser &parser);
-	~CommandLineParser();
-
-	const std::vector<long> &getVector() const;
-	const std::list<long> &getList() const;
-
+class PmergeMe
+{
 private:
-	std::vector<long> numVec_;
-	std::list<long> numList_;
 
-	void parseArgument(const int argc, const char *argv[]);
-};
+	int		_unpairedNumberVec;
+	int		_unpairedNumberDeq;
 
-// MergeInsertionSortテンプレートクラスの宣言と定義
-template <typename Container>
-class MergeInsertionSort {
+	std::vector<int>	_input;
+	std::vector<int>	_mainVector;
+	std::vector<int>	_pendVector;
+	std::vector<int>	_jacobSeqVector;
+	std::vector<int>	_posVec;
+
+	std::vector<std::pair<int, int> >	_pairVec;
+
+	std::deque<int>		_inputDeq;
+	std::deque<int>		_mainDeque;
+	std::deque<int>		_pendDeque;
+	std::deque<int>		_jacobSeqDeq;
+	std::deque<int>		_posDeq;
+
+	std::deque<std::pair<int, int> >	_pairDeq;
+
+	void	populateContainers( int, char ** );
+
+	void	printUnsortedSequence( int );
+	int		jacobsthal(int n);
+
+	void	sortVector( void );
+	void	mergeSort( std::vector<int>& S, int start, int end );
+	void 	insertNumbersVector( void );
+	void	positionsVector( void );
+
+	void	sortDeque( void );
+	void	mergeSort( std::deque<int>& S, int start, int end );
+	void	insertNumbersDeque( void );
+	void	positionsDeque( void );
+
 public:
-	MergeInsertionSort() {};
-	MergeInsertionSort(const MergeInsertionSort &sort) {
-		*this = sort;
-	};
-	MergeInsertionSort &operator=(const MergeInsertionSort &sort) {
-		if (this != &sort) {}
-		return (*this);
-	};
-	virtual ~MergeInsertionSort() {};
 
-	void displayInput(const Container &container) const {
-		displayContainer("before:\t", container);
-	};
+	PmergeMe( void );
+	PmergeMe( PmergeMe const& );
+	~PmergeMe( void );
 
-	void displayOutput(const Container &container) const {
-		displayContainer("after:\t", container);
-	};
+	PmergeMe& operator=( const PmergeMe &);
 
-	long sortAndMeasure(Container &container) {
-		struct timeval start, end;
+	void	merge( int, char ** );
 
-		gettimeofday(&start, NULL);
-		sort(container);
-		gettimeofday(&end, NULL);
+	template<typename T>
+	void	printSequence( const T& );
 
-		long second = end.tv_sec - start.tv_sec;
-		long micro = (second * 1000000) + (end.tv_usec - start.tv_usec);
-		return (micro);
-	};
+	template<typename T>
+	void displaySortInfo(clock_t, const T& );
 
-	void displayTime(Container &container, std::string str, long time) {
-		std::cout << "Time to process a range of " << container.size()
-				  << " elements with " << str << " : " << time << " us"
-				  << std::endl;
-	};
+	template<typename T>
+	void jacobsthalInsertSequence( T&, size_t );
 
-protected:
-	virtual void sort(Container &container) = 0;
-
-private:
-	void displayContainer(const std::string &prefix, const Container &container) const {
-		std::cout << prefix;
-		if (container.size() <= 5) {
-			for (typename Container::const_iterator it = container.begin();
-				 it != container.end(); it++) {
-				std::cout << *it << ' ';
-			}
-			std::cout << std::endl;
-		} else {
-			typename Container::const_iterator it = container.begin();
-			for (std::size_t i = 0; i < 4 && it != container.end(); i++, it++) {
-				std::cout << *it << ' ';
-			}
-			std::cout << "[...]" << std::endl;
-		}
-	};
+	template<typename T>
+	int binarySearch(T& deq, int nbr, int begin, int end);
 };
 
-// VectorMergeInsertionSortクラスの宣言
-class VectorMergeInsertionSort : public MergeInsertionSort<std::vector<long> > {
-public:
-	VectorMergeInsertionSort();
-	VectorMergeInsertionSort(const VectorMergeInsertionSort &sort);
-	VectorMergeInsertionSort &operator=(const VectorMergeInsertionSort &sort);
-	~VectorMergeInsertionSort();
-
-	void sort(std::vector<long> &container);
-
-private:
-	void mergeInsertVec(std::vector<long> &mainChain, std::vector<long> &bs, const std::vector<long> &order);
-};
-
-// ListMergeInsertionSortクラスの宣言
-class ListMergeInsertionSort : public MergeInsertionSort<std::list<long> > {
-public:
-	ListMergeInsertionSort();
-	ListMergeInsertionSort(const ListMergeInsertionSort &sort);
-	ListMergeInsertionSort &operator=(const ListMergeInsertionSort &sort);
-	~ListMergeInsertionSort();
-
-	void sort(std::list<long> &container);
-};
-
-// ヘルパー関数の宣言
-void pairSortVec(std::vector<std::pair<long, long> > &pairs, std::vector<long> &mainChain);
-void pairSortList(std::list<std::pair<long, long> > &pairs, std::list<long> &mainChain);
-
-size_t binarySearchInsertPosition (const std::vector<long>& mainChain, long value);
-void insertRemainingBsUsingJacobsthal(std::vector<long>& mainChain, const std::vector<long>& remainingBs);
-void insertRemainingBsUsingJacobsthal(std::list<long>& mainChain, const std::list<long>& remainingBs);
 #endif
