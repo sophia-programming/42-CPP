@@ -13,59 +13,57 @@
 class PmergeMe
 {
 private:
+	int		unpairedNumberVec_;
+	int		unpairedNumberDeq_;
 
-	int		_unpairedNumberVec;
-	int		_unpairedNumberDeq;
+	std::vector<int>	input_;
+	std::vector<int>	mainVector_;
+	std::vector<int>	pendVector_;
+	std::vector<int>	jacobSeqVector_;
+	std::vector<int>	posVec_;
 
-	std::vector<int>	_input;
-	std::vector<int>	_mainVector;
-	std::vector<int>	_pendVector;
-	std::vector<int>	_jacobSeqVector;
-	std::vector<int>	_posVec;
+	std::vector<std::pair<int, int> >	pairVec_;
 
-	std::vector<std::pair<int, int> >	_pairVec;
+	std::deque<int>		input_Deq_;
+	std::deque<int>		mainDeq_;
+	std::deque<int>		pendDeque_;
+	std::deque<int>		jacobSeqDeq_;
+	std::deque<int>		posDeq_;
 
-	std::deque<int>		_inputDeq;
-	std::deque<int>		_mainDeque;
-	std::deque<int>		_pendDeque;
-	std::deque<int>		_jacobSeqDeq;
-	std::deque<int>		_posDeq;
+	std::deque<std::pair<int, int> >	pairDeq_;
 
-	std::deque<std::pair<int, int> >	_pairDeq;
+	void	populateContainers(int, char **);
 
-	void	populateContainers( int, char ** );
-
-	void	printUnsortedSequence( int );
+	void	printUnsortedSequence(int);
 	int		jacobsthal(int n);
 
-	void	sortVector( void );
-	void	mergeSort( std::vector<int>& S, int start, int end );
-	void 	insertNumbersVector( void );
-	void	positionsVector( void );
+	void	sortVector();
+	void	mergeSort(std::vector<int>& S, int start, int end);
+	void 	insertNumbersVector();
+	void	positionsVector();
 
-	void	sortDeque( void );
-	void	mergeSort( std::deque<int>& S, int start, int end );
-	void	insertNumbersDeque( void );
-	void	positionsDeque( void );
+	void	sortDeque();
+	void	mergeSort(std::deque<int>& S, int start, int end);
+	void	insertNumbersDeque();
+	void	positionsDeque();
 
 public:
+	PmergeMe();
+	PmergeMe(PmergeMe const&);
+	~PmergeMe();
 
-	PmergeMe( void );
-	PmergeMe( PmergeMe const& );
-	~PmergeMe( void );
+	PmergeMe& operator=(const PmergeMe &);
 
-	PmergeMe& operator=( const PmergeMe &);
-
-	void	merge( int, char ** );
-
-	template<typename T>
-	void	printSequence( const T& );
+	void merge(int, char **);
 
 	template<typename T>
-	void displaySortInfo(clock_t, const T& );
+	void	printSequence(const T&);
 
 	template<typename T>
-	void jacobsthalInsertSequence( T&, size_t );
+	void displaySortInfo(clock_t, const T&);
+
+	template<typename T>
+	void jacobsthalInsertSequence(T&, size_t );
 
 	template<typename T>
 	int binarySearch(T& deq, int nbr, int begin, int end);
