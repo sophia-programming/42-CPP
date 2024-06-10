@@ -54,22 +54,6 @@ void PmergeMe::populateContainers(int argc, char **argv)
 	}
 }
 
-template<typename T>
-void	PmergeMe::printSequence(const T& sequence)
-{
-	typename T::const_iterator it;
-	int	i =  0;
-	for (it = sequence.begin(); it != sequence.end(); ++it) {
-		std::cout << *it << " ";
-		if (i == 15){
-			std::cout << "[...]";
-			break;
-		}
-		i++;
-	}
-	std::cout << std::endl;
-}
-
 void	PmergeMe::printUnsortedSequence(int argc)
 {
 	std::cout << "Before: ";
@@ -103,20 +87,6 @@ int PmergeMe::jacobsthal( int nbr )
 		prev2 = current;
 	}
 	return current;
-}
-
-template<typename T>
-void PmergeMe::jacobsthalInsertSequence(T& sequence, size_t maxSize)
-{
-	size_t	jacobIndex;
-	int		index;
-
-	index = 3;
-	while ((jacobIndex = PmergeMe::jacobsthal(index)) < maxSize - 1)
-	{
-		sequence.push_back(jacobIndex);
-		index++;
-	}
 }
 
 void PmergeMe::positionsVector()
@@ -350,39 +320,4 @@ void	PmergeMe::sortDeque()
 	insertNumbersDeque();
 
 	displaySortInfo(start, mainDeq_);
-}
-
-template<typename T>
-void PmergeMe::displaySortInfo(clock_t start, const T& mainSequence)
-{
-	clock_t end = clock();
-	double timePassedMs = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000;
-
-	std::cout << "After:  ";
-	printSequence(mainSequence);
-	std::cout << "Time to process a range of " << mainSequence.size();
-	std::cout << " elements with " << (typeid(mainSequence) == typeid(std::vector<int>) ? "std::vector" : "std::deque");
-	std::cout << " : " << timePassedMs << " ms" << std::endl;
-}
-
-template<typename T>
-int PmergeMe::binarySearch(T& container, int nbr, int begin, int end)
-{
-	int mid;
-
-	while (begin <= end)
-	{
-		mid = begin + (end - begin) / 2;
-		if (nbr == container.at(mid))
-			return (mid);
-
-		if (nbr > container.at(mid))
-			begin = mid + 1;
-		else
-			end = mid - 1;
-	}
-	if (nbr > container.at(mid))
-		return (mid + 1);
-	else
-		return (mid);
 }
