@@ -38,12 +38,12 @@ private:
 	int	jacobsthal(int n);
 
 	void sortVector();
-	void mergeSort(std::vector<int>& S, int start, int end);
+	void mergeSort(std::vector<int> &S, int start, int end);
 	void insertNumbersVector();
 	void positionsVector();
 
 	void sortDeque();
-	void mergeSort(std::deque<int>& S, int start, int end);
+	void mergeSort(std::deque<int> &S, int start, int end);
 	void insertNumbersDeque();
 	void positionsDeque();
 
@@ -52,18 +52,18 @@ public:
 	PmergeMe(PmergeMe const&);
 	~PmergeMe();
 
-	PmergeMe& operator=(const PmergeMe &);
+	PmergeMe &operator=(const PmergeMe &);
 
 	void merge(int, char **);
 
 	template<typename T>
-	void printSequence(const T& sequence)
+	void printSequence(const T &sequence)
 	{
 		typename T::const_iterator it;
-		int	i =  0;
+		size_t i =  0;
 		for (it = sequence.begin(); it != sequence.end(); ++it) {
 			std::cout << *it << " ";
-			if (i == 15){
+			if (i == 4){
 				std::cout << "[...]";
 				break;
 			}
@@ -73,20 +73,20 @@ public:
 	}
 
 	template<typename T>
-	void displaySortInfo(clock_t start, const T& mainSequence)
+	void displaySortInfo(clock_t start, const T &mainSequence)
 	{
 		clock_t end = clock();
-		double timePassedMs = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000;
+		double time = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000;
 
-		std::cout << "After:  ";
+		std::cout << YELLOW << "After:  " << STOP;
 		printSequence(mainSequence);
 		std::cout << "Time to process a range of " << mainSequence.size();
-		std::cout << " elements with " << (typeid(mainSequence) == typeid(std::vector<int>) ? "std::vector" : "std::deque");
-		std::cout << " : " << timePassedMs << " ms" << std::endl;
+		std::cout << " elements with " << RED << (typeid(mainSequence) == typeid(std::vector<int>) ? "std::vector" : "std::deque") << STOP;
+		std::cout << " : " << time << " ms" << std::endl;
 	}
 
 	template<typename T>
-	void jacobsthalInsertSequence(T& sequence, size_t maxSize)
+	void jacobsthalInsertSequence(T &sequence, size_t maxSize)
 	{
 		size_t	jacobIndex;
 		int		index;
@@ -100,7 +100,7 @@ public:
 	}
 
 	template<typename T>
-	int binarySearch(T& container, int nbr, int begin, int end)
+	int binarySearch(T &container, int nbr, int begin, int end)
 	{
 		int mid;
 
