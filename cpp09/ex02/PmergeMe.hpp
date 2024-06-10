@@ -33,7 +33,6 @@ private:
 	std::deque<std::pair<int, int> > pairDeq_;
 
 	void populateContainers(int, char **);
-
 	void printUnsortedSequence(int);
 	int	jacobsthal(int n);
 
@@ -50,9 +49,8 @@ private:
 public:
 	PmergeMe();
 	PmergeMe(PmergeMe const&);
+	PmergeMe &operator=(const PmergeMe &to_copy);
 	~PmergeMe();
-
-	PmergeMe &operator=(const PmergeMe &);
 
 	void merge(int, char **);
 
