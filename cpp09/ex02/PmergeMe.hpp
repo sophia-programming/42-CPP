@@ -1,20 +1,20 @@
 #ifndef PMERGEME_HPP
 # define PMERGEME_HPP
 
-#include <iostream> //std::cout
-#include <vector> //std::vector
-#include <deque> //std::deque
-#include <cstring> //std::strcmp
-#include <algorithm> //std::sort
-#include <set> //std::set
-#include <typeinfo> //typeid
-#include "Color.hpp" //Color
+#include <iostream> // std::cout
+#include <vector> // std::vector
+#include <list> // std::list
+#include <cstring> // std::strcmp
+#include <algorithm> // std::sort
+#include <set> // std::set
+#include <typeinfo> // typeid
+#include "Color.hpp" // Color
 
 class PmergeMe
 {
 private:
 	int unpairedNumberVec_;
-	int unpairedNumberDeq_;
+	int unpairedNumberList_;
 
 	std::vector<int> input_;
 	std::vector<int> mainVector_;
@@ -24,27 +24,27 @@ private:
 
 	std::vector<std::pair<int, int> > pairVec_;
 
-	std::deque<int> input_Deq_;
-	std::deque<int> mainDeq_;
-	std::deque<int>	pendDeque_;
-	std::deque<int>	jacobSeqDeq_;
-	std::deque<int>	posDeq_;
+	std::list<int> input_List_;
+	std::list<int> mainList_;
+	std::list<int> pendList_;
+	std::list<int> jacobSeqList_;
+	std::list<int> posList_;
 
-	std::deque<std::pair<int, int> > pairDeq_;
+	std::list<std::pair<int, int> > pairList_;
 
 	void populateContainers(int, char **);
 	void printUnsortedSequence(int);
-	int	jacobsthal(int n);
+	int jacobsthal(int n);
 
 	void sortVector();
 	void mergeSort(std::vector<int> &S, int start, int end);
 	void insertNumbersVector();
 	void positionsVector();
 
-	void sortDeque();
-	void mergeSort(std::deque<int> &S, int start, int end);
-	void insertNumbersDeque();
-	void positionsDeque();
+	void sortList();
+	void mergeSort(std::list<int> &S, int start, int end);
+	void insertNumbersList();
+	void positionsList();
 
 public:
 	PmergeMe();
@@ -58,10 +58,10 @@ public:
 	void printSequence(const T &sequence)
 	{
 		typename T::const_iterator it;
-		size_t i =  0;
+		size_t i = 0;
 		for (it = sequence.begin(); it != sequence.end(); ++it) {
 			std::cout << *it << " ";
-			if (i == 4){
+			if (i == 4) {
 				std::cout << "[...]";
 				break;
 			}
@@ -79,15 +79,15 @@ public:
 		std::cout << YELLOW << "After:  " << STOP;
 		printSequence(mainSequence);
 		std::cout << "Time to process a range of " << mainSequence.size();
-		std::cout << " elements with " << RED << (typeid(mainSequence) == typeid(std::vector<int>) ? "std::vector" : "std::deque") << STOP;
+		std::cout << " elements with " << RED << (typeid(mainSequence) == typeid(std::vector<int>) ? "std::vector" : "std::list") << STOP;
 		std::cout << " : " << time << " ms" << std::endl;
 	}
 
 	template<typename T>
 	void jacobsthalInsertSequence(T &sequence, size_t maxSize)
 	{
-		size_t	jacobIndex;
-		int		index;
+		size_t jacobIndex;
+		int index;
 
 		index = 3;
 		while ((jacobIndex = PmergeMe::jacobsthal(index)) < maxSize - 1)
@@ -105,15 +105,19 @@ public:
 		while (begin <= end)
 		{
 			mid = begin + (end - begin) / 2;
-			if (nbr == container.at(mid))
+			typename T::iterator it = container.begin();
+			std::advance(it, mid);
+			if (nbr == *it)
 				return (mid);
 
-			if (nbr > container.at(mid))
+			if (nbr > *it)
 				begin = mid + 1;
 			else
 				end = mid - 1;
 		}
-		if (nbr > container.at(mid))
+		typename T::iterator it = container.begin();
+		std::advance(it, mid);
+		if (nbr > *it)
 			return (mid + 1);
 		else
 			return (mid);

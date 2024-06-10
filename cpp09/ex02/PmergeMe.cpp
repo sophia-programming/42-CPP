@@ -1,7 +1,6 @@
 #include "PmergeMe.hpp"
-
 PmergeMe::PmergeMe() {
-	this->unpairedNumberDeq_ = -1;
+	this->unpairedNumberList_ = -1;
 	this->unpairedNumberVec_ = -1;
 }
 
@@ -17,17 +16,15 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &to_copy) {
 
 PmergeMe::~PmergeMe(){}
 
-
 void PmergeMe::merge(int argc, char **argv) {
 	PmergeMe::populateContainers(argc, argv);
 	PmergeMe::printUnsortedSequence(argc);
 	PmergeMe::sortVector();
-	PmergeMe::sortDeque();
+	PmergeMe::sortList();
 }
 
-
 void PmergeMe::populateContainers(int argc, char **argv) {
-	std::set<int>	numbers;
+	std::set<int> numbers;
 
 	for (int i = 1; i < argc; i++) {
 		int length = std::strlen(argv[i]);
@@ -36,19 +33,19 @@ void PmergeMe::populateContainers(int argc, char **argv) {
 				throw std::invalid_argument("Error: Invalid argument.");
 		}
 
-		int	num = atoi(argv[i]);
+		int num = atoi(argv[i]);
 		if (num < 0)
 			throw std::runtime_error("Error: Negative Numbers are invalid");
 		if (!numbers.insert(num).second)
 			throw std::runtime_error("Error: Duplicate number detected.");
 		input_.push_back(num);
-		input_Deq_.push_back(num);
+		input_List_.push_back(num);
 	}
 }
 
-void	PmergeMe::printUnsortedSequence(int argc) {
-	std::cout << YELLOW << "Before: " << STOP;
-	for(int i = 0; i < (argc - 1) ; i++) {
+void PmergeMe::printUnsortedSequence(int argc) {
+	std::cout << "Before: ";
+	for (int i = 0; i < (argc - 1); i++) {
 		std::cout << input_[i] << " ";
 		if (i == 4) {
 			std::cout << "[...]";
@@ -58,11 +55,11 @@ void	PmergeMe::printUnsortedSequence(int argc) {
 	std::cout << std::endl;
 }
 
-int PmergeMe::jacobsthal( int nbr ) {
+int PmergeMe::jacobsthal(int nbr) {
 	if (nbr == 0)
-		return (0);
+		return 0;
 	if (nbr == 1)
-		return (1);
+		return 1;
 
 	int prev1 = 0;
 	int prev2 = 1;
@@ -83,7 +80,7 @@ void PmergeMe::positionsVector() {
 	size_t lastPos = 1;
 	size_t val = 1;
 	for (size_t i = 0; i < jacobSeqVector_.size(); i++) {
-		val = jacobSeqVector_.at(i);
+		val = jacobSeqVector_[i];
 		posVec_.push_back(val);
 
 		size_t pos = val - 1;
@@ -99,12 +96,12 @@ void PmergeMe::positionsVector() {
 }
 
 void PmergeMe::insertNumbersVector() {
-	std::vector<int>::iterator	it;
-	size_t	addCount = 0;
+	std::vector<int>::iterator it;
+	size_t addCount = 0;
 
 	PmergeMe::positionsVector();
 	for (it = posVec_.begin(); it < posVec_.end(); it++) {
-		int nbr = pendVector_.at(*it - 1);
+		int nbr = pendVector_[*it - 1];
 		size_t endPos = *it + addCount;
 		size_t pos = PmergeMe::binarySearch(mainVector_, nbr, 0, endPos);
 		mainVector_.insert(mainVector_.begin() + pos, nbr);
@@ -152,10 +149,9 @@ void PmergeMe::mergeSort(std::vector<int>& vector, int start, int end) {
 		vector[i] = sorted[i - start];
 }
 
-
-void	PmergeMe::sortVector() {
+void PmergeMe::sortVector() {
 	clock_t start = clock();
-	size_t	size = input_.size();
+	size_t size = input_.size();
 
 	if (size % 2 == 1) {
 		unpairedNumberVec_ = input_.back();
@@ -166,7 +162,7 @@ void	PmergeMe::sortVector() {
 		pairVec_.push_back(std::make_pair(input_[i], input_[i + 1]));
 
 	for (size_t i = 0; i < pairVec_.size(); i++) {
-		if (pairVec_[i].first < pairVec_[i].second){
+		if (pairVec_[i].first < pairVec_[i].second) {
 			std::swap(pairVec_[i].first, pairVec_[i].second);
 		}
 		mainVector_.push_back(pairVec_[i].first);
@@ -178,112 +174,134 @@ void	PmergeMe::sortVector() {
 	PmergeMe::displaySortInfo(start, mainVector_);
 }
 
-
-void PmergeMe::positionsDeque() {
-	if (pendDeque_.empty())
+void PmergeMe::positionsList() {
+	if (pendList_.empty())
 		return;
 
-	PmergeMe::jacobsthalInsertSequence(jacobSeqDeq_, pendDeque_.size());
+	PmergeMe::jacobsthalInsertSequence(jacobSeqList_, pendList_.size());
 	size_t lastPos = 1;
 	size_t val = 1;
-	while (!jacobSeqDeq_.empty()) {
-		val = jacobSeqDeq_.front();
+	while (!jacobSeqList_.empty()) {
+		val = jacobSeqList_.front();
 
-		jacobSeqDeq_.pop_front();
-		posDeq_.push_back(val);
+		jacobSeqList_.pop_front();
+		posList_.push_back(val);
 
 		size_t pos = val - 1;
 		while (pos > lastPos) {
-			posDeq_.push_back(pos);
+			posList_.push_back(pos);
 			pos--;
 		}
 		lastPos = val;
 	}
-	while (val++ < pendDeque_.size())
-		posDeq_.push_back(val);
+	while (val++ < pendList_.size())
+		posList_.push_back(val);
 }
 
-
-void PmergeMe::insertNumbersDeque() {
-	std::deque<int>::iterator it;
+void PmergeMe::insertNumbersList() {
+	std::list<int>::iterator it;
 	size_t addCount = 0;
 
-	PmergeMe::positionsDeque();
-	for (it = posDeq_.begin(); it < posDeq_.end(); it++) {
-		int n = pendDeque_.at(*it - 1);
+	PmergeMe::positionsList();
+	for (it = posList_.begin(); it != posList_.end(); ++it) {
+		std::list<int>::iterator pendIt = pendList_.begin();
+		std::advance(pendIt, *it - 1);
+		int n = *pendIt;
 
-		size_t endPos = *it + addCount;
-		size_t pos = PmergeMe::binarySearch(mainDeq_, n, 0, endPos);
-		mainDeq_.insert(mainDeq_.begin() + pos, n);
+		std::list<int>::iterator mainIt = mainList_.begin();
+		std::advance(mainIt, *it + addCount);
+		size_t pos = PmergeMe::binarySearch(mainList_, n, 0, *it + addCount);
+		mainIt = mainList_.begin();
+		std::advance(mainIt, pos);
+		mainList_.insert(mainIt, n);
 		addCount++;
 	}
-	if (unpairedNumberDeq_ != -1) {
-		size_t nbr = unpairedNumberDeq_;
-		size_t pos = PmergeMe::binarySearch(mainDeq_, nbr, 0, mainDeq_.size() - 1);
-		mainDeq_.insert(mainDeq_.begin() + pos, nbr);
+	if (unpairedNumberList_ != -1) {
+		int nbr = unpairedNumberList_;
+		size_t pos = PmergeMe::binarySearch(mainList_, nbr, 0, mainList_.size() - 1);
+		std::list<int>::iterator mainIt = mainList_.begin();
+		std::advance(mainIt, pos);
+		mainList_.insert(mainIt, nbr);
 	}
 }
 
-
-void PmergeMe::mergeSort(std::deque<int>& deq, int start, int end) {
+void PmergeMe::mergeSort(std::list<int>& list, int start, int end) {
 	if (start >= end)
-		return ;
+		return;
 
 	int mid = (start + end) / 2;
 
-	mergeSort(deq, start, mid);
-	mergeSort(deq, mid + 1, end);
+	mergeSort(list, start, mid);
+	mergeSort(list, mid + 1, end);
 
 	std::vector<int> sorted;
 
 	int left = start;
 	int right = mid + 1;
 
-	while (left <= mid && right <= end)	{
-		if (deq[left] <= deq[right]) {
-			sorted.push_back(deq[left]);
+	std::list<int>::iterator it = list.begin();
+	std::advance(it, start);
+	std::list<int>::iterator leftIt = it;
+	std::advance(it, mid - start + 1);
+	std::list<int>::iterator rightIt = it;
+
+	while (left <= mid && right <= end) {
+		if (*leftIt <= *rightIt) {
+			sorted.push_back(*leftIt);
+			leftIt++;
 			left++;
 		} else {
-			sorted.push_back(deq[right]);
+			sorted.push_back(*rightIt);
+			rightIt++;
 			right++;
 		}
 	}
-	while (left <= mid)	{
-		sorted.push_back(deq[left]);
+	while (left <= mid) {
+		sorted.push_back(*leftIt);
+		leftIt++;
 		left++;
 	}
 	while (right <= end) {
-		sorted.push_back(deq[right]);
+		sorted.push_back(*rightIt);
+		rightIt++;
 		right++;
 	}
-	for (int i = start; i <= end; i++) {
-		deq[i] = sorted[i - start];
+	std::list<int>::iterator insertIt = list.begin();
+	std::advance(insertIt, start);
+	for (unsigned int i = 0; i < sorted.size(); ++i) {
+		*insertIt = sorted[i];
+		std::advance(insertIt, 1);
 	}
 }
 
-
-void	PmergeMe::sortDeque() {
+void PmergeMe::sortList() {
 	clock_t start = clock();
-	size_t	size = input_Deq_.size();
+	size_t size = input_List_.size();
 
 	if (size % 2 == 1) {
-		unpairedNumberDeq_ = input_Deq_.back();
-		input_Deq_.pop_back();
+		unpairedNumberList_ = input_List_.back();
+		input_List_.pop_back();
 	}
 	for (size_t i = 0; i < size - 1; i += 2) {
-		pairDeq_.push_back(std::make_pair(input_Deq_[i], input_Deq_[i + 1]));
+		std::list<int>::iterator it = input_List_.begin();
+		std::advance(it, i);
+		std::list<int>::iterator next_it = it;
+		std::advance(next_it, 1);
+		pairList_.push_back(std::make_pair(*it, *next_it));
 	}
-	for (size_t i = 0; i < pairDeq_.size(); i++) {
-		if (pairDeq_[i].first < pairDeq_[i].second)
-			std::swap(pairDeq_[i].first, pairDeq_[i].second);
-		mainDeq_.push_back(pairDeq_[i].first);
-		pendDeque_.push_back(pairDeq_[i].second);
+	std::list<std::pair<int, int> >::iterator pairIt = pairList_.begin();
+	while (pairIt != pairList_.end()) {
+		if (pairIt->first < pairIt->second)
+			std::swap(pairIt->first, pairIt->second);
+		mainList_.push_back(pairIt->first);
+		pendList_.push_back(pairIt->second);
+		++pairIt;
 	}
 
-	mergeSort(mainDeq_, 0, mainDeq_.size() - 1);
-	mainDeq_.push_front(pendDeque_[0]);
+	mergeSort(mainList_, 0, mainList_.size() - 1);
+	mainList_.push_front(pendList_.front());
 
-	insertNumbersDeque();
+	insertNumbersList();
 
-	displaySortInfo(start, mainDeq_);
+	displaySortInfo(start, mainList_);
 }
