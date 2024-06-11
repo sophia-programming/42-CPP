@@ -24,8 +24,6 @@ void PmergeMe::merge(int argc, char **argv) {
 }
 
 void PmergeMe::populateContainers(int argc, char **argv) {
-	std::set<int> numbers;
-
 	for (int i = 1; i < argc; i++) {
 		int length = std::strlen(argv[i]);
 		for (int j = 0; j < length; j++) {
@@ -33,12 +31,10 @@ void PmergeMe::populateContainers(int argc, char **argv) {
 				throw std::invalid_argument("Error: Invalid argument.");
 		}
 
-		int num = atoi(argv[i]);
+		int num = std::atoi(argv[i]);
 		if (num < 0)
 			throw std::runtime_error("Error: Negative Numbers are invalid");
-		if (!numbers.insert(num).second)
-			throw std::runtime_error("Error: Duplicate number detected.");
-		input_.push_back(num);
+		input_Vector_.push_back(num);
 		input_List_.push_back(num);
 	}
 }
@@ -46,7 +42,7 @@ void PmergeMe::populateContainers(int argc, char **argv) {
 void PmergeMe::printUnsortedSequence(int argc) {
 	std::cout << YELLOW << "Before: " << STOP;
 	for (int i = 0; i < (argc - 1); i++) {
-		std::cout << input_[i] << " ";
+		std::cout << input_Vector_[i] << " ";
 		if (i == 5) {
 			std::cout << "[...]";
 			break;
@@ -151,15 +147,15 @@ void PmergeMe::mergeSort(std::vector<int>& vector, int start, int end) {
 
 void PmergeMe::sortVector() {
 	clock_t start = clock();
-	size_t size = input_.size();
+	size_t size = input_Vector_.size();
 
 	if (size % 2 == 1) {
-		unpairedNumberVec_ = input_.back();
-		input_.pop_back();
+		unpairedNumberVec_ = input_Vector_.back();
+		input_Vector_.pop_back();
 	}
 
 	for (size_t i = 0; i < size - 1; i += 2)
-		pairVec_.push_back(std::make_pair(input_[i], input_[i + 1]));
+		pairVec_.push_back(std::make_pair(input_Vector_[i], input_Vector_[i + 1]));
 
 	for (size_t i = 0; i < pairVec_.size(); i++) {
 		if (pairVec_[i].first < pairVec_[i].second) {

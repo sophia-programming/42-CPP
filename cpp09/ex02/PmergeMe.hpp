@@ -8,6 +8,7 @@
 #include <algorithm> // std::sort
 #include <set> // std::set
 #include <typeinfo> // typeid
+#include <stdexcept> // std::runtime_error
 #include "Color.hpp" // Color
 
 class PmergeMe
@@ -16,7 +17,7 @@ private:
 	int unpairedNumberVec_;
 	int unpairedNumberList_;
 
-	std::vector<int> input_;
+	std::vector<int> input_Vector_;
 	std::vector<int> mainVector_;
 	std::vector<int> pendVector_;
 	std::vector<int> jacobSeqVector_;
