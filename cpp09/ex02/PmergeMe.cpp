@@ -57,9 +57,9 @@ int PmergeMe::jacobsthal(int nbr) {
 	if (nbr == 1)
 		return 1;
 
-	int prev1 = 0;
-	int prev2 = 1;
-	int current = 0;
+	int prev1 = 0; // Jacobsthal(0) nbr == 0の場合
+	int prev2 = 1; // Jacobsthal(1) nbr == 1の場合
+	int current = 0; // 計算中のJacobsthal数
 
 	for (int i = 2; i <= nbr; ++i) {
 		current = prev1 + 2 * prev2;
@@ -72,23 +72,28 @@ int PmergeMe::jacobsthal(int nbr) {
 void PmergeMe::positionsVector() {
 	if (this->pendVector_.empty())
 		return;
-	PmergeMe::jacobsthalInsertSequence(jacobSeqVector_, pendVector_.size());
-	size_t lastPos = 1;
-	size_t val = 1;
-	for (size_t i = 0; i < jacobSeqVector_.size(); i++) {
-		val = jacobSeqVector_[i];
-		posVec_.push_back(val);
 
-		size_t pos = val - 1;
+	// Jacobsthal数列を使って挿入位置を計算
+	PmergeMe::jacobsthalInsertSequence(jacobSeqVector_, pendVector_.size());
+
+	size_t lastPos = 1;
+	size_t currentPos = 1;
+
+	// Jacobsthal数列に基づいて挿入位置を決定
+	for (size_t i = 0; i < jacobSeqVector_.size(); i++) {
+		currentPos = jacobSeqVector_[i];
+		posVec_.push_back(currentPos);
+
+		size_t pos = currentPos - 1;
 		while (pos > lastPos) {
 			posVec_.push_back(pos);
 			pos--;
 		}
-		lastPos = val;
+		lastPos = currentPos;
 	}
-
-	while (val++ < pendVector_.size())
-		posVec_.push_back(val);
+	// 未挿入の要素を挿入
+	while (currentPos++ < pendVector_.size())
+		posVec_.push_back(currentPos);
 }
 
 void PmergeMe::insertNumbersVector() {
@@ -176,22 +181,22 @@ void PmergeMe::positionsList() {
 
 	PmergeMe::jacobsthalInsertSequence(jacobSeqList_, pendList_.size());
 	size_t lastPos = 1;
-	size_t val = 1;
+	size_t currentPos = 1;
 	while (!jacobSeqList_.empty()) {
-		val = jacobSeqList_.front();
+		currentPos = jacobSeqList_.front();
 
 		jacobSeqList_.pop_front();
-		posList_.push_back(val);
+		posList_.push_back(currentPos);
 
-		size_t pos = val - 1;
+		size_t pos = currentPos - 1;
 		while (pos > lastPos) {
 			posList_.push_back(pos);
 			pos--;
 		}
-		lastPos = val;
+		lastPos = currentPos;
 	}
-	while (val++ < pendList_.size())
-		posList_.push_back(val);
+	while (currentPos++ < pendList_.size())
+		posList_.push_back(currentPos);
 }
 
 void PmergeMe::insertNumbersList() {

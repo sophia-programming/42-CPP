@@ -9,6 +9,7 @@
 #include <set> // std::set
 #include <typeinfo> // typeid
 #include <stdexcept> // std::runtime_error
+#include <time.h> // clock_t
 #include "Color.hpp" // Color
 
 class PmergeMe
@@ -35,7 +36,7 @@ private:
 
 	void populateContainers(int, char **);
 	void printUnsortedSequence(int);
-	int jacobsthal(int n);
+	int jacobsthal(int nbr);
 
 	void sortVector();
 	void mergeSort(std::vector<int> &S, int start, int end);
