@@ -20,9 +20,9 @@ private:
 
 	std::vector<int> input_Vector_;
 	std::vector<int> mainVector_;
-	std::vector<int> pendVector_;
-	std::vector<int> jacobSeqVector_;
-	std::vector<int> posVec_;
+	std::vector<int> pendVector_; //ソートされる前の数列
+	std::vector<int> jacobSeqVector_; //ジャコブスタール数列でソートされた数列
+	std::vector<int> sortedVec_; // ソートされた数列の位置
 
 	std::vector<std::pair<int, int> > pairVec_;
 

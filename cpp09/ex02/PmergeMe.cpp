@@ -82,18 +82,18 @@ void PmergeMe::positionsVector() {
 	// Jacobsthal数列に基づいて挿入位置を決定
 	for (size_t i = 0; i < jacobSeqVector_.size(); i++) {
 		currentPos = jacobSeqVector_[i];
-		posVec_.push_back(currentPos);
+		sortedVec_.push_back(currentPos);
 
 		size_t pos = currentPos - 1;
 		while (pos > lastPos) {
-			posVec_.push_back(pos);
+			sortedVec_.push_back(pos);
 			pos--;
 		}
 		lastPos = currentPos;
 	}
-	// 未挿入の要素を挿入
+	// Jacobsthal数列の範囲外の値を追加
 	while (currentPos++ < pendVector_.size())
-		posVec_.push_back(currentPos);
+		sortedVec_.push_back(currentPos);
 }
 
 void PmergeMe::insertNumbersVector() {
@@ -101,7 +101,7 @@ void PmergeMe::insertNumbersVector() {
 	size_t addCount = 0;
 
 	PmergeMe::positionsVector();
-	for (it = posVec_.begin(); it < posVec_.end(); it++) {
+	for (it = sortedVec_.begin(); it < sortedVec_.end(); it++) {
 		int nbr = pendVector_[*it - 1];
 		size_t endPos = *it + addCount;
 		size_t pos = PmergeMe::binarySearch(mainVector_, nbr, 0, endPos);
