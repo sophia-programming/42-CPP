@@ -61,7 +61,7 @@ public:
 		size_t i = 0;
 		for (it = sequence.begin(); it != sequence.end(); ++it) {
 			std::cout << *it << " ";
-			if (i == 4) {
+			if (i == 5) {
 				std::cout << "[...]";
 				break;
 			}
@@ -76,8 +76,10 @@ public:
 		clock_t end = clock();
 		double time = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000;
 
-		std::cout << YELLOW << "After:  " << STOP;
-		printSequence(mainSequence);
+		if (typeid(mainSequence) == typeid(std::vector<int>)){
+			std::cout << YELLOW << "After:  " << STOP;
+			printSequence(mainSequence);
+		}
 		std::cout << "Time to process a range of " << mainSequence.size();
 		std::cout << " elements with " << RED << (typeid(mainSequence) == typeid(std::vector<int>) ? "std::vector" : "std::list") << STOP;
 		std::cout << " : " << time << " ms" << std::endl;

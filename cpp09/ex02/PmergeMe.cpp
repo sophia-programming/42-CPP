@@ -44,10 +44,10 @@ void PmergeMe::populateContainers(int argc, char **argv) {
 }
 
 void PmergeMe::printUnsortedSequence(int argc) {
-	std::cout << "Before: ";
+	std::cout << YELLOW << "Before: " << STOP;
 	for (int i = 0; i < (argc - 1); i++) {
 		std::cout << input_[i] << " ";
-		if (i == 4) {
+		if (i == 5) {
 			std::cout << "[...]";
 			break;
 		}
