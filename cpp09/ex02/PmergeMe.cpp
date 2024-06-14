@@ -76,7 +76,7 @@ void PmergeMe::positionsVector() {
 	// Jacobsthal数列を使って挿入位置を計算
 	PmergeMe::jacobsthalInsertSequence(jacobSeqVector_, pendVector_.size());
 
-	size_t lastPos = 1;
+	size_t lastPos = 0;
 	size_t currentPos = 1;
 
 	// Jacobsthal数列に基づいて挿入位置を決定
@@ -85,7 +85,7 @@ void PmergeMe::positionsVector() {
 		sortedVec_.push_back(currentPos);
 
 		size_t pos = currentPos - 1;
-		while (pos > lastPos) {
+		while (lastPos < pos) {
 			sortedVec_.push_back(pos);
 			pos--;
 		}
@@ -116,19 +116,25 @@ void PmergeMe::insertNumbersVector() {
 }
 
 void PmergeMe::mergeSort(std::vector<int>& vector, int start, int end) {
-	if (start >= end)
+	// 配列の要素が1つの場合は何もしない
+	if (end <= start)
 		return;
 
+	// 中間点の計算
 	int mid = (start + end) / 2;
 
+	// 左側の配列を再帰的にソート
 	PmergeMe::mergeSort(vector, start, mid);
+	// 右側の配列を再帰的にソート
 	PmergeMe::mergeSort(vector, mid + 1, end);
 
+	// 2つの配列をマージ
 	std::vector<int> sorted;
 
 	int left = start;
 	int right = mid + 1;
 
+	// 左右の部分配列をマージ
 	while (left <= mid && right <= end) {
 		if (vector[left] <= vector[right]) {
 			sorted.push_back(vector[left]);
@@ -138,14 +144,20 @@ void PmergeMe::mergeSort(std::vector<int>& vector, int start, int end) {
 			right++;
 		}
 	}
+
+	// 左側の残りを追加
 	while (left <= mid) {
 		sorted.push_back(vector[left]);
 		left++;
 	}
+
+	// 右側の残りを追加
 	while (right <= end) {
 		sorted.push_back(vector[right]);
 		right++;
 	}
+
+	// マージ結果を元の配列にコピー
 	for (int i = start; i <= end; i++)
 		vector[i] = sorted[i - start];
 }
@@ -154,11 +166,13 @@ void PmergeMe::sortVector() {
 	clock_t start = clock();
 	size_t size = input_Vector_.size();
 
+	// ベクターの要素数が奇数の場合は、最後の要素を取り出し、unpairedNumberVec_に格納
 	if (size % 2 == 1) {
 		unpairedNumberVec_ = input_Vector_.back();
 		input_Vector_.pop_back();
 	}
 
+	// ペアを作成してpairVec_に格納
 	for (size_t i = 0; i < size - 1; i += 2)
 		pairVec_.push_back(std::make_pair(input_Vector_[i], input_Vector_[i + 1]));
 
@@ -166,12 +180,22 @@ void PmergeMe::sortVector() {
 		if (pairVec_[i].first < pairVec_[i].second) {
 			std::swap(pairVec_[i].first, pairVec_[i].second);
 		}
+		// 大きい方の値をmainVector_に追加
 		mainVector_.push_back(pairVec_[i].first);
+		// 小さい方の値をpendVector_に追加
 		pendVector_.push_back(pairVec_[i].second);
 	}
+
+	// mainVector_をマージソート
 	PmergeMe::mergeSort(mainVector_, 0, mainVector_.size() - 1);
+
+	// pendVector_の最初の要素をmainVector_の先頭に挿入
 	mainVector_.insert(mainVector_.begin(), pendVector_[0]);
+
+	// 残りのpendVector_の要素をmainVector_に挿入
 	PmergeMe::insertNumbersVector();
+
+	// ソート結果を表示
 	PmergeMe::displaySortInfo(start, mainVector_);
 }
 
@@ -180,7 +204,7 @@ void PmergeMe::positionsList() {
 		return;
 
 	PmergeMe::jacobsthalInsertSequence(jacobSeqList_, pendList_.size());
-	size_t lastPos = 1;
+	size_t lastPos = 0;
 	size_t currentPos = 1;
 	while (!jacobSeqList_.empty()) {
 		currentPos = jacobSeqList_.front();
